@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S249 // Frequency Grid</title>
+<meta name="description" content="S249 Data Analytics for Population Health – Lessons 3 & 4: Measurement of Disease Frequencies (population, distribution, determinants, ratios, proportions, rates, incidence, prevalence).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03060b; --panel:rgba(8,18,32,.8);
+  --o:#ff6a00; --o2:#ffa13d; --b:#00e5ff; --b2:#2d8cff;
+  --ink:#d7f6ff; --mute:#7fa3b5; --ok:#00e5ff; --bad:#ff3d5a;
+  --glow-o:0 0 6px rgba(255,106,0,.9),0 0 22px rgba(255,106,0,.45);
+  --glow-b:0 0 6px rgba(0,229,255,.9),0 0 22px rgba(0,229,255,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Orbitron',system-ui,sans-serif;font-size:14px;line-height:1.7;letter-spacing:.2px;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(900px 500px at 15% -5%,rgba(255,106,0,.16),transparent 60%),
+  radial-gradient(900px 600px at 95% 10%,rgba(0,229,255,.14),transparent 60%),
+  linear-gradient(#03060b,#050b14)}
+.floor{position:fixed;left:-50%;right:-50%;bottom:0;height:55vh;z-index:-2;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(0,229,255,.28) 0 1px,transparent 1px 70px),repeating-linear-gradient(0deg,rgba(0,229,255,.28) 0 1px,transparent 1px 70px);
+  transform:perspective(420px) rotateX(62deg);transform-origin:bottom;
+  -webkit-mask-image:linear-gradient(to top,#000 5%,transparent 85%);mask-image:linear-gradient(to top,#000 5%,transparent 85%);
+  animation:floor 6s linear infinite;opacity:.5}
+@keyframes floor{to{background-position:0 70px,70px 0}}
+.scan{position:fixed;inset:0;z-index:50;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+h1,h2,h3,h4{font-weight:800;text-transform:uppercase;letter-spacing:2px;line-height:1.25}
+a{color:var(--b)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{padding:20px 0 10px}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:42px;height:42px;border:2px solid var(--o);box-shadow:var(--glow-o),inset 0 0 12px rgba(255,106,0,.4);transform:rotate(45deg);flex:none;position:relative;margin:6px}
+.logo::after{content:"";position:absolute;inset:8px;border:2px solid var(--b);box-shadow:var(--glow-b)}
+.brand h1{font-size:clamp(.95rem,2.4vw,1.45rem);color:var(--b);text-shadow:var(--glow-b)}
+.brand h1 b{color:var(--o);text-shadow:var(--glow-o);font-weight:900}
+.brand small{display:block;font-size:.6rem;letter-spacing:3px;color:var(--mute);font-weight:500}
+.xp{margin-left:auto;min-width:200px;flex:1;max-width:320px}
+.xp span{font-size:.6rem;letter-spacing:2px;color:var(--mute);display:flex;justify-content:space-between}
+.xp .bar{height:8px;border:1px solid var(--b);margin-top:4px;position:relative;box-shadow:var(--glow-b);clip-path:polygon(0 0,100% 0,98% 100%,2% 100%)}
+.xp .bar i{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--o),var(--o2));box-shadow:var(--glow-o);transition:width .6s}
+nav{position:sticky;top:0;z-index:40;background:linear-gradient(rgba(3,6,11,.95),rgba(3,6,11,.86));backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,229,255,.25);margin-bottom:22px}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px;scrollbar-width:thin}
+.tab{flex:none;background:transparent;border:1px solid rgba(0,229,255,.25);color:var(--mute);font:600 .64rem 'Orbitron',sans-serif;letter-spacing:1.5px;text-transform:uppercase;padding:9px 14px;cursor:pointer;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:.2s;white-space:nowrap}
+.tab em{font-style:normal;color:var(--o);margin-right:6px}
+.tab:hover{color:var(--b);border-color:var(--b)}
+.tab[aria-selected=true]{color:#fff;background:linear-gradient(135deg,rgba(255,106,0,.35),rgba(0,229,255,.2));border-color:var(--o);box-shadow:var(--glow-o)}
+.tab.seen::after{content:" ✓";color:var(--b)}
+.panel{display:none;animation:in .5s ease}
+.panel.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.ph{margin-bottom:18px}
+.ph .kick{font-size:.62rem;letter-spacing:4px;color:var(--o);text-shadow:var(--glow-o);font-weight:700}
+.ph h2{font-size:clamp(1.3rem,3.6vw,2.2rem);color:#fff;text-shadow:var(--glow-b);margin-top:4px}
+.ph h2 span{color:var(--b)}
+.ph p{color:var(--mute);max-width:820px;margin-top:6px}
+.sec{font-size:.68rem;letter-spacing:4px;color:var(--b);text-shadow:var(--glow-b);font-weight:800;margin:30px 0 12px;display:flex;align-items:center;gap:12px}
+.sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--b),transparent)}
+.sec em{font-style:normal;color:var(--o);text-shadow:var(--glow-o)}
+.card{position:relative;background:var(--panel);border:1px solid rgba(0,229,255,.28);padding:18px 20px;margin-bottom:16px;backdrop-filter:blur(3px)}
+.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--o);box-shadow:var(--glow-o)}
+.card::before{top:-2px;left:-2px;border-right:0;border-bottom:0}
+.card::after{bottom:-2px;right:-2px;border-left:0;border-top:0}
+.card.o{border-color:rgba(255,106,0,.45)}
+.card.o::before,.card.o::after{border-color:var(--b);box-shadow:var(--glow-b)}
+.card h3{font-size:.85rem;color:var(--b);text-shadow:var(--glow-b);margin-bottom:8px}
+.card.o h3{color:var(--o2);text-shadow:var(--glow-o)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.hl{color:var(--o2);font-weight:700}
+.hb{color:var(--b);font-weight:700}
+.mute{color:var(--mute);font-size:.78rem}
+.tag{display:inline-block;font-size:.56rem;letter-spacing:2px;padding:2px 8px;border:1px solid var(--o);color:var(--o2);margin:2px 4px 2px 0;vertical-align:middle}
+.tag.b{border-color:var(--b);color:var(--b)}
+.note{border-left:3px solid var(--o);padding:8px 14px;background:rgba(255,106,0,.07);color:#ffd9b8;font-size:.78rem;margin-top:10px}
+.illus{font-size:.56rem;letter-spacing:2px;color:var(--mute);margin-top:8px}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--o),#ff8a2a);color:#05080d;font:800 .7rem 'Orbitron',sans-serif;letter-spacing:2px;text-transform:uppercase;padding:11px 20px;border:0;cursor:pointer;text-decoration:none;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:var(--glow-o);transition:.2s}
+.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn.b{background:linear-gradient(135deg,var(--b),var(--b2))}
+.btn.ghost{background:transparent;color:var(--b);border:1px solid var(--b);clip-path:none}
+.btn.sm{padding:7px 12px;font-size:.6rem}
+.btn:disabled{opacity:.35;cursor:not-allowed;filter:none;transform:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--b);flex-wrap:wrap}
+.seg button{background:transparent;border:0;color:var(--b);font:700 .62rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:8px 14px;cursor:pointer;text-transform:uppercase}
+.seg button.on{background:var(--b);color:#03060b;box-shadow:var(--glow-b)}
+
+/* formula */
+.fx{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 8px;font-weight:800;text-align:center}
+.fx .lhs{color:var(--o);text-shadow:var(--glow-o);font-size:1.05rem;letter-spacing:2px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;font-size:.8rem;letter-spacing:1px}
+.frac .n{padding:0 10px 6px;color:#fff}
+.frac .d{padding:6px 10px 0;border-top:2px solid var(--b);box-shadow:0 -1px 8px -4px var(--b);color:var(--b)}
+.big{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;color:var(--o);text-shadow:var(--glow-o);line-height:1.1}
+
+/* cover */
+.cover{position:relative;border:1px solid rgba(255,106,0,.45);background:linear-gradient(180deg,rgba(255,106,0,.06),rgba(0,229,255,.04));overflow:hidden;margin-bottom:18px}
+.cover canvas{display:block;width:100%;height:440px}
+.cover .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:26px;pointer-events:none;background:linear-gradient(90deg,rgba(3,6,11,.92) 0%,rgba(3,6,11,.7) 42%,rgba(3,6,11,0) 70%)}
+.cover .kick{font-size:.64rem;letter-spacing:5px;color:var(--b);text-shadow:var(--glow-b);font-weight:700}
+.cover h2{font-size:clamp(1.8rem,5.4vw,3.6rem);color:#fff;font-weight:900;letter-spacing:3px;line-height:1.05;margin-top:8px;text-shadow:0 0 24px rgba(0,229,255,.5)}
+.cover h2 b{color:var(--o);text-shadow:var(--glow-o);display:block}
+.cover .sub{color:var(--mute);font-size:.72rem;letter-spacing:2px;margin-top:10px;max-width:440px}
+.live{display:flex;gap:10px;flex-wrap:wrap}
+.live div{border:1px solid rgba(0,229,255,.45);background:rgba(3,6,11,.75);padding:8px 12px;min-width:120px}
+.live b{display:block;font-size:1.4rem;font-weight:900;color:var(--b);text-shadow:var(--glow-b);line-height:1.2}
+.live div.o{border-color:var(--o)}
+.live div.o b{color:var(--o);text-shadow:var(--glow-o)}
+.live span{font-size:.52rem;letter-spacing:2px;color:var(--mute)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.56rem;letter-spacing:2px;color:var(--mute);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.mods{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.mod{background:var(--panel);border:1px solid rgba(0,229,255,.3);padding:16px;cursor:pointer;text-align:left;color:var(--ink);font-family:'Orbitron',sans-serif;transition:.25s;position:relative;overflow:hidden}
+.mod:hover{border-color:var(--o);box-shadow:var(--glow-o);transform:translateY(-3px)}
+.mod svg{width:46px;height:46px;display:block;margin-bottom:10px}
+.mod em{font-style:normal;color:var(--o);font-weight:900;font-size:.7rem;letter-spacing:2px}
+.mod b{display:block;font-size:.8rem;letter-spacing:1.5px;margin-top:2px;text-transform:uppercase}
+.mod small{display:block;color:var(--mute);font-size:.58rem;letter-spacing:1px;margin-top:4px;line-height:1.5}
+.alert{border:1px solid var(--o);background:repeating-linear-gradient(135deg,rgba(255,106,0,.12) 0 12px,rgba(255,106,0,.05) 12px 24px);padding:14px 18px;display:flex;gap:14px;align-items:center;box-shadow:var(--glow-o);margin:16px 0}
+.alert .ic{flex:none;width:38px;height:38px;border:2px solid var(--o);transform:rotate(45deg);display:grid;place-items:center;font-weight:900;color:var(--o)}
+.alert .ic span{transform:rotate(-45deg)}
+.alert b{color:var(--o2);letter-spacing:2px}
+.alert p{font-size:.76rem}
+
+/* population boxes */
+.pbox{position:relative;height:130px;border:2px solid var(--b);box-shadow:var(--glow-b),inset 0 0 20px rgba(0,229,255,.15);overflow:hidden;margin:8px 0 10px}
+.pbox.open{border-left-color:transparent;border-right-color:transparent;border-color:var(--o);box-shadow:var(--glow-o),inset 0 0 20px rgba(255,106,0,.15)}
+.pbox.open{border-left:2px dashed rgba(255,106,0,.35);border-right:2px dashed rgba(255,106,0,.35)}
+.pbox i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--b);box-shadow:var(--glow-b)}
+.pbox.closed i{animation:bob 3s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translate(8px,-10px)}}
+.pbox.open i{background:var(--o);box-shadow:var(--glow-o);left:-20px;animation:flow linear infinite}
+@keyframes flow{from{left:-6%}to{left:104%}}
+.pbox .lock{position:absolute;right:8px;top:6px;font-size:.55rem;letter-spacing:2px;color:var(--b)}
+.pbox.open .lock{color:var(--o)}
+
+/* time chart, place map */
+.chart{width:100%;display:block}
+.chart text{font:600 10px 'Orbitron',sans-serif;fill:var(--mute)}
+.map{display:grid;grid-template-columns:repeat(3,1fr);grid-template-areas:". n ne" "w c e";gap:10px;max-width:560px;margin:10px auto}
+.tile{border:1px solid var(--b);padding:12px 8px;text-align:center;transition:.4s;background:rgba(0,229,255,.05);clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%)}
+.tile b{display:block;font-size:.62rem;letter-spacing:2px}
+.tile span{font-size:1.15rem;font-weight:900}
+.tile small{display:block;font-size:.5rem;color:var(--mute);letter-spacing:1px}
+.tile.top{box-shadow:var(--glow-o);border-color:var(--o)}
+.tile.top span{color:var(--o2)}
+
+/* interactive components (shared) */
+.comp{border:1px solid rgba(255,106,0,.5);background:linear-gradient(180deg,rgba(255,106,0,.07),rgba(7,16,28,.8));padding:18px 20px;margin:18px 0;position:relative}
+.comp>.ct{position:absolute;top:-11px;left:14px;background:var(--bg);padding:0 10px;font-size:.58rem;letter-spacing:3px;color:var(--o);text-shadow:var(--glow-o);font-weight:800}
+.comp.done{border-color:var(--b);box-shadow:0 0 14px rgba(0,229,255,.25)}
+.comp.done>.ct{color:var(--b);text-shadow:var(--glow-b)}
+.comp.done>.ct::after{content:" ✓ CLEARED"}
+.comp .q{font-weight:600;color:#fff;margin-bottom:12px;font-size:.84rem}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.35);color:var(--ink);padding:9px 14px;font:500 .76rem 'Orbitron',sans-serif;cursor:pointer;transition:.18s;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--o);background:rgba(255,106,0,.1)}
+.opt.ok{border-color:var(--ok);background:rgba(0,229,255,.2);box-shadow:var(--glow-b);color:#fff}
+.opt.ok::before{content:"✔ "}
+.opt.bad{border-color:var(--bad);background:rgba(255,61,90,.15);color:#ffc2cb}
+.opt.bad::before{content:"✘ "}
+.opt:disabled{cursor:default}
+.fb2{margin-top:12px;padding:10px 14px;border-left:3px solid var(--b);background:rgba(0,229,255,.07);font-size:.76rem;display:none}
+.fb2.bad{border-color:var(--bad);background:rgba(255,61,90,.08)}
+.fb2.show{display:block;animation:in .3s}
+.pool,.zone{min-height:46px;display:flex;flex-wrap:wrap;gap:8px;padding:8px;border:1px dashed rgba(0,229,255,.35)}
+.pool{margin-bottom:12px}
+.bins{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.bin h4{font-size:.66rem;color:var(--o2);margin-bottom:6px;text-shadow:var(--glow-o)}
+.bin .zone{min-height:84px;border-color:rgba(255,106,0,.5)}
+.zone.over,.pool.over{background:rgba(255,106,0,.12);border-color:var(--o)}
+.chip{background:rgba(0,229,255,.1);border:1px solid var(--b);padding:6px 12px;font-size:.68rem;cursor:grab;user-select:none;transition:.15s;line-height:1.4}
+.chip:hover{box-shadow:var(--glow-b)}
+.chip.sel{background:var(--o);color:#05080d;border-color:var(--o);box-shadow:var(--glow-o);font-weight:700}
+.chip.ok{background:rgba(0,229,255,.28);border-color:var(--ok);color:#fff}
+.chip.ok::before{content:"✔ "}
+.chip.bad{background:rgba(255,61,90,.2);border-color:var(--bad);color:#ffc2cb}
+.chip.bad::before{content:"✘ "}
+.chip.lock{cursor:default}
+.hint{font-size:.62rem;color:var(--mute);letter-spacing:1px;margin-bottom:10px}
+.ctl{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* reveal */
+.rev{border:1px solid rgba(0,229,255,.3);margin:10px 0 0;background:rgba(0,229,255,.04)}
+.rev summary{cursor:pointer;padding:9px 14px;font-weight:700;list-style:none;color:var(--b);font-size:.64rem;letter-spacing:2px;text-transform:uppercase}
+.rev summary::-webkit-details-marker{display:none}
+.rev summary::before{content:"▸";color:var(--o);margin-right:10px;display:inline-block;transition:.2s}
+.rev[open] summary::before{transform:rotate(90deg)}
+.rev[open]{border-color:var(--o)}
+.rev>div{padding:2px 14px 12px 34px;font-size:.78rem}
+.work div{padding:3px 0}
+.work .eq{color:var(--o2);font-weight:700}
+
+/* inputs */
+.inp{background:rgba(3,6,11,.8);border:1px solid var(--b);color:#fff;font:700 .85rem 'Orbitron',sans-serif;padding:9px 12px;width:150px;outline:none}
+.inp:focus{border-color:var(--o);box-shadow:var(--glow-o)}
+select.inp{width:auto}
+.inp.ok{border-color:var(--ok);box-shadow:var(--glow-b)}
+.inp.bad{border-color:var(--bad)}
+label.f{display:block;font-size:.58rem;letter-spacing:2px;color:var(--mute);margin-bottom:4px;text-transform:uppercase}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:linear-gradient(90deg,var(--o),var(--b));outline:none;margin:12px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#03060b;border:2px solid var(--o);transform:rotate(45deg);box-shadow:var(--glow-o);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#03060b;border:2px solid var(--o);box-shadow:var(--glow-o);cursor:pointer;border-radius:0}
+.sl{display:flex;justify-content:space-between;font-size:.6rem;letter-spacing:1.5px;color:var(--mute)}
+.sl b{color:#fff;font-size:.78rem}
+.res{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-top:12px}
+.res div{border:1px solid rgba(0,229,255,.35);padding:10px 12px;background:rgba(3,6,11,.6)}
+.res b{display:block;font-size:1.25rem;font-weight:900;color:var(--b);text-shadow:var(--glow-b);line-height:1.25}
+.res div.o{border-color:var(--o)}
+.res div.o b{color:var(--o);text-shadow:var(--glow-o)}
+.res span{font-size:.52rem;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.hidden-res .res div.o b{filter:blur(9px)}
+
+/* E-learning */
+.aq{border:1px solid rgba(0,229,255,.3);padding:14px 16px;margin-bottom:12px;background:rgba(3,6,11,.5)}
+.aq .qh{font-size:.62rem;letter-spacing:3px;color:var(--o);font-weight:800;margin-bottom:8px}
+.ffrac{display:inline-flex;flex-direction:column;font-size:.7rem;text-align:center;margin:6px 0 10px;max-width:100%}
+.ffrac span:first-child{padding-bottom:5px;color:#fff}
+.ffrac span:last-child{padding-top:5px;border-top:2px solid var(--b);color:var(--b)}
+.aqv{display:none;margin-top:10px;padding:10px 14px;border-left:3px solid var(--o);background:rgba(255,106,0,.08);font-size:.76rem}
+.aqv.show{display:block;animation:in .3s}
+.verd{font-size:.66rem;letter-spacing:2px;font-weight:800;margin-left:6px}
+
+/* timelines */
+.tlw{overflow-x:auto}
+.tlsvg{width:100%;min-width:640px;display:block}
+.tlsvg text{font:600 10px 'Orbitron',sans-serif;fill:var(--mute)}
+.tlsvg .lbl{font-size:9px}
+
+/* bathtub */
+.tub{width:100%;max-width:560px;display:block;margin:0 auto}
+.tub text{font:700 11px 'Orbitron',sans-serif;letter-spacing:1px}
+#tubH{margin-top:16px}
+.flowpath{stroke-dasharray:6 8;animation:dashf .6s linear infinite}
+@keyframes dashf{to{stroke-dashoffset:-14}}
+.cmp{width:100%;border-collapse:collapse;font-size:.74rem}
+.cmp th{color:var(--o2);text-align:left;padding:8px;border-bottom:1px solid var(--o);font-size:.64rem;letter-spacing:2px}
+.cmp td{padding:8px;border-bottom:1px solid rgba(0,229,255,.15);vertical-align:top}
+.cmp td:first-child{color:var(--mute);font-size:.62rem;letter-spacing:1px}
+.cmp th:nth-child(2){color:var(--o2)} .cmp th:nth-child(3){color:var(--b)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(260px,1fr) minmax(280px,1.2fr);gap:18px}
+@media(max-width:760px){.calc{grid-template-columns:1fr}}
+.out{border:1px solid var(--o);padding:18px;background:linear-gradient(180deg,rgba(255,106,0,.1),rgba(3,6,11,.6));box-shadow:inset 0 0 30px rgba(255,106,0,.12)}
+.out .big{word-break:break-word}
+.out .unit{color:var(--b);font-size:.7rem;letter-spacing:2px;margin-top:4px}
+.out .work{margin-top:14px;font-size:.74rem;border-top:1px dashed rgba(0,229,255,.3);padding-top:10px}
+.err{color:var(--bad);font-size:.72rem;margin-top:8px;min-height:1em}
+.dl{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.dl svg{width:54px;height:54px;flex:none}
+.task{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(0,229,255,.18)}
+.task .t{font-size:.76rem}
+.task .t em{font-style:normal;color:var(--o);font-weight:900;margin-right:8px}
+.task .a{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.task .inp{width:110px;font-size:.75rem;padding:7px 9px}
+.task .ans{grid-column:1/-1;display:none;font-size:.72rem;color:#ffd9b8;padding:6px 10px;border-left:3px solid var(--o);background:rgba(255,106,0,.07)}
+.task .ans.show{display:block}
+@media(max-width:620px){.task{grid-template-columns:1fr}.task .a{justify-content:flex-start}}
+
+#cs{scroll-margin-top:70px}
+.csw{display:grid;grid-template-columns:minmax(260px,1fr) minmax(280px,1fr);gap:22px;align-items:start;margin-top:10px}
+#csGrid{width:100%;max-width:440px;display:block;margin:0 auto}
+#csR{grid-template-columns:repeat(2,1fr)}
+#csR div.o{box-shadow:var(--glow-o)}
+#csR .pyt{grid-column:1/-1}
+#msSeg button{min-width:38px}
+#msSeg button.dn:not(.on){color:var(--o2)}
+#msSeg button.dn::after{content:"✓";margin-left:3px}
+.mc{border:1px solid rgba(0,229,255,.3);background:rgba(3,6,11,.55);padding:14px 16px;margin:12px 0}
+.mch{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.7rem}
+.mcr{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:12px}
+.mcf{display:flex;flex-direction:column;align-items:center;gap:4px}
+.mcf label{font-size:.55rem;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.mcf i{width:170px;height:2px;background:var(--b);box-shadow:var(--glow-b)}
+.mcf .inp{width:150px;text-align:center}
+.mcr .op{font-size:1.2rem;font-weight:900;color:var(--b)}
+.mcr .mres{font-size:clamp(1.6rem,4vw,2.3rem)}
+@media(max-width:760px){.csw{grid-template-columns:1fr}}
+.pager{display:flex;justify-content:space-between;gap:10px;margin:26px 0 10px;flex-wrap:wrap}
+footer{border-top:1px solid rgba(0,229,255,.2);margin-top:40px;padding:20px 0 60px;font-size:.6rem;color:var(--mute);letter-spacing:1px;text-align:center}
+@media(max-width:640px){.live{display:grid;grid-template-columns:1fr 1fr}.live div{min-width:0}.live b{font-size:1.1rem}body{font-size:13px}.card{padding:15px}.cover canvas{height:520px}.cover .ov{background:linear-gradient(180deg,rgba(3,6,11,.9) 0%,rgba(3,6,11,.55) 55%,rgba(3,6,11,.85) 100%);padding:18px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="floor"></div><div class="scan"></div>
+<header><div class="wrap brand">
+  <div class="logo"></div>
+  <div><h1>S249 // <b>FREQ</b>UENCY GRID<small>DATA ANALYTICS FOR POPULATION HEALTH · LESSONS 3 &amp; 4</small></h1></div>
+  <div class="xp"><span><b>SYSTEM SYNC</b><b id="xpn">0%</b></span><div class="bar"><i id="xpb"></i></div></div>
+</div></header>
+<nav><div class="wrap" role="tablist" id="tabs"></div></nav>
+
+<main class="wrap">
+
+<!-- 00 COVER -->
+<section class="panel on" id="p0" data-name="COVER">
+  <div class="cover">
+    <canvas id="popc" aria-label="Animated population: people become new cases, stay ill for a while, then recover"></canvas>
+    <div class="ov">
+      <div>
+        <div class="kick">LESSONS 03 – 04 · MEASUREMENT OF DISEASE FREQUENCIES</div>
+        <h2>Count.<br>Compare.<b>Decide.</b></h2>
+        <p class="sub">Every glowing dot is a person. Watch new cases appear (incidence) and pile up (prevalence).</p>
+      </div>
+      <div>
+        <div class="live">
+          <div class="o"><b id="cNew">0</b><span>NEW CASES · LAST 7 DAYS</span></div>
+          <div><b id="cEx">0</b><span>EXISTING CASES · TODAY</span></div>
+          <div class="o"><b id="cInc">0%</b><span>7-DAY INCIDENCE</span></div>
+          <div><b id="cPrev">0%</b><span>PREVALENCE TODAY</span></div>
+        </div>
+        <div class="legend"><span><i style="background:rgba(0,229,255,.55)"></i>AT RISK</span><span><i style="background:#fff;box-shadow:0 0 8px #ff6a00"></i>NEW CASE</span><span><i style="background:#ff6a00"></i>EXISTING CASE</span><span><i style="border:1px solid #556"></i>DIED</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="mods" id="mods">
+    <button class="mod" data-go="1"><svg viewBox="0 0 48 48"><g fill="none" stroke="#00e5ff" stroke-width="2"><circle cx="14" cy="16" r="5"/><circle cx="34" cy="16" r="5"/><circle cx="24" cy="12" r="5" stroke="#ff6a00"/><path d="M6 36c0-6 4-10 8-10s8 4 8 10M26 36c0-6 4-10 8-10s8 4 8 10M16 32c0-6 4-10 8-10s8 4 8 10" /></g></svg><em>01</em><b>Concepts</b><small>Population · distribution · determinants</small></button>
+    <button class="mod" data-go="2"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M10 38L38 10" stroke="#ff6a00"/><circle cx="14" cy="14" r="5" stroke="#00e5ff"/><circle cx="34" cy="34" r="5" stroke="#00e5ff"/></g></svg><em>02</em><b>Frequency</b><small>Ratio · proportion · rate · E-learning</small></button>
+    <button class="mod" data-go="3"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M6 24h26M24 14l10 10-10 10" stroke="#ff6a00"/><rect x="36" y="10" width="6" height="28" stroke="#00e5ff"/></g></svg><em>03</em><b>Incidence</b><small>New cases · cohort simulator</small></button>
+    <button class="mod" data-go="4"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M8 14v20a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V14" stroke="#00e5ff"/><path d="M10 28h28" stroke="#ff6a00"/><path d="M24 4v14" stroke="#ff6a00" stroke-dasharray="3 3"/></g></svg><em>04</em><b>Prevalence</b><small>Existing cases · bathtub model</small></button>
+    <button class="mod" data-go="5"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="10" y="6" width="28" height="36" stroke="#00e5ff"/><rect x="15" y="11" width="18" height="8" stroke="#ff6a00"/><path d="M16 26h4M28 26h4M16 33h4M28 33h4" stroke="#00e5ff"/></g></svg><em>05</em><b>Calculator</b><small>Calculator · case study</small></button>
+  </div>
+  <div class="alert"><div class="ic"><span>!</span></div><p><b>E-LEARNING (LESSON 3)</b><br>Hand in your Lesson 3 E-learning assignment in your class MS Teams by <span class="hl">2359h on your E-learning day</span>. It counts as your attendance.</p></div>
+</section>
+
+<!-- 01 CONCEPTS -->
+<section class="panel" id="p1" data-name="CONCEPTS">
+  <div class="ph"><div class="kick">LESSON 3 · KEY COMPONENTS</div><h2>Population Health <span>Concepts</span></h2></div>
+
+  <div class="sec"><em>01</em> POPULATION</div>
+  <div class="card"><p>A group of people sharing a <span class="hl">common characteristic</span>.</p>
+    <div class="row" style="margin-top:8px"><span class="tag">PERSONAL · age, sex, organisation</span><span class="tag">PLACE · country, town, community</span><span class="tag">TIME · years, months, weeks</span></div></div>
+  <div class="grid g2">
+    <div class="card"><h3>Closed (fixed)</h3><div class="pbox closed" id="boxC"><span class="lock">🔒 NO NEW MEMBERS</span></div><p class="mute">Membership set by an <span class="hb">event</span>; permanent. e.g. atomic bomb survivors · people born in Singapore in 2025.</p></div>
+    <div class="card o"><h3>Open (dynamic)</h3><div class="pbox open" id="boxO"><span class="lock">⇄ PEOPLE FLOW IN &amp; OUT</span></div><p class="mute">Membership set by a <span class="hl">condition</span>; transitory. e.g. residents of Tampines · patients warded at a hospital.</p></div>
+  </div>
+  <div class="comp-m" data-c="sortPop"></div>
+
+  <div class="sec"><em>02</em> DISTRIBUTION · FREQUENCY</div>
+  <div class="card"><div class="grid g2" style="align-items:center">
+    <div><p><span class="hl">Frequency</span> = how many. Numbers alone tell you <i>size</i> – not risk.</p><p class="mute" style="margin-top:6px">To compare groups of different sizes, relate cases to population (you will do this in tab 02).</p></div>
+    <div class="row" style="justify-content:center"><div style="text-align:center"><div class="big" id="freqN">0</div><div class="mute">dengue cases notified in Singapore in one quarter (Jul–Sep)</div><div class="illus">SOURCE CITED IN LESSON 3 SLIDES (STRAITS TIMES)</div></div></div>
+  </div></div>
+
+  <div class="sec"><em>03</em> DISTRIBUTION · PATTERN</div>
+  <div class="card o"><div class="row" style="justify-content:space-between"><h3 style="margin:0">Time</h3>
+    <div class="seg" id="timeSeg"><button class="on" data-m="trend">Trend</button><button data-m="season">Seasonality</button><button data-m="outbreak">Outbreak</button></div></div>
+    <svg class="chart" id="timeChart" viewBox="0 0 1000 250"></svg>
+    <p class="mute" id="timeCap"></p><div class="illus">ILLUSTRATIVE DATA</div></div>
+  <div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">Place</h3>
+    <div class="seg" id="placeSeg"><button class="on" data-m="n">Count</button><button data-m="r">Rate /100k</button></div></div>
+    <div class="map" id="map"></div>
+    <p class="mute" id="placeCap" style="text-align:center"></p><div class="illus" style="text-align:center">ILLUSTRATIVE DENGUE DATA BY REGION</div></div>
+  <div class="card o"><h3>Person</h3><div class="grid g3">
+    <div><span class="tag">AGE</span><p class="mute">Hand, foot &amp; mouth disease → young children. Falls → older adults.</p></div>
+    <div><span class="tag">SEX</span><p class="mute">Osteoporosis → more common in women.</p></div>
+    <div><span class="tag">SOCIOECONOMIC</span><p class="mute">Gout → higher SES (rich food). Tuberculosis → lower SES (crowding, malnutrition).</p></div></div></div>
+  <div class="comp-m" data-c="mTime"></div>
+
+  <div class="sec"><em>04</em> DETERMINANTS</div>
+  <div class="card"><div class="fx"><span class="tag b" style="font-size:.7rem;padding:6px 12px">CAUSES &amp; RISK FACTORS</span><span style="color:var(--o);font-size:1.4rem">⟶</span><span class="tag" style="font-size:.7rem;padding:6px 12px">CHANGE IN HEALTH OUTCOME</span></div>
+    <p class="mute" style="text-align:center">Stagnant water → dengue · smoking → lung cancer · poor lighting at home → falls</p></div>
+  <div class="comp-m" data-c="sortDet"></div>
+  <div class="pager"><button class="btn ghost" data-go="0">◂ Cover</button><button class="btn" data-go="2">Frequency ▸</button></div>
+</section>
+
+<!-- 02 FREQUENCY -->
+<section class="panel" id="p2" data-name="FREQUENCY">
+  <div class="ph"><div class="kick">LESSON 3 · FREQUENCY MEASURES</div><h2>Ratio · Proportion · <span>Rate</span></h2><p>Compare one part of a distribution to another part, or to the whole.</p></div>
+  <div class="grid g3">
+    <div class="card"><h3>Ratio</h3><div class="fx"><span class="big" style="font-size:1.8rem">a : b</span></div><p class="mute">Compares <span class="hb">any two</span> values. a need not be part of b.</p></div>
+    <div class="card o"><h3>Proportion</h3><div class="fx"><span class="frac"><span class="n">a</span><span class="d">a + b</span></span></div><p class="mute">Part of the <span class="hl">whole</span>. Numerator is always inside the denominator. ×100 = %.</p></div>
+    <div class="card"><h3>Rate</h3><div class="fx"><span class="frac"><span class="n">cases</span><span class="d">population × time</span></span></div><p class="mute">A measure of <span class="hb">risk</span> over time. Fair comparison of groups of different sizes.</p></div>
+  </div>
+
+  <div class="sec"><em>LAB</em> RATIO vs PROPORTION</div>
+  <div class="card o"><p class="mute">Polyclinic attendees today. Drag the sliders.</p>
+    <div class="grid g2" style="margin-top:6px">
+      <div><div class="sl"><span>WOMEN</span><b id="wv">360</b></div><input type="range" id="wS" min="0" max="600" value="360">
+           <div class="sl"><span>MEN</span><b id="mv">180</b></div><input type="range" id="mS" min="0" max="600" value="180"></div>
+      <div><svg viewBox="0 0 300 70" style="width:100%;font-family:Orbitron,sans-serif"><rect x="0" y="20" width="300" height="30" fill="none" stroke="#00e5ff" stroke-opacity=".4"/><rect id="barW" x="0" y="20" height="30" fill="#ff6a00"/><rect id="barM" y="20" height="30" fill="#00e5ff" fill-opacity=".7"/><text x="0" y="14" fill="#ffa13d" font-size="7" letter-spacing="1">WOMEN</text><text x="300" y="14" fill="#00e5ff" font-size="7" letter-spacing="1" text-anchor="end">MEN</text></svg></div>
+    </div>
+    <div class="res"><div class="o"><b id="rP">0.67</b><span>Proportion women = W ÷ (W+M)</span></div><div class="o"><b id="rPc">66.67%</b><span>Percentage</span></div><div><b id="rR">1 : 2</b><span>Ratio men : women</span></div><div><b id="rRd">0.50</b><span>Ratio as decimal</span></div></div>
+  </div>
+
+  <div class="sec"><em>WORKED</em> EXAMPLES</div>
+  <div class="grid g2">
+    <div class="card"><span class="tag">PROPORTION</span><p style="margin-top:6px">360 of 540 polyclinic attendees are women. Proportion of women?</p>
+      <details class="rev"><summary>Reveal working</summary><div class="work"><div>360 ÷ 540 = <span class="eq">0.67</span></div><div>× 100% = <span class="eq">66.67%</span></div></div></details></div>
+    <div class="card"><span class="tag">RATIO</span><p style="margin-top:6px">Same clinic. Ratio of men to women?</p>
+      <details class="rev"><summary>Reveal working</summary><div class="work"><div>Men = 540 − 360 = 180</div><div>180 : 360 = <span class="eq">1 : 2</span></div><div class="mute">One man for every two women.</div></div></details></div>
+    <div class="card"><span class="tag">RATIO OF RATES</span><p style="margin-top:6px">Singapore infant mortality: 1.499 (2021) vs 1.457 (2022) per 1,000 live births. Ratio 2021 : 2022?</p>
+      <details class="rev"><summary>Reveal working</summary><div class="work"><div>1.499 ÷ 1.457 = <span class="eq">1.03 : 1</span></div><div class="mute">2021's rate was 1.03 times as high.</div></div></details></div>
+    <div class="card"><span class="tag">RATE</span><p style="margin-top:6px">An Active Ageing Centre follows 2,400 seniors for one year; 96 have a fall-related ED visit. Rate?</p>
+      <details class="rev"><summary>Reveal working</summary><div class="work"><div>96 ÷ 2,400 = 0.04 per senior per year</div><div>× 1,000 = <span class="eq">40 per 1,000 seniors per year</span></div></div></details><div class="illus">ILLUSTRATIVE</div></div>
+  </div>
+  <div class="comp-m" data-c="sortFM"></div>
+  <div class="comp-m" data-c="mDial"></div>
+
+  <div class="sec"><em>MISSION</em> LESSON 3 E-LEARNING ASSIGNMENT</div>
+  <div class="alert"><div class="ic"><span>!</span></div><p><b>SUBMIT IN MS TEAMS</b><br>Practise here, then hand in your assignment in your class MS Teams by <span class="hl">2359h on your E-learning day</span>. Your submission counts as attendance.</p></div>
+  <div class="card o" id="elearn">
+    <h3>Q1 · Ratio or proportion?</h3>
+    <div id="q1"></div>
+    <h3 style="margin-top:18px">Q2 · Gastroenteritis outbreak</h3>
+    <p class="mute">At a corporate dinner, <span class="hl">99</span> people ate potato salad; <span class="hl">66</span> developed gastroenteritis.</p>
+    <div class="aq"><div class="qh">Q2 (i)</div><p style="font-size:.8rem">Proportion of potato-salad eaters who developed gastroenteritis? <span class="mute">(2 d.p.)</span></p>
+      <div class="ctl"><input class="inp" id="q2a" placeholder="e.g. 0.50"><button class="btn sm" data-chk="q2a">Check</button><button class="btn ghost sm" data-rev="q2a">Reveal</button><span class="verd" id="q2a-v"></span></div>
+      <div class="aqv" id="q2a-r"><div>Proportion = cases ÷ all who ate potato salad</div><div>= 66 ÷ 99 = <span class="hl">0.67</span> (66.67%)</div></div></div>
+    <div class="aq"><div class="qh">Q2 (ii)</div><p style="font-size:.8rem">Among potato-salad eaters, ratio of those <i>with</i> to those <i>without</i> gastroenteritis? <span class="mute">(format a:b)</span></p>
+      <div class="ctl"><input class="inp" id="q2b" placeholder="e.g. 3:1"><button class="btn sm" data-chk="q2b">Check</button><button class="btn ghost sm" data-rev="q2b">Reveal</button><span class="verd" id="q2b-v"></span></div>
+      <div class="aqv" id="q2b-r"><div>Without = 99 − 66 = 33</div><div>66 : 33 = <span class="hl">2 : 1</span></div><div class="mute">Twice as many fell ill as did not.</div></div></div>
+  </div>
+  <div class="pager"><button class="btn ghost" data-go="1">◂ Concepts</button><button class="btn" data-go="3">Incidence ▸</button></div>
+</section>
+
+<!-- 03 INCIDENCE -->
+<section class="panel" id="p3" data-name="INCIDENCE">
+  <div class="ph"><div class="kick">LESSON 4 · NEW CASES</div><h2><span>Incidence</span></h2><p>How fast are people <span class="hl">developing</span> the disease?</p></div>
+  <div class="card o"><div class="fx"><span class="lhs">INCIDENCE</span><span>=</span><span class="frac"><span class="n">NEW cases in a period</span><span class="d">population AT RISK</span></span></div>
+    <p class="mute" style="text-align:center">At risk = disease-free people (including those who have recovered).</p></div>
+  <div class="grid g2">
+    <div class="card"><h3>Cumulative incidence</h3><div class="fx"><span class="frac"><span class="n">new cases</span><span class="d">population initially at risk</span></span></div><p class="mute">A risk (proportion) over a defined period.</p></div>
+    <div class="card"><h3>Incidence rate</h3><div class="fx"><span class="frac"><span class="n">new cases</span><span class="d">person-time at risk</span></span></div><p class="mute">Accounts for different follow-up times. Mostly used in research.</p></div>
+  </div>
+  <div class="grid g4">
+    <div class="card"><span class="tag">CASE FATALITY</span><p class="mute">fatal cases ÷ all cases</p></div>
+    <div class="card"><span class="tag">CUMULATIVE MORTALITY</span><p class="mute">fatal cases ÷ initially at risk</p></div>
+    <div class="card"><span class="tag">PROPORTIONAL MORTALITY</span><p class="mute">deaths from disease ÷ all deaths</p></div>
+    <div class="card"><span class="tag">DEATH RATE</span><p class="mute">deaths ÷ population, per 1,000 per year</p></div>
+  </div>
+
+  <div class="sec"><em>WORKED</em> 1 · DIABETES COHORT</div>
+  <div class="card o"><p class="mute">10,000 healthy people followed 1 Jan – 31 Dec. Those lost to follow-up (FU) were disease-free when lost.</p>
+    <svg class="chart" id="dmT" viewBox="0 0 700 120"></svg>
+    <div class="row" style="margin-top:8px"><div class="seg" id="dmSeg"><button class="on" data-m="a">1 Jan – 31 Dec</button><button data-m="b">1 Jul – 31 Dec</button></div></div>
+    <div class="work" id="dmW" style="margin-top:12px"></div></div>
+  <div class="grid g2">
+    <div class="card"><span class="tag">WORKED 2</span><p style="margin-top:6px;font-size:.8rem">10,000 men aged 50+ screened for prostate cancer. New cases: 2015 → 2 · 2016 → 2 · 2017 → 3 · 2018 → 2. Cumulative incidence 2016–2018?</p>
+      <details class="rev"><summary>Reveal working</summary><div class="work"><div>At risk at start of 2016 = 10,000 − 2 = 9,998</div><div>New cases = 2 + 3 + 2 = 7</div><div>7 ÷ 9,998 = <span class="eq">0.0007 (0.07%)</span></div></div></details></div>
+    <div class="card"><span class="tag">WORKED 3 · PERSON-TIME</span><p style="margin-top:6px;font-size:.8rem">Five nursing-home residents followed up to 12 months for a first fall.</p>
+      <svg class="chart" id="ptT" viewBox="0 0 420 150"></svg>
+      <details class="rev"><summary>Reveal working</summary><div class="work"><div>Person-time = 12 + 6 + 4 + 9 + 12 = 43 person-months</div><div>2 falls ÷ 43 = 0.047 per person-month</div><div>× 12 × 100 = <span class="eq">≈ 56 falls per 100 person-years</span></div></div></details><div class="illus">ILLUSTRATIVE</div></div>
+  </div>
+
+  <div class="sec"><em>SIM</em> COHORT TIMELINE · INCIDENCE</div>
+  <div class="card o" id="simI">
+    <p class="mute">Move the study window. Rows already ill at the start are <span class="hl">excluded</span> from the population at risk.</p>
+    <div class="row" style="margin:10px 0"><button class="btn sm b" data-ds="slide">Slide dataset</button><button class="btn sm ghost" data-ds="rand">New random cohort</button>
+      <label class="row mute" style="font-size:.62rem;letter-spacing:1px;cursor:pointer"><input type="checkbox" class="hideChk"> TEST ME (hide answers)</label></div>
+    <div class="tlw"><svg class="tlsvg"></svg></div>
+    <div class="grid g2" style="margin-top:4px"><div><div class="sl"><span>WINDOW START</span><b class="wa"></b></div><input type="range" class="ra" min="0" max="17" step="0.25" value="2"></div>
+      <div><div class="sl"><span>WINDOW END</span><b class="wb"></b></div><input type="range" class="rb" min="0" max="17" step="0.25" value="14"></div></div>
+    <div class="res"></div>
+    <div class="ctl testbox" style="display:none"><span class="mute">Your cumulative incidence (%):</span><input class="inp ti" placeholder="e.g. 25.0"><button class="btn sm tchk">Check</button><span class="verd tv"></span></div>
+  </div>
+  <div class="comp-m" data-c="mInc1"></div>
+  <div class="pager"><button class="btn ghost" data-go="2">◂ Frequency</button><button class="btn" data-go="4">Prevalence ▸</button></div>
+</section>
+
+<!-- 04 PREVALENCE -->
+<section class="panel" id="p4" data-name="PREVALENCE">
+  <div class="ph"><div class="kick">LESSON 4 · EXISTING CASES</div><h2><span>Prevalence</span></h2><p>How much disease is in the population <span class="hl">right now</span>?</p></div>
+  <div class="card o"><div class="fx"><span class="lhs">PREVALENCE</span><span>=</span><span class="frac"><span class="n">ALL existing cases (old + new)</span><span class="d">total population</span></span></div></div>
+  <div class="grid g2">
+    <div class="card"><h3>Point prevalence</h3><div class="fx"><span class="frac"><span class="n">existing cases on a date</span><span class="d">population on that date</span></span></div><p class="mute">A snapshot.</p></div>
+    <div class="card"><h3>Period prevalence</h3><div class="fx"><span class="frac"><span class="n">cases at any time in a period</span><span class="d">estimated population in the period</span></span></div><p class="mute">A time-lapse.</p></div>
+  </div>
+  <div class="sec"><em>WORKED</em> EXAMPLES</div>
+  <div class="grid g3">
+    <div class="card"><span class="tag">POINT</span><p style="margin-top:6px;font-size:.8rem">5,000 students; 50 have flu today.</p><details class="rev"><summary>Reveal</summary><div class="work"><div>50 ÷ 5,000 = <span class="eq">0.01 (1%)</span></div></div></details></div>
+    <div class="card"><span class="tag">PERIOD</span><p style="margin-top:6px;font-size:.8rem">Same 5,000 students; 120 had flu last week.</p><details class="rev"><summary>Reveal</summary><div class="work"><div>120 ÷ 5,000 = <span class="eq">0.024 (2.4%)</span></div></div></details></div>
+    <div class="card"><span class="tag">SG COMMUNITY CARE</span><p style="margin-top:6px;font-size:.8rem">A polyclinic screens 800 seniors on one day; 240 have diabetes.</p><details class="rev"><summary>Reveal</summary><div class="work"><div>240 ÷ 800 = <span class="eq">0.30 (30%) point prevalence</span></div></div></details><div class="illus">ILLUSTRATIVE</div></div>
+  </div>
+
+  <div class="sec"><em>SIM</em> POINT vs PERIOD</div>
+  <div class="card" id="simP">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px"><div class="seg pseg"><button class="on" data-m="point">Point</button><button data-m="period">Period</button></div>
+      <div class="row"><button class="btn sm b" data-ds="slide">Slide dataset</button><button class="btn sm ghost" data-ds="rand">Random cohort</button></div></div>
+    <div class="tlw"><svg class="tlsvg"></svg></div>
+    <div class="grid g2" style="margin-top:4px"><div><div class="sl"><span class="la">DATE</span><b class="wa"></b></div><input type="range" class="ra" min="0" max="17" step="0.25" value="8"></div>
+      <div class="pb" style="display:none"><div class="sl"><span>PERIOD END</span><b class="wb"></b></div><input type="range" class="rb" min="0" max="17" step="0.25" value="11"></div></div>
+    <div class="res"></div>
+  </div>
+
+  <div class="sec"><em>SIM</em> THE PREVALENCE BATHTUB</div>
+  <div class="card o">
+    <div class="grid g2" style="align-items:center">
+      <div><svg class="tub" id="tub" viewBox="0 0 420 300"></svg></div>
+      <div>
+        <div class="sl"><span>INCIDENCE · NEW CASES / MONTH</span><b id="vI">40</b></div><input type="range" id="sI" min="0" max="150" value="40">
+        <div class="sl"><span>AVERAGE DURATION OF ILLNESS (MONTHS)</span><b id="vD">12</b></div><input type="range" id="sD" min="1" max="60" value="12">
+        <div class="sl"><span>EXITS THAT ARE DEATHS (%)</span><b id="vM">20</b></div><input type="range" id="sM" min="0" max="100" value="20">
+        <div class="res"><div class="o"><b id="tubP">0</b><span>EXISTING CASES</span></div><div class="o"><b id="tubPc">0%</b><span>PREVALENCE (N=10,000)</span></div><div><b id="tubSS">480</b><span>STEADY STATE ≈ I × D</span></div></div>
+        <div class="row" style="margin-top:12px"><button class="btn sm" data-sc="cure">Cure found</button><button class="btn sm" data-sc="survive">Live longer, no cure</button><button class="btn sm" data-sc="prevent">Prevention</button><button class="btn sm" data-sc="outbreak">Outbreak</button><button class="btn sm ghost" data-sc="reset">Reset</button></div>
+        <p class="mute" id="tubMsg" style="margin-top:10px">Prevalence ≈ Incidence × Duration.</p>
+      </div>
+    </div>
+    <svg class="chart" id="tubH" viewBox="0 0 640 90" style="max-height:120px"></svg>
+  </div>
+
+  <div class="sec"><em>VS</em> INCIDENCE vs PREVALENCE</div>
+  <div class="card"><table class="cmp"><thead><tr><th></th><th>INCIDENCE</th><th>PREVALENCE</th></tr></thead><tbody>
+    <tr><td>MEASURES</td><td>Speed of new disease</td><td>Proportion with disease</td></tr>
+    <tr><td>POPULATION</td><td>At risk</td><td>Whole population</td></tr>
+    <tr><td>CASES</td><td>Newly diagnosed</td><td>All existing cases</td></tr>
+    <tr><td>TIME</td><td>Study period</td><td>Point or period</td></tr>
+    <tr><td>BEST FOR</td><td>Causes (aetiology)</td><td>Health service planning</td></tr></tbody></table></div>
+  <div class="comp-m" data-c="sortIP"></div>
+  <div class="pager"><button class="btn ghost" data-go="3">◂ Incidence</button><button class="btn" data-go="5">Calculator ▸</button></div>
+</section>
+
+<!-- 05 CALCULATOR -->
+<section class="panel" id="p5" data-name="CALCULATOR">
+  <div class="ph"><div class="kick">TOOLKIT</div><h2>Incidence &amp; Prevalence <span>Calculator</span></h2></div>
+  <div class="card o">
+    <div class="seg" id="calcSeg" style="margin-bottom:16px"><button class="on" data-m="ci">Cumulative incidence</button><button data-m="ir">Incidence rate</button><button data-m="pp">Point prevalence</button><button data-m="per">Period prevalence</button><button data-m="cf">Case fatality</button></div>
+    <div class="calc">
+      <div>
+        <label class="f" id="l1"></label><input class="inp" id="c1" type="number" min="0" step="any" style="width:100%">
+        <label class="f" id="l2" style="margin-top:12px"></label><input class="inp" id="c2" type="number" min="0" step="any" style="width:100%">
+        <div id="c3w" style="margin-top:12px;display:none"><label class="f" id="l3"></label><input class="inp" id="c3" type="number" min="0" step="any" style="width:100%"></div>
+        <div id="unitW" style="margin-top:12px;display:none"><label class="f">PERSON-TIME UNIT</label><select class="inp" id="unit"><option value="365">person-days</option><option value="12">person-months</option><option value="1" selected>person-years</option></select></div>
+        <label class="f" style="margin-top:12px">EXPRESS AS</label><select class="inp" id="mult"><option value="1">Proportion (decimal)</option><option value="100" selected>Percentage (%)</option><option value="1000">per 1,000</option><option value="10000">per 10,000</option><option value="100000">per 100,000</option></select>
+        <div class="err" id="cErr"></div>
+      </div>
+      <div class="out"><div class="mute" id="cName" style="letter-spacing:2px;font-size:.62rem"></div><div class="big" id="cRes">–</div><div class="unit" id="cUnit"></div><div class="work" id="cWork"></div></div>
+    </div>
+  </div>
+
+  <div class="sec"><em>CASE</em> STUDY · AAC DIABETES COHORT 2025</div>
+  <div class="card o" id="cs">
+    <p class="mute">100 seniors at an Active Ageing Centre, followed from 1 Jan to 31 Dec 2025. Each figure is one senior. <span class="illus">FICTIONAL DATA</span></p>
+    <div class="csw">
+      <div><svg id="csGrid" viewBox="0 0 400 400"></svg>
+        <div class="legend" style="justify-content:center"><span><i style="background:#ff6a00"></i>EXISTING CASE</span><span><i style="background:#fff;box-shadow:0 0 8px #ff6a00"></i>NEW CASE</span><span><i style="background:rgba(0,229,255,.7)"></i>AT RISK</span><span><i style="border:1px solid #778"></i>LOST TO FOLLOW-UP</span></div></div>
+      <div>
+        <label class="f">1 · WHO TO SHOW</label><div class="seg" id="csF"><button class="on" data-v="all">All</button><button data-v="F">Female</button><button data-v="M">Male</button></div>
+        <label class="f" style="margin-top:14px">2 · WHAT TO HIGHLIGHT</label><div class="seg" id="csH"><button class="on" data-v="none">None</button><button data-v="ex">Existing</button><button data-v="risk">At risk</button><button data-v="new">New</button><button data-v="cases">Existing + new</button></div>
+        <div style="margin-top:14px"><div class="sl"><span>3 · DATE</span><b id="csTl">1 JAN 2025</b></div><input type="range" id="csT" min="0" max="12" step="1" value="0"></div>
+        <div class="res" id="csR"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="mission">
+    <div class="row" style="justify-content:space-between;margin-bottom:14px"><h3 style="margin:0">// Mission · use the data</h3><div class="seg" id="msSeg"></div></div>
+    <div id="msBody"></div>
+  </div>
+  <div class="pager"><button class="btn ghost" data-go="4">◂ Prevalence</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
+</section>
+</main>
+<footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · MEASUREMENT OF DISEASE FREQUENCIES · REPUBLIC POLYTECHNIC</div></footer>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const NS="http://www.w3.org/2000/svg";
+const sv=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const f2=(x,d)=>Number.isFinite(x)?x.toLocaleString("en-US",{maximumFractionDigits:d==null?2:d,minimumFractionDigits:0}):"–";
+const O="#ff6a00",B="#00e5ff";
+
+/* ---------- XP ---------- */
+let totalComps=0,doneComps=0;const doneSet=new Set();
+function markDone(box,id){if(id&&doneSet.has(id))return;if(id)doneSet.add(id);if(box)box.classList.add("done");doneComps++;updateXP()}
+function updateXP(){const p=Math.round(100*doneComps/Math.max(1,totalComps));$("#xpb").style.width=p+"%";$("#xpn").textContent=p+"%"}
+
+/* ---------- COMPONENT DATA ---------- */
+const C={
+ sortPop:{type:"sort",title:"CHALLENGE · CLOSED OR OPEN?",bins:["Closed (fixed)","Open (dynamic)"],
+  items:[["Survivors of the 2003 SARS outbreak in Singapore",0],["Babies born at KK Hospital in 2025",0],["Residents of Tampines",1],["Patients warded at a hospital",1],["Seniors in an Active Ageing Centre's catchment",1],["Atomic bomb survivors",0]],
+  why:"Closed: membership fixed by an event and permanent. Open: membership depends on a condition (living, being warded) and people move in and out."},
+ mTime:{type:"mcq",title:"CHALLENGE · READ THE PATTERN",q:"Influenza cases in Singapore rise around similar months every year. Which time pattern is this?",
+  o:["Seasonality","Long-term trend","Point-source outbreak","Place pattern"],
+  why:"A predictable rise at the same time each year is seasonality, so prevention (e.g. vaccination) can be timed before the peak."},
+ sortDet:{type:"sort",title:"CHALLENGE · PATTERN OR DETERMINANT?",bins:["Distribution (pattern)","Determinant (cause / risk factor)"],
+  items:[["Dengue cases peak mid-year",0],["Stagnant water in flower-pot plates",1],["Diabetes is more common in older adults",0],["Smoking",1],["Most HFMD cases are preschool children",0],["Sedentary lifestyle",1]],
+  why:"Patterns describe who, where and when. Determinants are the causes and risk factors behind them."},
+ sortFM:{type:"sort",title:"CHALLENGE · WHICH MEASURE?",bins:["Ratio","Proportion","Rate"],
+  items:[["Nurses : hospital beds",0],["Male : female attendees",0],["Residents with diabetes ÷ all residents",1],["% of seniors vaccinated for flu",1],["New dengue cases per 100,000 per week",2],["Deaths per 1,000 population per year",2]],
+  why:"Ratio compares any two values. Proportion is part of a whole. Rate includes time and is used to compare risk."},
+ mDial:{type:"mcq",title:"CHALLENGE · QUICK CALC",q:"A dialysis centre has 150 patients; 90 are men. Ratio of men to women?",
+  o:["3 : 2","2 : 3","3 : 5","0.6"],
+  why:"Women = 150 − 90 = 60. Men : women = 90 : 60 = 3 : 2. (The proportion of men is 90 ÷ 150 = 0.6.)"},
+ mInc1:{type:"mcq",title:"CHALLENGE · DENOMINATOR CHECK",q:"For cumulative incidence, who belongs in the denominator?",
+  o:["People who are disease-free (at risk) at the start","Everyone in the population, including existing cases","Only the new cases","Only people who died"],
+  why:"Existing cases cannot become new cases, so they are removed from the population at risk."},
+ sortIP:{type:"sort",title:"CHALLENGE · INCIDENCE OR PREVALENCE?",bins:["Incidence","Prevalence"],
+  items:[["New dengue cases per 100,000 this week",0],["% of residents aged 60+ with diabetes in a survey",1],["Planning how many dialysis chairs are needed",1],["New hip fractures per 1,000 seniors in 2025",0],["Investigating whether a food stall caused gastroenteritis",0],["Nursing-home residents with dementia on 1 Jan",1]],
+  why:"Incidence counts new cases and helps find causes. Prevalence counts all existing cases and helps plan services."}
+};
+
+/* ---------- COMPONENTS ---------- */
+function mcq(cfg){
+  const box=el("div","comp");box.appendChild(el("span","ct",cfg.title));
+  box.appendChild(el("div","q",cfg.q));
+  const opts=el("div","opts");box.appendChild(opts);const fb=el("div","fb2");box.appendChild(fb);
+  let answered=false;
+  shuffle(cfg.o.map((t,i)=>({t,i}))).forEach(x=>{
+    const b=el("button","opt",x.t);
+    b.onclick=()=>{ if(answered)return;
+      if(x.i===0){answered=true;$$(".opt",opts).forEach(o=>o.disabled=true);b.classList.add("ok");fb.className="fb2 show";fb.innerHTML="<b class='hb'>CORRECT.</b> "+cfg.why;markDone(box)}
+      else{b.classList.add("bad");b.disabled=true;fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>NOT QUITE.</b> Try again."}};
+    opts.appendChild(b)});
+  return box;
+}
+function sorter(cfg){
+  const box=el("div","comp");box.appendChild(el("span","ct",cfg.title));
+  box.appendChild(el("div","hint","Tap a chip, then tap a box – or drag and drop."));
+  const pool=el("div","pool");box.appendChild(pool);
+  const bins=el("div","bins");box.appendChild(bins);
+  const zones=cfg.bins.map(n=>{const b=el("div","bin");b.appendChild(el("h4","",n));const z=el("div","zone");b.appendChild(z);bins.appendChild(b);return z});
+  const fb=el("div","fb2"),ctl=el("div","ctl"),chk=el("button","btn","Check ▸"),rst=el("button","btn ghost","Reset");ctl.append(chk,rst);box.append(ctl,fb);
+  let sel=null,solved=false,dragEl=null;
+  const chips=shuffle(cfg.items).map(x=>{const c=el("div","chip",x[0]);c.draggable=true;c._b=x[1];pool.appendChild(c);
+    c.onclick=e=>{e.stopPropagation();if(solved)return;if(sel&&sel!==c)sel.classList.remove("sel");sel=(sel===c)?null:c;c.classList.toggle("sel",sel===c)};
+    c.ondragstart=e=>{dragEl=c;try{e.dataTransfer.setData("text/plain","x")}catch(_){}};c.ondragend=()=>{dragEl=null};return c});
+  const put=(c,z)=>{z.appendChild(c);c.classList.remove("sel","ok","bad");sel=null};
+  [pool,...zones].forEach(z=>{z.onclick=()=>{if(sel&&!solved)put(sel,z)};z.ondragover=e=>{e.preventDefault();z.classList.add("over")};z.ondragleave=()=>z.classList.remove("over");z.ondrop=e=>{e.preventDefault();z.classList.remove("over");if(dragEl&&!solved)put(dragEl,z)}});
+  chk.onclick=()=>{if(solved)return;let right=0,un=0;
+    chips.forEach(c=>{const zi=zones.indexOf(c.parentNode);c.classList.remove("ok","bad","sel");if(zi<0){un++;return}if(zi===c._b){c.classList.add("ok");right++}else c.classList.add("bad")});
+    if(un){fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>PLACE EVERY CHIP</b> first.";return}
+    if(right===chips.length){solved=true;chips.forEach(c=>{c.classList.add("lock");c.draggable=false});chk.disabled=true;fb.className="fb2 show";fb.innerHTML="<b class='hb'>ALL CORRECT.</b> "+cfg.why;markDone(box)}
+    else{fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>"+right+" / "+chips.length+" correct.</b> Move the ✘ chips and check again."}};
+  rst.onclick=()=>{if(solved)return;chips.forEach(c=>{pool.appendChild(c);c.classList.remove("ok","bad","sel")});fb.className="fb2"};
+  return box;
+}
+$$(".comp-m").forEach(m=>{const c=C[m.dataset.c];if(!c)return;totalComps++;m.replaceWith(c.type==="mcq"?mcq(c):sorter(c))});
+
+/* ---------- TABS ---------- */
+const panels=$$("main > .panel");
+panels.forEach((p,i)=>{const b=el("button","tab","<em>0"+i+"</em>"+p.dataset.name);b.setAttribute("role","tab");b.setAttribute("aria-selected",i===0);b.dataset.i=i;b.onclick=()=>go(i);$("#tabs").appendChild(b)});
+function go(i){
+  panels.forEach((p,k)=>p.classList.toggle("on",k===i));
+  $$(".tab").forEach((t,k)=>{t.setAttribute("aria-selected",k===i);if(k===i)t.classList.add("seen")});
+  const t=$$(".tab")[i];if(t&&t.scrollIntoView)t.scrollIntoView({inline:"center",block:"nearest"});
+  window.scrollTo({top:0,behavior:"smooth"});
+  try{history.replaceState(null,"","#"+i)}catch(e){}
+  if(i===1)countUp($("#freqN"),874);
+  resizeCover();
+}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(+g.dataset.go)});
+$("#tabs").addEventListener("keydown",e=>{const c=+$(".tab[aria-selected=true]").dataset.i;if(e.key==="ArrowRight")go(Math.min(5,c+1));if(e.key==="ArrowLeft")go(Math.max(0,c-1))});
+function countUp(n,v){if(RM){n.textContent=v;return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1400);n.textContent=Math.round(v*(1-Math.pow(1-k,3))).toLocaleString();if(k<1)requestAnimationFrame(f)})(t0)}
+
+/* ---------- COVER SIM ---------- */
+const cv=$("#popc"),cx=cv.getContext("2d");let ppl=[],day=0,newLog=[],cols=0,rows=0,cell=0;
+function resizeCover(){const r=cv.getBoundingClientRect();if(!r.width)return;const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=r.width*dpr;cv.height=r.height*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+  const W=r.width,H=r.height;cell=W<640?22:26;cols=Math.floor(W/cell);rows=Math.floor(H/cell);
+  const n=cols*rows;while(ppl.length<n)ppl.push({s:0,t:0,d:0});ppl.length=n}
+function step(){day++;let nw=0;
+  ppl.forEach(p=>{ if(p.s===0){if(Math.random()<0.004){p.s=1;p.t=0;p.d=8+Math.random()*40;nw++}}
+    else if(p.s===1){p.t++;if(p.t>p.d){if(Math.random()<0.12){p.s=3;p.t=0}else{p.s=2;p.t=0}}}
+    else if(p.s===2){p.t++;if(p.t>25){p.s=0}}
+    else if(p.s===3){p.t++;if(p.t>60){p.s=0}} });
+  newLog.push(nw);if(newLog.length>7)newLog.shift();
+  const alive=ppl.filter(p=>p.s!==3).length,ill=ppl.filter(p=>p.s===1).length,n7=newLog.reduce((a,b)=>a+b,0);
+  $("#cNew").textContent=n7;$("#cEx").textContent=ill;$("#cInc").textContent=(100*n7/Math.max(1,alive-ill+n7)).toFixed(1)+"%";$("#cPrev").textContent=(100*ill/Math.max(1,alive)).toFixed(1)+"%";}
+function draw(){const r=cv.getBoundingClientRect();cx.clearRect(0,0,r.width,r.height);
+  const ox=(r.width-cols*cell)/2+cell/2,oy=(r.height-rows*cell)/2+cell/2,now=performance.now()/1000;
+  ppl.forEach((p,i)=>{const x=ox+(i%cols)*cell,y=oy+Math.floor(i/cols)*cell,s=cell/26;
+    let col="rgba(0,229,255,.45)",glow=0;
+    if(p.s===1){col=p.t<3?"#ffffff":O;glow=p.t<3?18:10}
+    else if(p.s===2)col="rgba(0,229,255,.9)";
+    cx.shadowBlur=glow;cx.shadowColor=O;
+    if(p.s===3){cx.strokeStyle="rgba(120,130,150,.5)";cx.lineWidth=1;cx.beginPath();cx.arc(x,y-4*s,3*s,0,7);cx.stroke();cx.beginPath();cx.moveTo(x-5*s,y+8*s);cx.quadraticCurveTo(x,y-2*s,x+5*s,y+8*s);cx.stroke()}
+    else{cx.fillStyle=col;cx.beginPath();cx.arc(x,y-4*s,3.2*s,0,7);cx.fill();cx.beginPath();cx.moveTo(x-5.5*s,y+8*s);cx.quadraticCurveTo(x,y-3*s,x+5.5*s,y+8*s);cx.closePath();cx.fill()}
+    if(p.s===1&&p.t<3){cx.shadowBlur=0;cx.strokeStyle="rgba(255,106,0,"+(0.9-0.3*p.t)+")";cx.lineWidth=1.5;cx.beginPath();cx.arc(x,y,(6+p.t*4+Math.sin(now*6)*1.5)*s,0,7);cx.stroke()}
+  });cx.shadowBlur=0}
+resizeCover();for(let i=0;i<120;i++)step();
+let last=0;(function loop(t){if($("#p0").classList.contains("on")){if(t-last>(RM?2000:180)){step();last=t}draw()}requestAnimationFrame(loop)})(0);
+addEventListener("resize",resizeCover);
+
+/* ---------- POPULATION BOXES ---------- */
+(function(){const bc=$("#boxC"),bo=$("#boxO");
+  for(let i=0;i<14;i++){const d=el("i");d.style.left=(6+Math.random()*86)+"%";d.style.top=(14+Math.random()*68)+"%";d.style.animationDelay=(-Math.random()*3)+"s";bc.appendChild(d)}
+  for(let i=0;i<12;i++){const d=el("i");d.style.top=(14+Math.random()*68)+"%";d.style.animationDuration=(5+Math.random()*5)+"s";d.style.animationDelay=(-Math.random()*10)+"s";bo.appendChild(d)}})();
+
+/* ---------- TIME CHART ---------- */
+const TD={
+ trend:{cap:"Trend: a steady rise over years – e.g. diabetes diagnoses per 1,000 seniors as the population ages.",kind:"line",x:["2015","","2017","","2019","","2021","","2023","","2025"],y:[52,55,57,61,63,60,66,70,73,77,80]},
+ season:{cap:"Seasonality: peaks around the same months each year – e.g. influenza-like illness.",kind:"line",x:[],y:[]},
+ outbreak:{cap:"Outbreak: a sudden spike from one source – e.g. gastroenteritis after a corporate dinner.",kind:"bar",x:["D0","D1","D2","D3","D4","D5","D6"],y:[3,31,22,8,3,1,0]}
+};
+for(let w=0;w<104;w++){const k=w%52;TD.season.y.push(Math.round(18+30*Math.exp(-Math.pow(k-24,2)/28)+18*Math.exp(-Math.pow(k-50,2)/14)+16*Math.exp(-Math.pow(k+2,2)/14)+Math.random()*4));TD.season.x.push(w===0?"Y1 JAN":w===26?"JUL":w===52?"Y2 JAN":w===78?"JUL":"")}
+function drawTime(m){const s=$("#timeChart");s.innerHTML="";const d=TD[m],W=1000,H=250,L=36,R=10,T=14,Bt=30,mx=Math.max(...d.y)*1.15,n=d.y.length;
+  for(let g=0;g<=4;g++){const y=T+(H-T-Bt)*g/4;sv("line",{x1:L,x2:W-R,y1:y,y2:y,stroke:"rgba(0,229,255,.12)"},s)}
+  const X=i=>L+(W-L-R)*(d.kind==="bar"?(i+.5)/n:i/(n-1)),Y=v=>H-Bt-(H-T-Bt)*v/mx;
+  if(d.kind==="bar"){const bw=(W-L-R)/n*0.6;d.y.forEach((v,i)=>{const r=sv("rect",{x:X(i)-bw/2,y:H-Bt,width:bw,height:0,fill:O,style:"filter:drop-shadow(0 0 6px #ff6a00);transition:all .6s"},s);setTimeout(()=>{r.setAttribute("y",Y(v));r.setAttribute("height",H-Bt-Y(v))},30+i*60)})}
+  else{let p="";d.y.forEach((v,i)=>p+=(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1));
+    sv("path",{d:p+"L"+X(n-1)+" "+(H-Bt)+"L"+X(0)+" "+(H-Bt)+"Z",fill:"rgba(0,229,255,.08)"},s);
+    const pl=sv("path",{d:p,fill:"none",stroke:B,"stroke-width":2.5,style:"filter:drop-shadow(0 0 5px #00e5ff)"},s);
+    const len=pl.getTotalLength();pl.style.strokeDasharray=len;pl.style.strokeDashoffset=len;pl.getBoundingClientRect();pl.style.transition="stroke-dashoffset 1.4s ease";pl.style.strokeDashoffset=0}
+  d.x.forEach((t,i)=>{if(t)sv("text",{x:X(i),y:H-10,"text-anchor":"middle"},s).textContent=t});
+  $("#timeCap").textContent=d.cap}
+$$("#timeSeg button").forEach(b=>b.onclick=()=>{$$("#timeSeg button").forEach(x=>x.classList.toggle("on",x===b));drawTime(b.dataset.m)});
+drawTime("trend");
+
+/* ---------- PLACE ---------- */
+const PL=[["n","NORTH",220,600],["ne","NORTH-EAST",280,950],["w","WEST",400,950],["c","CENTRAL",420,1000],["e","EAST",300,500]];
+function drawPlace(m){const mp=$("#map");mp.innerHTML="";const v=PL.map(r=>m==="n"?r[2]:r[2]/r[3]*100),mx=Math.max(...v);
+  PL.forEach((r,i)=>{const t=el("div","tile"+(v[i]===mx?" top":""),"<b>"+r[1]+"</b><span>"+(m==="n"?r[2]:v[i].toFixed(1))+"</span><small>"+(m==="n"?"cases":"per 100,000")+" · pop "+r[3]+"k</small>");t.style.gridArea=r[0];t.style.background="rgba("+(v[i]===mx?"255,106,0":"0,229,255")+","+(0.05+0.25*v[i]/mx)+")";mp.appendChild(t)});
+  $("#placeCap").innerHTML=m==="n"?"By <span class='hb'>count</span>, Central looks worst.":"By <span class='hl'>rate</span>, East carries the highest risk. Rates make fair comparisons."}
+$$("#placeSeg button").forEach(b=>b.onclick=()=>{$$("#placeSeg button").forEach(x=>x.classList.toggle("on",x===b));drawPlace(b.dataset.m)});
+drawPlace("n");
+
+/* ---------- RATIO LAB ---------- */
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+function lab(){const w=+$("#wS").value,m=+$("#mS").value,t=w+m;$("#wv").textContent=w;$("#mv").textContent=m;
+  $("#barW").setAttribute("width",t?300*w/t:0);$("#barM").setAttribute("x",t?300*w/t:0);$("#barM").setAttribute("width",t?300*m/t:0);
+  $("#rP").textContent=t?(w/t).toFixed(2):"–";$("#rPc").textContent=t?(100*w/t).toFixed(2)+"%":"–";
+  const g=gcd(m,w)||1;$("#rR").textContent=w?(m/g)+" : "+(w/g):"–";$("#rRd").textContent=w?(m/w).toFixed(2):"–"}
+$("#wS").oninput=lab;$("#mS").oninput=lab;lab();
+
+/* ---------- E-LEARNING ---------- */
+const Q1=[["women in State A who died from heart disease in 2004","women in State A who died in 2004","P","The heart-disease deaths are part of all deaths – numerator inside denominator."],
+ ["women in State A who died from heart disease in 2004","women in State A who died from cancer in 2004","R","Heart-disease deaths are not part of cancer deaths – two separate groups."],
+ ["women in State A who died from lung cancer in 2004","women in State A who died from cancer (all types) in 2004","P","Lung-cancer deaths are a subset of all cancer deaths."],
+ ["women in State A who died from lung cancer in 2004","estimated revenue ($) from cigarette sales in State A in 2004","R","Two different quantities (deaths vs dollars) – a ratio."]];
+const q1=$("#q1");
+Q1.forEach((q,i)=>{totalComps++;const d=el("div","aq","<div class='qh'>CALCULATION "+(i+1)+"</div><div class='ffrac'><span>No. of "+q[0]+"</span><span>No. of "+q[1]+"</span></div>");
+  const c=el("div","ctl"),s=el("select","inp");s.innerHTML="<option value=''>Select…</option><option value='R'>A. Ratio</option><option value='P'>B. Proportion</option>";
+  const ck=el("button","btn sm","Check"),rv=el("button","btn ghost sm","Reveal"),vd=el("span","verd"),ex=el("div","aqv","<b class='hl'>"+(q[2]==="P"?"B. PROPORTION":"A. RATIO")+"</b> – "+q[3]);
+  ck.onclick=()=>{if(!s.value){vd.textContent="SELECT AN ANSWER";vd.style.color="var(--mute)";return}const ok=s.value===q[2];vd.textContent=ok?"✔ CORRECT":"✘ TRY AGAIN";vd.style.color=ok?"var(--ok)":"var(--bad)";s.className="inp "+(ok?"ok":"bad");if(ok){markDone(null,"q1"+i);ex.classList.add("show")}};
+  rv.onclick=()=>ex.classList.toggle("show");c.append(s,ck,rv,vd);d.append(c,ex);q1.appendChild(d)});
+function parseNum(s){s=String(s).trim().replace(/,/g,"");if(!s)return NaN;let pct=/%$/.test(s);s=s.replace("%","");let v;
+  if(/^[\d.]+\s*\/\s*[\d.]+$/.test(s)){const [a,b]=s.split("/").map(Number);v=a/b}else v=Number(s);if(pct)v/=100;return v}
+function parseRatio(s){s=String(s).trim();const m=s.match(/^([\d.]+)\s*[:\/]\s*([\d.]+)$/);if(m)return +m[1]/+m[2];const n=Number(s);return n}
+const AQ={q2a:v=>{let x=parseNum(v);if(x>1&&x<=100)x/=100;return Math.abs(x-66/99)<0.006},q2b:v=>Math.abs(parseRatio(v)-2)<0.01};
+totalComps+=2;
+$$("[data-chk]").forEach(b=>b.onclick=()=>{const id=b.dataset.chk,inp=$("#"+id),vd=$("#"+id+"-v");if(!inp.value.trim()){vd.textContent="ENTER AN ANSWER";vd.style.color="var(--mute)";return}
+  const ok=AQ[id](inp.value);vd.textContent=ok?"✔ CORRECT":"✘ TRY AGAIN";vd.style.color=ok?"var(--ok)":"var(--bad)";inp.className="inp "+(ok?"ok":"bad");if(ok){markDone(null,id);$("#"+id+"-r").classList.add("show")}});
+$$("[data-rev]").forEach(b=>b.onclick=()=>$("#"+b.dataset.rev+"-r").classList.toggle("show"));
+
+/* ---------- WORKED 1: DIABETES TIMELINE ---------- */
+(function(){const s=$("#dmT"),ev=[["1 JAN","Start",10000],["31 MAR","100 lost to FU"],["30 JUN","30 new cases"],["30 SEP","20 new cases"],["30 NOV","50 lost to FU"],["31 DEC","End"]],L=40,R=660;
+  const xs=ev.map((e,i)=>L+(R-L)*i/5);
+  const win=sv("rect",{x:L,y:30,width:R-L,height:44,fill:"rgba(0,229,255,.1)",stroke:B,"stroke-dasharray":"4 4",style:"transition:all .6s"},s);
+  sv("line",{x1:L,x2:R,y1:52,y2:52,stroke:B,"stroke-width":2,style:"filter:drop-shadow(0 0 4px #00e5ff)"},s);
+  ev.forEach((e,i)=>{const isCase=/new/.test(e[1]);sv("circle",{cx:xs[i],cy:52,r:isCase?8:5,fill:isCase?O:"#03060b",stroke:isCase?O:B,"stroke-width":2,style:isCase?"filter:drop-shadow(0 0 6px #ff6a00)":""},s);
+    sv("text",{x:xs[i],y:20,"text-anchor":"middle",fill:"#fff"},s).textContent=e[0];const t=sv("text",{x:xs[i],y:96,"text-anchor":"middle"},s);t.textContent=e[1];if(isCase)t.setAttribute("style","fill:#ffa13d")});
+  const W={a:{x:L,w:R-L,h:"<div>New cases = 30 + 20 = 50</div><div>At risk at start = 10,000</div><div>CI = 50 ÷ 10,000 = <span class='eq'>0.005 (0.5%)</span></div>"},
+           b:{x:xs[2],w:R-xs[2],h:"<div>New cases after 1 Jul = 20</div><div>At risk on 1 Jul = 10,000 − 100 (lost) − 30 (already cases) = 9,870</div><div>CI = 20 ÷ 9,870 = <span class='eq'>0.0020 (0.20%)</span></div>"}};
+  function set(m){win.setAttribute("x",W[m].x);win.setAttribute("width",W[m].w);$("#dmW").innerHTML=W[m].h}
+  $$("#dmSeg button").forEach(b=>b.onclick=()=>{$$("#dmSeg button").forEach(x=>x.classList.toggle("on",x===b));set(b.dataset.m)});set("a")})();
+
+/* ---------- WORKED 3: PERSON-TIME ---------- */
+(function(){const s=$("#ptT"),d=[["R1",12,""],["R2",6,"fall"],["R3",4,"left"],["R4",9,"fall"],["R5",12,""]],L=40,W=360;
+  d.forEach((r,i)=>{const y=18+i*24;sv("text",{x:4,y:y+4},s).textContent=r[0];sv("rect",{x:L,y:y-6,width:W*r[1]/12,height:12,fill:r[2]==="fall"?"rgba(255,106,0,.5)":"rgba(0,229,255,.35)",stroke:r[2]==="fall"?O:B},s);
+    sv("text",{x:L+W*r[1]/12+6,y:y+4,style:"fill:"+(r[2]==="fall"?"#ffa13d":"#d7f6ff")},s).textContent=r[1]+" mo"+(r[2]==="fall"?" · FALL":r[2]==="left"?" · LEFT":"")});
+  sv("text",{x:L,y:142},s).textContent="0";sv("text",{x:L+W,y:142,"text-anchor":"end"},s).textContent="12 MONTHS"})();
+
+/* ---------- COHORT TIMELINE SIMULATOR ---------- */
+const MON=["AUG 90","SEP 90","OCT 90","NOV 90","DEC 90","JAN 91","FEB 91","MAR 91","APR 91","MAY 91","JUN 91","JUL 91","AUG 91","SEP 91","OCT 91","NOV 91","DEC 91","JAN 92"];
+const mlabel=v=>{const i=Math.floor(v),d=Math.round((v-i)*30)+1;return d+" "+MON[Math.min(17,i)]};
+const SLIDE=(function(){const a=[[0.64,15.05,"d"],[1.33,4.6,"d"],[12.18,15.3,"d"],[1.6,9.15,"d"],[1.12,12.66,"d"],[6.6,12.66,"d"],[5.6,15.3,"r"],[0.64,6.17,"d"],[1.33,15.5,"r"],[5.6,14.8,"d"]].map(x=>({on:x[0],end:x[1],type:x[2]}));while(a.length<20)a.push({on:null,end:null,type:null});return a})();
+function randCohort(){const a=[];for(let i=0;i<20;i++){if(Math.random()<0.55){const on=+(Math.random()*15.5).toFixed(2),r=Math.random(),dur=1+Math.random()*9;a.push(r<0.2?{on,end:null,type:null}:{on,end:Math.min(17,+(on+dur).toFixed(2)),type:r<0.6?"d":"r"})}else a.push({on:null,end:null,type:null})}
+  a.sort((x,y)=>(x.on==null)-(y.on==null)||(x.on||0)-(y.on||0));return a}
+const illAt=(p,t)=>p.on!=null&&p.on<=t&&(p.end==null||p.end>t);
+const deadAt=(p,t)=>p.type==="d"&&p.end!=null&&p.end<=t;
+function makeSim(root,mode){
+  let data=SLIDE,pm="point";const svg=$(".tlsvg",root),ra=$(".ra",root),rb=$(".rb",root),res=$(".res",root);
+  const W=900,L=46,R=14,rowH=17,T=26,N=()=>data.length,X=v=>L+(W-L-R)*v/17;
+  function render(){
+    let a=+ra.value,b=rb?+rb.value:a;if(mode==="inc"||pm==="period"){if(b<a){[a,b]=[b,a]}}
+    const H=T+N()*rowH+26;svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.innerHTML="";
+    for(let m=0;m<=17;m++){sv("line",{x1:X(m),x2:X(m),y1:T-4,y2:H-22,stroke:"rgba(0,229,255,"+(m%3===2?.18:.07)+")"},svg);if(m%2===0)sv("text",{x:X(m),y:H-8,"text-anchor":"middle",class:"lbl"},svg).textContent=MON[m]}
+    const point=mode==="prev"&&pm==="point";
+    if(point){sv("line",{x1:X(a),x2:X(a),y1:T-10,y2:H-22,stroke:O,"stroke-width":2.5,style:"filter:drop-shadow(0 0 6px #ff6a00)"},svg)}
+    else sv("rect",{x:X(a),y:T-10,width:Math.max(1,X(b)-X(a)),height:H-T-12,fill:mode==="inc"?"rgba(0,229,255,.08)":"rgba(255,106,0,.08)",stroke:mode==="inc"?B:O,"stroke-dasharray":"5 4"},svg);
+    let st={alive:0,ill:0,risk:0,nw:0,pt:0,cases:0,mid:0};const mid=(a+b)/2;
+    data.forEach((p,i)=>{const y=T+i*rowH+rowH/2;let cls="norm";
+      if(mode==="inc"){const alive=!deadAt(p,a),ill=illAt(p,a);if(alive)st.alive++;if(alive&&ill){st.ill++;cls="excl"}else if(alive){st.risk++;const isNew=p.on!=null&&p.on>=a&&p.on<=b;if(isNew){st.nw++;cls="new"}
+          const stop=Math.min(b,isNew?p.on:b,(p.type==="d"&&p.end>a&&p.on==null)?p.end:b);st.pt+=Math.max(0,stop-a);
+          sv("rect",{x:X(a),y:y-2,width:Math.max(0,X(stop)-X(a)),height:4,fill:"rgba(0,229,255,.55)"},svg)}else cls="dead"}
+      else{ if(point){if(!deadAt(p,a)){st.alive++;if(illAt(p,a)){st.cases++;cls="new"}}else cls="dead"}
+        else{if(!deadAt(p,mid))st.mid++;if(p.on!=null&&p.on<=b&&(p.end==null||p.end>=a)&&!deadAt(p,a)){st.cases++;cls="new"}else if(deadAt(p,a))cls="dead"}}
+      const lc=cls==="new"?"#ffa13d":cls==="excl"||cls==="dead"?"#4a5a68":"#7fa3b5";
+      sv("text",{x:6,y:y+3,class:"lbl",style:"fill:"+lc},svg).textContent=(i+1<10?"0":"")+(i+1)+(cls==="excl"?" ✕":"");
+      if(cls==="new")sv("rect",{x:L-4,y:y-rowH/2+1,width:W-L-R+8,height:rowH-2,fill:"rgba(255,106,0,.09)"},svg);
+      sv("line",{x1:X(0),x2:X(17),y1:y,y2:y,stroke:"rgba(0,229,255,.12)"},svg);
+      if(p.on!=null){const e=p.end==null?17:p.end;sv("line",{x1:X(p.on),x2:X(e),y1:y,y2:y,stroke:cls==="excl"?"#6a5444":O,"stroke-width":3,style:cls==="excl"?"":"filter:drop-shadow(0 0 3px #ff6a00)"},svg);
+        sv("path",{d:"M"+(X(p.on)-5)+" "+(y-7)+"h10l-5 7z",fill:cls==="excl"?"#6a5444":"#fff"},svg);
+        if(p.end!=null){if(p.type==="d")sv("path",{d:"M"+(X(e)-4)+" "+(y-4)+"l8 8M"+(X(e)+4)+" "+(y-4)+"l-8 8",stroke:"#ff3d5a","stroke-width":2},svg);
+          else sv("path",{d:"M"+(X(e)-5)+" "+(y+7)+"h10l-5 -7z",fill:B},svg)}}});
+    sv("text",{x:L,y:12,class:"lbl"},svg).textContent="▼ ONSET   ✕ DEATH   ▲ RECOVERY   ━ ILL";
+    $(".wa",root).textContent=mlabel(+ra.value);if(rb)$(".wb",root).textContent=mlabel(+rb.value);
+    if(mode==="inc"){const ci=st.risk?st.nw/st.risk:NaN,ir=st.pt?st.nw/(st.pt/12):NaN;root._ci=ci;
+      res.innerHTML="<div><b>"+st.alive+"</b><span>Alive at start</span></div><div><b>"+st.ill+"</b><span>Already ill · excluded</span></div><div><b>"+st.risk+"</b><span>At risk</span></div><div><b>"+st.nw+"</b><span>New cases</span></div>"+
+        "<div class='o'><b>"+f2(100*ci,1)+"%</b><span>Cumulative incidence = "+st.nw+" ÷ "+st.risk+"</span></div><div class='o'><b>"+f2(ir,2)+"</b><span>Incidence rate per person-year ("+f2(st.pt,1)+" person-months)</span></div>"}
+    else if(point){res.innerHTML="<div><b>"+st.alive+"</b><span>Population on "+mlabel(a)+"</span></div><div><b>"+st.cases+"</b><span>Existing cases</span></div><div class='o'><b>"+f2(100*st.cases/st.alive,1)+"%</b><span>Point prevalence = "+st.cases+" ÷ "+st.alive+"</span></div>"}
+    else{res.innerHTML="<div><b>"+st.mid+"</b><span>Population at mid-period</span></div><div><b>"+st.cases+"</b><span>Cases at any time in period</span></div><div class='o'><b>"+f2(100*st.cases/st.mid,1)+"%</b><span>Period prevalence = "+st.cases+" ÷ "+st.mid+"</span></div>"}
+  }
+  ra.oninput=render;if(rb)rb.oninput=render;
+  $$("[data-ds]",root).forEach(b=>b.onclick=()=>{data=b.dataset.ds==="slide"?SLIDE:randCohort();const tv=$(".tv",root);if(tv){tv.textContent="";$(".ti",root).value=""}render()});
+  if(mode==="prev")$$(".pseg button",root).forEach(b=>b.onclick=()=>{pm=b.dataset.m;$$(".pseg button",root).forEach(x=>x.classList.toggle("on",x===b));$(".pb",root).style.display=pm==="period"?"":"none";$(".la",root).textContent=pm==="period"?"PERIOD START":"DATE";if(pm==="period"&&+rb.value<=+ra.value)rb.value=Math.min(17,+ra.value+3);render()});
+  const hc=$(".hideChk",root);if(hc){totalComps++;hc.onchange=()=>{root.classList.toggle("hidden-res",hc.checked);$(".testbox",root).style.display=hc.checked?"":"none"};
+    $(".tchk",root).onclick=()=>{const raw=$(".ti",root).value,tv=$(".tv",root);let x=parseNum(raw);if(/%/.test(raw))x*=100;else if(x<1&&root._ci*100>=1)x*=100;
+      const ok=Math.abs(x-100*root._ci)<0.15;tv.textContent=ok?"✔ CORRECT":"✘ CHECK: new cases ÷ at risk";tv.style.color=ok?"var(--ok)":"var(--bad)";if(ok){markDone(null,"simtest");root.classList.remove("hidden-res");hc.checked=false;$(".testbox",root).style.display="none"}}}
+  render();
+}
+makeSim($("#simI"),"inc");makeSim($("#simP"),"prev");
+
+/* ---------- BATHTUB ---------- */
+(function(){const s=$("#tub"),h=$("#tubH"),Npop=10000;let P=480,hist=[];
+  const defs=sv("defs",{},s);const lg=sv("linearGradient",{id:"wg",x1:0,y1:0,x2:0,y2:1},defs);sv("stop",{offset:0,"stop-color":"#ff8a2a"},lg);sv("stop",{offset:1,"stop-color":"#a33d00"},lg);
+  const tx=90,ty=70,tw=240,th=170;
+  const inflow=sv("path",{d:"M60 20 H150 V"+(ty+10),fill:"none",stroke:O,class:"flowpath","stroke-linecap":"round"},s);
+  sv("text",{x:60,y:14,style:"fill:#ffa13d"},s).textContent="NEW CASES (INCIDENCE)";
+  sv("path",{d:"M"+tx+" "+ty+" V"+(ty+th)+" H"+(tx+tw)+" V"+ty,fill:"rgba(0,229,255,.04)",stroke:B,"stroke-width":3,style:"filter:drop-shadow(0 0 6px #00e5ff)"},s);
+  const water=sv("rect",{x:tx+2,width:tw-4,fill:"url(#wg)",opacity:.85},s);
+  const wave=sv("rect",{x:tx+2,width:tw-4,height:3,fill:"#ffd2a8"},s);
+  const lbl=sv("text",{x:tx+tw/2,"text-anchor":"middle",style:"fill:#fff;font-size:13px;font-weight:900"},s);
+  const outR=sv("path",{d:"M"+(tx+60)+" "+(ty+th)+" V"+(ty+th+40)+" H20",fill:"none",stroke:B,class:"flowpath","stroke-linecap":"round"},s);
+  const outD=sv("path",{d:"M"+(tx+tw-60)+" "+(ty+th)+" V"+(ty+th+40)+" H400",fill:"none",stroke:"#ff3d5a",class:"flowpath","stroke-linecap":"round"},s);
+  sv("text",{x:20,y:ty+th+58,style:"fill:#00e5ff"},s).textContent="RECOVERY";sv("text",{x:400,y:ty+th+58,"text-anchor":"end",style:"fill:#ff3d5a"},s).textContent="DEATH";
+  sv("text",{x:tx+tw,y:ty-8,"text-anchor":"end",style:"fill:#7fa3b5"},s).textContent="EXISTING CASES (PREVALENCE)";
+  const I=()=>+$("#sI").value,D=()=>+$("#sD").value,M=()=>+$("#sM").value/100;
+  function ui(){$("#vI").textContent=I();$("#vD").textContent=D();$("#vM").textContent=Math.round(M()*100);$("#tubSS").textContent=f2(I()*D(),0)}
+  function frame(){const out=P/D();P=Math.max(0,Math.min(Npop,P+I()-out));hist.push(P);if(hist.length>120)hist.shift();
+    const maxP=3000,lvl=Math.min(1,P/maxP),hh=(th-4)*lvl;water.setAttribute("y",ty+th-2-hh);water.setAttribute("height",hh);wave.setAttribute("y",ty+th-2-hh-1.5);
+    lbl.setAttribute("y",Math.max(ty+18,ty+th-hh-8));lbl.textContent=f2(P,0)+" CASES";
+    inflow.setAttribute("stroke-width",Math.max(0.5,I()/10));outR.setAttribute("stroke-width",Math.max(0.5,out*(1-M())/10));outD.setAttribute("stroke-width",Math.max(0.5,out*M()/10));
+    $("#tubP").textContent=f2(P,0);$("#tubPc").textContent=f2(100*P/Npop,1)+"%";
+    h.innerHTML="";const mx=Math.max(600,...hist)*1.1;let p="";hist.forEach((v,i)=>p+=(i?"L":"M")+(10+620*i/119).toFixed(1)+" "+(84-74*v/mx).toFixed(1));
+    sv("path",{d:p,fill:"none",stroke:O,"stroke-width":2,style:"filter:drop-shadow(0 0 4px #ff6a00)"},h);
+    sv("line",{x1:10,x2:630,y1:84-74*(I()*D())/mx,y2:84-74*(I()*D())/mx,stroke:B,"stroke-dasharray":"4 4","stroke-opacity":.6},h);
+    sv("text",{x:12,y:10},h).textContent="EXISTING CASES OVER TIME   - - STEADY STATE"}
+  $$("#sI,#sD,#sM").forEach(x=>x.oninput=ui);
+  const SC={cure:[null,3,null,"A cure shortens duration: prevalence FALLS even though incidence is unchanged."],survive:[null,40,5,"Treatment keeps people alive longer without curing them: prevalence RISES (e.g. diabetes, HIV)."],prevent:[15,null,null,"Prevention cuts new cases: prevalence falls slowly as existing cases exit."],outbreak:[140,null,null,"An outbreak floods in new cases: prevalence climbs fast."],reset:[40,12,20,"Prevalence ≈ Incidence × Duration."]};
+  $$("[data-sc]").forEach(b=>b.onclick=()=>{const c=SC[b.dataset.sc];if(c[0]!=null)$("#sI").value=c[0];if(c[1]!=null)$("#sD").value=c[1];if(c[2]!=null)$("#sM").value=c[2];$("#tubMsg").textContent=c[3];ui()});
+  ui();let lt=0;(function loop(t){if($("#p4").classList.contains("on")&&t-lt>220){frame();lt=t}requestAnimationFrame(loop)})(0);frame()})();
+
+/* ---------- CALCULATOR ---------- */
+const CM={
+ ci:{n:"CUMULATIVE INCIDENCE",l1:"New cases during the period",l2:"Population initially at risk",num:"new cases",den:"population at risk",chk:1,interp:"of people at risk developed the disease during the period"},
+ ir:{n:"INCIDENCE RATE",l1:"New cases",l2:"Total person-time at risk",num:"new cases",den:"person-time",rate:1,interp:"new cases per person-year of follow-up"},
+ pp:{n:"POINT PREVALENCE",l1:"Existing cases on the date",l2:"Population on that date",num:"existing cases",den:"population",chk:1,interp:"of the population had the disease on that date"},
+ per:{n:"PERIOD PREVALENCE",l1:"Cases existing at the start",l2:"Estimated population in the period",l3:"New cases during the period",num:"existing + new cases",den:"population",chk:1,three:1,interp:"of the population had the disease at some time in the period"},
+ cf:{n:"CASE FATALITY",l1:"Deaths among cases",l2:"Total number of cases",num:"deaths",den:"cases",chk:1,interp:"of cases died of the disease"}};
+let cm="ci";
+const EX={ci:[50,10000],ir:[2,3.58],pp:[50,5000],per:[50,5000,70],cf:[3,120]};
+function setCalc(m){cm=m;const c=CM[m];$("#l1").textContent=c.l1;$("#l2").textContent=c.l2;$("#c3w").style.display=c.three?"":"none";if(c.three)$("#l3").textContent=c.l3;$("#unitW").style.display=c.rate?"":"none";
+  const e=EX[m];$("#c1").value=e[0];$("#c2").value=e[1];if(c.three)$("#c3").value=e[2];$("#mult").value=c.rate?"1000":"100";$("#cName").textContent=c.n;calc()}
+function calc(){const c=CM[cm],a=parseFloat($("#c1").value),b=parseFloat($("#c2").value),k=+$("#mult").value,e3=c.three?parseFloat($("#c3").value):0,err=$("#cErr");err.textContent="";
+  if(!(a>=0)||!(b>0)||(c.three&&!(e3>=0))){err.textContent="Enter non-negative numbers; the denominator must be above 0.";$("#cRes").textContent="–";$("#cUnit").textContent="";$("#cWork").innerHTML="";return}
+  const num=a+e3;if(c.chk&&num>b){err.textContent="The numerator cannot exceed the denominator – check your population.";}
+  let den=b,u="";if(c.rate){const per=+$("#unit").value;den=b/per;u=" person-years"}
+  const v=num/den,out=v*k,unit=k===1?(c.rate?"per person-year":"(proportion)"):k===100?(c.rate?"per 100 person-years":"%"):"per "+k.toLocaleString()+(c.rate?" person-years":"");
+  $("#cRes").textContent=f2(out,4);$("#cUnit").textContent=unit.toUpperCase();
+  $("#cWork").innerHTML="<div>"+c.num+" ÷ "+c.den+"</div><div>= "+(c.three?"("+f2(a)+" + "+f2(e3)+")":f2(a))+" ÷ "+f2(den,4)+(c.rate&&+$("#unit").value!==1?" <span class='mute'>(converted to person-years)</span>":"")+"</div><div>= "+f2(v,6)+(k!==1?" × "+k.toLocaleString():"")+"</div><div class='eq'>= "+f2(out,4)+" "+unit+"</div><div class='mute' style='margin-top:6px'>"+(c.rate?f2(out,2)+" "+unit+".":f2(v*100,2)+"% "+c.interp+".")+"</div>"}
+$$("#calcSeg button").forEach(b=>b.onclick=()=>{$$("#calcSeg button").forEach(x=>x.classList.toggle("on",x===b));setCalc(b.dataset.m)});
+$$("#c1,#c2,#c3,#mult,#unit").forEach(x=>x.addEventListener("input",calc));
+setCalc("ci");
+
+/* ---------- CASE STUDY ---------- */
+const CO=[["F",0,0,8],["M",1,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",1,0,0],["M",0,0,0],["M",0,0,0],["F",1,0,0],["M",1,0,0],["F",1,0,0],["F",0,0,0],["M",0,8,0],["M",1,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["M",0,0,7],["M",0,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,4],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,0,0],["M",0,0,0],["F",0,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,9,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,4,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,0,3],["M",1,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["F",1,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",1,0,0],["M",1,0,0],["M",0,6,0],["M",0,0,0],["F",0,0,0],["M",0,2,0],["M",0,0,0],["F",0,5,0],["F",1,0,0],["F",0,0,0],["F",0,0,0],["F",1,0,0],["F",1,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["M",0,11,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",1,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0]].map(r=>({s:r[0],ex:!!r[1],nm:r[2]||null,lm:r[3]||null}));
+const MN=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const cs={f:"all",h:"none",t:0};
+const isNew=(p,t)=>!p.ex&&p.nm!=null&&p.nm<=t, isLost=(p,t)=>!p.ex&&p.lm!=null&&p.lm<=t;
+const MATCH={none:()=>true,ex:p=>p.ex,risk:p=>!p.ex,new:p=>isNew(p,cs.t),cases:p=>p.ex||isNew(p,cs.t)};
+const g=$("#csGrid");
+function csDraw(){
+  g.innerHTML="";const t=cs.t;
+  CO.forEach((p,i)=>{const x=20+(i%10)*40,y=22+Math.floor(i/10)*40,shown=cs.f==="all"||p.s===cs.f,hit=MATCH[cs.h](p);
+    const op=!shown?.07:(cs.h!=="none"&&!hit)?.2:1;const gr=sv("g",{opacity:op,style:"transition:opacity .35s"},g);
+    let fill="rgba(0,229,255,.7)",glow="";
+    if(p.ex){fill=O;glow="drop-shadow(0 0 4px #ff6a00)"}
+    else if(isNew(p,t)){fill="#fff";glow="drop-shadow(0 0 6px #ff6a00)"}
+    if(isLost(p,t)){sv("circle",{cx:x,cy:y-6,r:5,fill:"none",stroke:"#778"},gr);sv("path",{d:"M"+(x-9)+" "+(y+12)+"Q"+x+" "+(y-4)+" "+(x+9)+" "+(y+12)+"Z",fill:"none",stroke:"#778"},gr)}
+    else{sv("circle",{cx:x,cy:y-6,r:5.5,fill,style:"filter:"+glow},gr);sv("path",{d:"M"+(x-9)+" "+(y+12)+"Q"+x+" "+(y-5)+" "+(x+9)+" "+(y+12)+"Z",fill,style:"filter:"+glow},gr)}
+    if(!p.ex&&p.nm===t&&t>0)sv("circle",{cx:x,cy:y,r:16,fill:"none",stroke:O,"stroke-width":2},gr);
+    sv("text",{x:x+12,y:y+13,style:"font:700 7px Orbitron,sans-serif;fill:#7fa3b5"},gr).textContent=p.s});
+  const sh=CO.filter(p=>cs.f==="all"||p.s===cs.f),ex=sh.filter(p=>p.ex).length,risk=sh.length-ex,nw=sh.filter(p=>isNew(p,t)).length,lost=sh.filter(p=>isLost(p,t)).length;
+  const pm=sh.filter(p=>!p.ex).reduce((a,p)=>a+Math.min(t,p.nm||p.lm||99),0);
+  const d=t===0?"1 JAN":"END "+MN[t-1];$("#csTl").textContent=t===0?"1 JAN 2025":"END OF "+MN[t-1]+" 2025";
+  const tile=(k,v,l,cl)=>"<div class='"+(cl||"")+(cs.h===k?" o":"")+"'><b>"+v+"</b><span>"+l+"</span></div>";
+  $("#csR").innerHTML=tile("none",sh.length,"Seniors shown")+tile("ex",ex,"Existing cases (1 Jan)")+tile("risk",risk,"At risk (1 Jan)")+tile("new",nw,"New cases by "+d)+tile("cases",ex+nw,"Existing + new")+tile("lost",lost,"Lost to follow-up")+"<div class='pyt'><b>"+(pm/12).toFixed(2)+"</b><span>Person-years at risk to "+d+"</span></div>";
+}
+function csSet(o){Object.assign(cs,o);$$("#csF button").forEach(b=>b.classList.toggle("on",b.dataset.v===cs.f));$$("#csH button").forEach(b=>b.classList.toggle("on",b.dataset.v===cs.h));$("#csT").value=cs.t;csDraw()}
+$$("#csF button").forEach(b=>b.onclick=()=>csSet({f:b.dataset.v}));
+$$("#csH button").forEach(b=>b.onclick=()=>csSet({h:b.dataset.v}));
+$("#csT").oninput=()=>csSet({t:+$("#csT").value});
+csDraw();
+
+/* ---------- MISSION ---------- */
+const MS=[
+ {n:"Point prevalence",q:"What % of seniors had diabetes on 1 Jan 2025?",fr:[{set:{f:"all",h:"ex",t:0},how:"ALL · EXISTING · 1 JAN",nl:"Existing cases",dl:"All seniors",n:30,d:100,k:100,u:"%",hn:"Count the orange figures – see the EXISTING tile.",hd:"Prevalence uses the whole population – see SENIORS SHOWN."}],done:"30% of seniors already had diabetes on 1 Jan. A snapshot."},
+ {n:"Cumulative incidence",q:"What % of seniors at risk developed diabetes during 2025?",fr:[{set:{f:"all",h:"new",t:12},how:"ALL · NEW · END OF DEC",nl:"New cases in 2025",dl:"At risk on 1 Jan",n:7,d:70,k:100,u:"%",hn:"Slide the date to END OF DEC and read NEW CASES.",hd:"Existing cases cannot become new cases – use AT RISK, not everyone."}],done:"10% of disease-free seniors developed diabetes in one year. This is their risk."},
+ {n:"Period prevalence",q:"What % of seniors had diabetes at any time during 2025?",fr:[{set:{f:"all",h:"cases",t:12},how:"ALL · EXISTING + NEW · END OF DEC",nl:"Existing + new cases",dl:"All seniors",n:37,d:100,k:100,u:"%",hn:"Add existing cases and new cases (EXISTING + NEW tile).",hd:"Prevalence uses the whole population."}],done:"37% had diabetes at some point in 2025 – higher than the 1 Jan snapshot, because new cases were added."},
+ {n:"Incidence rate",q:"How many new cases per 1,000 person-years of follow-up?",fr:[{set:{f:"all",h:"risk",t:12},how:"ALL · AT RISK · END OF DEC",nl:"New cases",dl:"Person-years at risk",n:7,d:64.58,tol:.06,k:1000,u:"per 1,000 person-years",hn:"Same new cases as Step 2.",hd:"Read PERSON-YEARS AT RISK at END OF DEC. Lost seniors and new cases stop adding time when they leave or are diagnosed."}],done:"About 108 new cases per 1,000 person-years. Person-time gives fair credit for seniors who left early."},
+ {n:"Who is at higher risk?",q:"Compare cumulative incidence in females and males.",fr:[
+   {set:{f:"F",h:"new",t:12},how:"FEMALE · NEW · END OF DEC",nl:"New cases (female)",dl:"Females at risk",n:2,d:40,k:100,u:"%",hn:"Show FEMALE only, then read NEW CASES.",hd:"Read AT RISK for females."},
+   {set:{f:"M",h:"new",t:12},how:"MALE · NEW · END OF DEC",nl:"New cases (male)",dl:"Males at risk",n:5,d:30,k:100,u:"%",hn:"Show MALE only, then read NEW CASES.",hd:"Read AT RISK for males."}],done:"Males 16.7% vs females 5%: men in this cohort had more than three times the risk. A pattern by PERSON."},
+ {n:"Proportion & ratio",q:"What proportion of the cohort is female, and what is the female : male ratio?",fr:[
+   {set:{f:"F",h:"none",t:0},how:"FEMALE · NONE",nl:"Females",dl:"All seniors",n:52,d:100,k:100,u:"%",hn:"Show FEMALE only and read SENIORS SHOWN.",hd:"A proportion compares a part to the whole – use all 100."},
+   {set:{f:"M",h:"none",t:0},how:"MALE · NONE",nl:"Females",dl:"Males",n:52,d:48,k:1,u:": 1 (ratio)",hn:"Females, from the row above.",hd:"Show MALE only and read SENIORS SHOWN. A ratio compares two separate groups."}],done:"52% female; female : male = 52 : 48 ≈ 1.08 : 1."}];
+const msDone=new Set();let ms=0;totalComps+=MS.length;
+MS.forEach((s,i)=>{const b=el("button",i===0?"on":"",String(i+1));b.title=s.n;b.onclick=()=>msShow(i);$("#msSeg").appendChild(b)});
+function msShow(i){ms=i;$$("#msSeg button").forEach((b,k)=>b.classList.toggle("on",k===i));const s=MS[i],body=$("#msBody");body.innerHTML="";
+  body.appendChild(el("div","","<div class='kick' style='font-size:.6rem;letter-spacing:4px;color:var(--o)'>STEP "+(i+1)+" OF "+MS.length+" · "+s.n.toUpperCase()+"</div><p style='color:#fff;font-weight:700;margin:6px 0 4px'>"+s.q+"</p>"));
+  let ok=s.fr.map(()=>false);const fin=el("div","note");fin.style.display="none";
+  s.fr.forEach((f,j)=>{const w=el("div","mc");
+    w.innerHTML="<div class='mch'><span class='tag b'>SET</span><span class='mute'>"+f.how+"</span> <button class='btn sm ghost sm2'>Show me</button></div>"+
+     "<div class='mcr'><div class='mcf'><label>"+f.nl+"</label><input class='inp mn' inputmode='decimal'><i></i><input class='inp md' inputmode='decimal'><label>"+f.dl+"</label></div><span class='op'>"+(f.k>1?"× "+f.k.toLocaleString():"")+"</span><span class='op'>=</span><div><b class='mres big'>?</b><div class='unit mute'>"+f.u+"</div></div></div>"+
+     "<div class='ctl'><button class='btn sm mchk'>Check</button><span class='verd mv'></span></div>";
+    const mn=$(".mn",w),md=$(".md",w),res=$(".mres",w),v=$(".mv",w);
+    $(".sm2",w).onclick=()=>{csSet(f.set);$("#cs").scrollIntoView({behavior:"smooth",block:"start"})};
+    const live=()=>{const a=parseFloat(mn.value),b=parseFloat(md.value);res.textContent=(a>=0&&b>0)?f2(a/b*f.k,f.k===1?2:1):"?"};mn.oninput=md.oninput=live;
+    $(".mchk",w).onclick=()=>{const a=parseFloat(mn.value),b=parseFloat(md.value),tol=f.tol||0.001,okn=Math.abs(a-f.n)<0.001,okd=Math.abs(b-f.d)<=tol;
+      mn.className="inp mn "+(okn?"ok":"bad");md.className="inp md "+(okd?"ok":"bad");
+      if(okn&&okd){v.innerHTML="✔ CORRECT";v.style.color="var(--ok)";ok[j]=true;if(ok.every(Boolean)){fin.style.display="";fin.innerHTML="<b>✔ "+s.done+"</b>"+(i<MS.length-1?" <button class='btn sm' style='margin-left:8px'>Next step ▸</button>":"");const nb=$(".btn",fin);if(nb)nb.onclick=()=>msShow(i+1);if(!msDone.has(i)){msDone.add(i);markDone(null,"ms"+i);$$("#msSeg button")[i].classList.add("dn")}if(msDone.size===MS.length)msSummary()}}
+      else{v.innerHTML="✘ "+(!okn?f.hn:f.hd);v.style.color="var(--bad)"}};
+    body.appendChild(w)});
+  body.appendChild(fin);
+  if(msDone.size===MS.length)msSummary();
+}
+function msSummary(){if($("#msSum"))return;const d=el("div","comp done","<span class='ct'>MISSION COMPLETE</span><table class='cmp'><tbody>"+
+  "<tr><td>POINT PREVALENCE (1 JAN)</td><td>30 ÷ 100</td><td class='hl'>30%</td></tr><tr><td>CUMULATIVE INCIDENCE (2025)</td><td>7 ÷ 70</td><td class='hl'>10%</td></tr><tr><td>PERIOD PREVALENCE (2025)</td><td>(30 + 7) ÷ 100</td><td class='hl'>37%</td></tr><tr><td>INCIDENCE RATE</td><td>7 ÷ 64.58 person-years</td><td class='hl'>108 per 1,000 PY</td></tr><tr><td>CUMULATIVE INCIDENCE BY SEX</td><td>F 2 ÷ 40 · M 5 ÷ 30</td><td class='hl'>5% vs 16.7%</td></tr><tr><td>PROPORTION FEMALE · RATIO F:M</td><td>52 ÷ 100 · 52 : 48</td><td class='hl'>52% · 1.08 : 1</td></tr></tbody></table>");
+  d.id="msSum";$("#mission").appendChild(d)}
+msShow(0);
+
+updateXP();
+const hs=parseInt((location.hash||"").slice(1),10);go(isNaN(hs)||hs<0||hs>5?0:hs);
+})();
+</script>
+</body>
+</html>
