@@ -283,6 +283,52 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#03060b;bo
 .mcr .op{font-size:1.2rem;font-weight:900;color:var(--b)}
 .mcr .mres{font-size:clamp(1.6rem,4vw,2.3rem)}
 @media(max-width:760px){.csw{grid-template-columns:1fr}}
+.ptsvg{width:100%;max-width:640px;display:block;margin:10px 0}
+.ptsvg text{font:600 9px 'Orbitron',sans-serif;fill:var(--mute)}
+.ptr{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px dashed rgba(0,229,255,.2);font-size:.8rem;animation:in .4s}
+.ptr b{color:var(--o2)}
+.ptr.tot{border-top:1px solid var(--o)}
+.tag.g{border-color:#8894a0;color:#b8c2cc}
+.pqtop{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.pqnav{display:flex;gap:8px;flex-wrap:wrap}
+.pqd{width:40px;height:40px;border:2px solid var(--lc);background:transparent;color:var(--ink);font:800 .72rem 'Orbitron',sans-serif;cursor:pointer;transform:rotate(45deg);margin:6px;transition:.2s;position:relative}
+.pqd span{display:block;transform:rotate(-45deg)}
+.pqd:hover{box-shadow:0 0 12px var(--lc)}
+.pqd.cur{background:var(--lc);color:#03060b;box-shadow:0 0 14px var(--lc)}
+.pqd.solved{background:rgba(0,229,255,.32)}
+.pqd.rev{background:rgba(255,106,0,.18)}
+.pqd.solved::after{content:"✔";position:absolute;top:-10px;right:-10px;transform:rotate(-45deg);font-size:.6rem;color:var(--ok)}
+.pqd.tried::after{content:"◐";position:absolute;top:-10px;right:-10px;transform:rotate(-45deg);font-size:.6rem;color:var(--o2)}
+.pqd.rev::after{content:"👁";position:absolute;top:-10px;right:-10px;transform:rotate(-45deg);font-size:.55rem}
+.pqscore{text-align:right}
+.pqscore b{font-size:2rem;font-weight:900;color:var(--o);text-shadow:var(--glow-o)}
+.pqscore span{font-size:.6rem;letter-spacing:2px;color:var(--mute);margin-left:6px}
+.pqscore small{display:block;font-size:.58rem;letter-spacing:2px;color:var(--b)}
+.pqh{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.pqh .qn{font-size:1.4rem;font-weight:900;color:#fff;margin-right:6px}
+.pqsc{font-size:.9rem;color:#fff;line-height:1.75;margin-bottom:6px}
+.pqsc b{color:var(--o2)}
+.pqdata{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:12px 0}
+.pqdata div{border:1px solid rgba(0,229,255,.3);padding:8px 10px;background:rgba(0,229,255,.04)}
+.pqdata b{display:block;color:var(--b);font-size:1.05rem;font-weight:900}
+.pqdata span{font-size:.55rem;letter-spacing:1.5px;color:var(--mute);text-transform:uppercase}
+.pqask{font-weight:700;color:var(--o2);margin:10px 0 4px;font-size:.84rem}
+.pqf{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px dashed rgba(0,229,255,.15)}
+.pqf label{flex:1;min-width:200px;font-size:.76rem}
+.pqf .inp{width:140px;text-align:center}
+.pqf .u{font-size:.66rem;color:var(--mute);width:170px}
+.pqf .vv{font-size:1rem;width:20px}
+.pqfb{margin-top:12px;padding:10px 14px;font-size:.78rem;display:none;border-left:3px solid var(--b);background:rgba(0,229,255,.07)}
+.pqfb.bad{border-color:var(--bad);background:rgba(255,61,90,.08)}
+.pqfb.show{display:block;animation:in .3s}
+.pqhint{margin-top:10px;border:1px solid rgba(255,106,0,.45);background:rgba(255,106,0,.06);padding:10px 14px;font-size:.78rem;animation:in .35s}
+.pqhint .ht{font-size:.56rem;letter-spacing:3px;color:var(--o);font-weight:800;margin-bottom:4px}
+.pqhint ol{padding-left:20px}
+.pqhint li{padding:3px 0}
+.pqhint li::marker{color:var(--o);font-weight:800}
+.pqhint .eq{color:var(--o2);font-weight:700}
+.pqbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}
+.pqres td{font-size:.72rem}
 .pager{display:flex;justify-content:space-between;gap:10px;margin:26px 0 10px;flex-wrap:wrap}
 footer{border-top:1px solid rgba(0,229,255,.2);margin-top:40px;padding:20px 0 60px;font-size:.6rem;color:var(--mute);letter-spacing:1px;text-align:center}
 @media(max-width:640px){.live{display:grid;grid-template-columns:1fr 1fr}.live div{min-width:0}.live b{font-size:1.1rem}body{font-size:13px}.card{padding:15px}.cover canvas{height:520px}.cover .ov{background:linear-gradient(180deg,rgba(3,6,11,.9) 0%,rgba(3,6,11,.55) 55%,rgba(3,6,11,.85) 100%);padding:18px}}
@@ -327,6 +373,7 @@ footer{border-top:1px solid rgba(0,229,255,.2);margin-top:40px;padding:20px 0 60
     <button class="mod" data-go="3"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M6 24h26M24 14l10 10-10 10" stroke="#ff6a00"/><rect x="36" y="10" width="6" height="28" stroke="#00e5ff"/></g></svg><em>03</em><b>Incidence</b><small>New cases · cohort simulator</small></button>
     <button class="mod" data-go="4"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M8 14v20a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V14" stroke="#00e5ff"/><path d="M10 28h28" stroke="#ff6a00"/><path d="M24 4v14" stroke="#ff6a00" stroke-dasharray="3 3"/></g></svg><em>04</em><b>Prevalence</b><small>Existing cases · bathtub model</small></button>
     <button class="mod" data-go="5"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="10" y="6" width="28" height="36" stroke="#00e5ff"/><rect x="15" y="11" width="18" height="8" stroke="#ff6a00"/><path d="M16 26h4M28 26h4M16 33h4M28 33h4" stroke="#00e5ff"/></g></svg><em>05</em><b>Calculator</b><small>Calculator · case study</small></button>
+    <button class="mod" data-go="6"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="10" y="10" width="28" height="28" transform="rotate(45 24 24)" stroke="#ff6a00"/><path d="M18 24l4 4 8-9" stroke="#00e5ff"/></g></svg><em>06</em><b>Practice Quiz</b><small>10 calculations · hints · check</small></button>
   </div>
   <div class="alert"><div class="ic"><span>!</span></div><p><b>E-LEARNING (LESSON 3)</b><br>Hand in your Lesson 3 E-learning assignment in your class MS Teams by <span class="hl">2359h on your E-learning day</span>. It counts as your attendance.</p></div>
 </section>
@@ -554,7 +601,21 @@ footer{border-top:1px solid rgba(0,229,255,.2);margin-top:40px;padding:20px 0 60
     <div class="row" style="justify-content:space-between;margin-bottom:14px"><h3 style="margin:0">// Mission · use the data</h3><div class="seg" id="msSeg"></div></div>
     <div id="msBody"></div>
   </div>
-  <div class="pager"><button class="btn ghost" data-go="4">◂ Prevalence</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
+  <div class="pager"><button class="btn ghost" data-go="4">◂ Prevalence</button><button class="btn" data-go="6">Practice Quiz ▸</button></div>
+</section>
+<!-- 06 PRACTICE QUIZ -->
+<section class="panel" id="p6" data-name="PRACTICE QUIZ">
+  <div class="ph"><div class="kick">SELF-CHECK</div><h2>Practice <span>Quiz</span></h2><p>10 calculations, from easy to challenging. Try first. Use hints only if you're stuck.</p></div>
+  <div class="card o">
+    <div class="pqtop">
+      <div class="pqnav" id="pqNav"></div>
+      <div class="pqscore"><b id="pqS">0</b><span>/ 10 SOLVED</span><small id="pqF">0 first try</small></div>
+    </div>
+    <div class="legend" style="margin-top:6px"><span><i style="background:#00e5ff"></i>EASY</span><span><i style="background:#ffa13d"></i>MEDIUM</span><span><i style="background:#ff3d5a"></i>CHALLENGING</span><span style="margin-left:auto">✔ SOLVED · ◐ ATTEMPTED · 👁 REVEALED</span></div>
+  </div>
+  <div class="card" id="pqCard"></div>
+  <div class="card o" id="pqEnd" style="display:none"></div>
+  <div class="pager"><button class="btn ghost" data-go="5">◂ Calculator</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
 </section>
 </main>
 <footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · MEASUREMENT OF DISEASE FREQUENCIES · REPUBLIC POLYTECHNIC</div></footer>
@@ -651,7 +712,7 @@ function go(i){
   resizeCover();
 }
 document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(+g.dataset.go)});
-$("#tabs").addEventListener("keydown",e=>{const c=+$(".tab[aria-selected=true]").dataset.i;if(e.key==="ArrowRight")go(Math.min(5,c+1));if(e.key==="ArrowLeft")go(Math.max(0,c-1))});
+$("#tabs").addEventListener("keydown",e=>{const c=+$(".tab[aria-selected=true]").dataset.i;if(e.key==="ArrowRight")go(Math.min(panels.length-1,c+1));if(e.key==="ArrowLeft")go(Math.max(0,c-1))});
 function countUp(n,v){if(RM){n.textContent=v;return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1400);n.textContent=Math.round(v*(1-Math.pow(1-k,3))).toLocaleString();if(k<1)requestAnimationFrame(f)})(t0)}
 
 /* ---------- COVER SIM ---------- */
@@ -865,7 +926,7 @@ $$("#c1,#c2,#c3,#mult,#unit").forEach(x=>x.addEventListener("input",calc));
 setCalc("ci");
 
 /* ---------- CASE STUDY ---------- */
-const CO=[["F",0,0,8],["M",1,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",1,0,0],["M",0,0,0],["M",0,0,0],["F",1,0,0],["M",1,0,0],["F",1,0,0],["F",0,0,0],["M",0,8,0],["M",1,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["M",0,0,7],["M",0,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,4],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,0,0],["M",0,0,0],["F",0,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,9,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,4,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,0,3],["M",1,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["F",1,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",1,0,0],["M",1,0,0],["M",0,6,0],["M",0,0,0],["F",0,0,0],["M",0,2,0],["M",0,0,0],["F",0,5,0],["F",1,0,0],["F",0,0,0],["F",0,0,0],["F",1,0,0],["F",1,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["M",0,11,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",1,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0]].map(r=>({s:r[0],ex:!!r[1],nm:r[2]||null,lm:r[3]||null}));
+const CO=[["F",0,0,8],["M",1,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",1,0,0],["M",0,0,0],["M",0,0,0],["F",1,0,0],["M",1,0,0],["F",1,0,0],["F",0,0,0],["M",0,8,0],["M",1,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["M",0,0,7],["M",0,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,9],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,0,0],["M",0,0,0],["F",0,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,9,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",0,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",1,0,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,4,0],["M",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["F",0,0,0],["M",0,0,3],["M",1,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["F",1,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",0,0,0],["M",1,0,0],["M",1,0,0],["M",0,6,0],["M",0,0,0],["F",0,0,0],["M",0,2,0],["M",0,0,0],["F",0,5,0],["F",1,0,0],["F",0,0,0],["F",0,0,0],["F",1,0,0],["F",1,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["M",0,11,0],["F",0,0,0],["M",1,0,0],["F",0,0,0],["F",1,0,0],["F",1,0,0],["M",0,0,0],["F",0,0,0],["M",1,0,0],["F",0,0,0]].map(r=>({s:r[0],ex:!!r[1],nm:r[2]||null,lm:r[3]||null}));
 const MN=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 const cs={f:"all",h:"none",t:0};
 const isNew=(p,t)=>!p.ex&&p.nm!=null&&p.nm<=t, isLost=(p,t)=>!p.ex&&p.lm!=null&&p.lm<=t;
@@ -899,7 +960,7 @@ const MS=[
  {n:"Point prevalence",q:"What % of seniors had diabetes on 1 Jan 2025?",fr:[{set:{f:"all",h:"ex",t:0},how:"ALL · EXISTING · 1 JAN",nl:"Existing cases",dl:"All seniors",n:30,d:100,k:100,u:"%",hn:"Count the orange figures – see the EXISTING tile.",hd:"Prevalence uses the whole population – see SENIORS SHOWN."}],done:"30% of seniors already had diabetes on 1 Jan. A snapshot."},
  {n:"Cumulative incidence",q:"What % of seniors at risk developed diabetes during 2025?",fr:[{set:{f:"all",h:"new",t:12},how:"ALL · NEW · END OF DEC",nl:"New cases in 2025",dl:"At risk on 1 Jan",n:7,d:70,k:100,u:"%",hn:"Slide the date to END OF DEC and read NEW CASES.",hd:"Existing cases cannot become new cases – use AT RISK, not everyone."}],done:"10% of disease-free seniors developed diabetes in one year. This is their risk."},
  {n:"Period prevalence",q:"What % of seniors had diabetes at any time during 2025?",fr:[{set:{f:"all",h:"cases",t:12},how:"ALL · EXISTING + NEW · END OF DEC",nl:"Existing + new cases",dl:"All seniors",n:37,d:100,k:100,u:"%",hn:"Add existing cases and new cases (EXISTING + NEW tile).",hd:"Prevalence uses the whole population."}],done:"37% had diabetes at some point in 2025 – higher than the 1 Jan snapshot, because new cases were added."},
- {n:"Incidence rate",q:"How many new cases per 1,000 person-years of follow-up?",fr:[{set:{f:"all",h:"risk",t:12},how:"ALL · AT RISK · END OF DEC",nl:"New cases",dl:"Person-years at risk",n:7,d:64.58,tol:.06,k:1000,u:"per 1,000 person-years",hn:"Same new cases as Step 2.",hd:"Read PERSON-YEARS AT RISK at END OF DEC. Lost seniors and new cases stop adding time when they leave or are diagnosed."}],done:"About 108 new cases per 1,000 person-years. Person-time gives fair credit for seniors who left early."},
+ {n:"Incidence rate",q:"How many new cases per 1,000 person-years of follow-up?",pt:1,fr:[{set:{f:"all",h:"risk",t:12},how:"ALL · AT RISK · END OF DEC",nl:"New cases",dl:"Person-years at risk",n:7,d:65,tol:.01,k:1000,u:"per 1,000 person-years",hn:"Same new cases as Step 2.",hd:"Build the person-time above: 780 person-months ÷ 12 = 65 person-years."}],done:"About 108 new cases per 1,000 person-years. Person-time gives fair credit for seniors who were followed for less than a year."},
  {n:"Who is at higher risk?",q:"Compare cumulative incidence in females and males.",fr:[
    {set:{f:"F",h:"new",t:12},how:"FEMALE · NEW · END OF DEC",nl:"New cases (female)",dl:"Females at risk",n:2,d:40,k:100,u:"%",hn:"Show FEMALE only, then read NEW CASES.",hd:"Read AT RISK for females."},
    {set:{f:"M",h:"new",t:12},how:"MALE · NEW · END OF DEC",nl:"New cases (male)",dl:"Males at risk",n:5,d:30,k:100,u:"%",hn:"Show MALE only, then read NEW CASES.",hd:"Read AT RISK for males."}],done:"Males 16.7% vs females 5%: men in this cohort had more than three times the risk. A pattern by PERSON."},
@@ -910,6 +971,7 @@ const msDone=new Set();let ms=0;totalComps+=MS.length;
 MS.forEach((s,i)=>{const b=el("button",i===0?"on":"",String(i+1));b.title=s.n;b.onclick=()=>msShow(i);$("#msSeg").appendChild(b)});
 function msShow(i){ms=i;$$("#msSeg button").forEach((b,k)=>b.classList.toggle("on",k===i));const s=MS[i],body=$("#msBody");body.innerHTML="";
   body.appendChild(el("div","","<div class='kick' style='font-size:.6rem;letter-spacing:4px;color:var(--o)'>STEP "+(i+1)+" OF "+MS.length+" · "+s.n.toUpperCase()+"</div><p style='color:#fff;font-weight:700;margin:6px 0 4px'>"+s.q+"</p>"));
+  if(s.pt)body.appendChild(ptBuild());
   let ok=s.fr.map(()=>false);const fin=el("div","note");fin.style.display="none";
   s.fr.forEach((f,j)=>{const w=el("div","mc");
     w.innerHTML="<div class='mch'><span class='tag b'>SET</span><span class='mute'>"+f.how+"</span> <button class='btn sm ghost sm2'>Show me</button></div>"+
@@ -926,13 +988,128 @@ function msShow(i){ms=i;$$("#msSeg button").forEach((b,k)=>b.classList.toggle("o
   body.appendChild(fin);
   if(msDone.size===MS.length)msSummary();
 }
+function ptBuild(){
+  const w=el("div","mc ptb");
+  w.innerHTML="<div class='mch'><span class='tag'>FIRST</span><b class='hb'>BUILD THE PERSON-TIME</b></div>"+
+   "<p class='mute' style='margin-top:8px'>Count how long each <span class='hb'>at-risk</span> senior was watched while still disease-free. 1 senior watched for 12 months = <span class='hl'>1 person-year</span>.</p>"+
+   "<svg class='ptsvg' viewBox='0 0 640 250'></svg>"+
+   "<div class='ptr'><span class='tag b'>A · STAYED HEALTHY ALL YEAR</span><div>59 seniors × 12 months = <b>708</b> person-months</div></div>"+
+   "<div class='ptr'><span class='tag'>B · NEW CASES – STOP COUNTING WHEN DIAGNOSED</span><div>2 + 4 + 5 + 6 + 8 + 9 + 11 = <b>45</b> person-months</div></div>"+
+   "<div class='ptr'><span class='tag g'>C · LOST TO FOLLOW-UP – STOP COUNTING WHEN THEY LEFT</span><div>3 + 7 + 8 + 9 = <b>27</b> person-months</div></div>"+
+   "<div class='ptr tot'><span class='tag'>TOTAL</span><div>708 + 45 + 27 = 780 person-months<br>780 ÷ 12 = <b class='big' style='font-size:1.6rem'>65</b> person-years</div></div>"+
+   "<div class='ctl'><button class='btn sm ptn'>Show part A ▸</button><button class='btn ghost sm pta'>Show all</button></div>";
+  const sg=$(".ptsvg",w),rows=$$(".ptr",w),btn=$(".ptn",w),labels=["Show part A ▸","Show part B ▸","Show part C ▸","Show total ▸"];
+  rows.forEach(r=>r.style.display="none");
+  // bars: 1 summary bar for the 59, then 7 new cases, then 4 lost
+  const L=150,W=470,X=m=>L+W*m/12;let y=16;
+  for(let m=0;m<=12;m+=3){sv("line",{x1:X(m),x2:X(m),y1:8,y2:232,stroke:"rgba(0,229,255,.12)"},sg);sv("text",{x:X(m),y:246,"text-anchor":"middle"},sg).textContent=m===0?"1 JAN":m===12?"31 DEC":MN[m-1]}
+  const bar=(lab,m,col,grp,txt)=>{const g=sv("g",{class:"pg pg"+grp,opacity:.12,style:"transition:opacity .5s"},sg);sv("text",{x:L-8,y:y+9,"text-anchor":"end"},g).textContent=lab;
+    sv("rect",{x:L,y:y,width:X(m)-L,height:12,fill:col,"fill-opacity":.55,stroke:col},g);sv("text",{x:txt?L+8:X(m)+6,y:y+10,style:"fill:#fff"},g).textContent=txt||m+" mo";y+=17};
+  bar("59 HEALTHY",12,B,"a","59 × 12 = 708");y+=4;
+  [2,4,5,6,8,9,11].forEach((m,i)=>bar(i===0?"NEW CASES":"",m,O,"b"));y+=4;
+  [3,7,8,9].forEach((m,i)=>bar(i===0?"LOST":"",m,"#8894a0","c"));
+  let k=0;const show=n=>{for(let i=0;i<n;i++){rows[i].style.display="";const gp=["a","b","c"][i];if(gp)$$(".pg"+gp,sg).forEach(x=>x.setAttribute("opacity",1))}k=n;if(k>=4){btn.style.display="none";$(".pta",w).style.display="none"}else btn.textContent=labels[k]};
+  btn.onclick=()=>show(k+1);$(".pta",w).onclick=()=>show(4);
+  return w}
 function msSummary(){if($("#msSum"))return;const d=el("div","comp done","<span class='ct'>MISSION COMPLETE</span><table class='cmp'><tbody>"+
-  "<tr><td>POINT PREVALENCE (1 JAN)</td><td>30 ÷ 100</td><td class='hl'>30%</td></tr><tr><td>CUMULATIVE INCIDENCE (2025)</td><td>7 ÷ 70</td><td class='hl'>10%</td></tr><tr><td>PERIOD PREVALENCE (2025)</td><td>(30 + 7) ÷ 100</td><td class='hl'>37%</td></tr><tr><td>INCIDENCE RATE</td><td>7 ÷ 64.58 person-years</td><td class='hl'>108 per 1,000 PY</td></tr><tr><td>CUMULATIVE INCIDENCE BY SEX</td><td>F 2 ÷ 40 · M 5 ÷ 30</td><td class='hl'>5% vs 16.7%</td></tr><tr><td>PROPORTION FEMALE · RATIO F:M</td><td>52 ÷ 100 · 52 : 48</td><td class='hl'>52% · 1.08 : 1</td></tr></tbody></table>");
+  "<tr><td>POINT PREVALENCE (1 JAN)</td><td>30 ÷ 100</td><td class='hl'>30%</td></tr><tr><td>CUMULATIVE INCIDENCE (2025)</td><td>7 ÷ 70</td><td class='hl'>10%</td></tr><tr><td>PERIOD PREVALENCE (2025)</td><td>(30 + 7) ÷ 100</td><td class='hl'>37%</td></tr><tr><td>INCIDENCE RATE</td><td>7 ÷ 65 person-years</td><td class='hl'>108 per 1,000 PY</td></tr><tr><td>CUMULATIVE INCIDENCE BY SEX</td><td>F 2 ÷ 40 · M 5 ÷ 30</td><td class='hl'>5% vs 16.7%</td></tr><tr><td>PROPORTION FEMALE · RATIO F:M</td><td>52 ÷ 100 · 52 : 48</td><td class='hl'>52% · 1.08 : 1</td></tr></tbody></table>");
   d.id="msSum";$("#mission").appendChild(d)}
 msShow(0);
 
+/* ---------- PRACTICE QUIZ ---------- */
+const PQ=[
+ {lv:0,tp:"Proportion",sc:"A polyclinic sees <b>480</b> patients in one morning. <b>120</b> of them are aged 65 and above.",data:[["480","patients"],["120","aged 65+"]],ask:"What percentage of patients are aged 65+?",
+  f:[{l:"Percentage aged 65+",a:25,tol:.05,u:"%",pct:1}],
+  h:["A proportion compares a part to the whole. Which number is the part, and which is the whole?","Part = 120 (aged 65+). Whole = 480 (all patients). Divide, then × 100."],
+  w:["Part ÷ whole = 120 ÷ 480","= 0.25","× 100 = <span class='eq'>25%</span>"]},
+ {lv:0,tp:"Ratio",sc:"A nursing home has <b>90</b> female and <b>60</b> male residents.",data:[["90","female"],["60","male"]],ask:"What is the female-to-male ratio? (Type it as a decimal, e.g. 1.2 – or as a:b.)",
+  f:[{l:"Female : male",a:1.5,tol:.01,u:": 1",ratio:1}],
+  h:["A ratio compares two separate groups. Females are not part of males.","Female ÷ male = 90 ÷ 60. Simplify 90 : 60 by dividing both by 30."],
+  w:["90 : 60","÷ 30 → 3 : 2","= <span class='eq'>1.5 : 1</span>","There are 1.5 female residents for every male resident."]},
+ {lv:0,tp:"Point prevalence",sc:"On 1 March, a health screening of <b>2,000</b> residents in Bedok finds <b>260</b> people with high blood pressure.",data:[["2,000","residents screened"],["260","with high BP on 1 Mar"]],ask:"What is the point prevalence of high blood pressure?",
+  f:[{l:"Point prevalence",a:13,tol:.05,u:"%",pct:1}],
+  h:["Point prevalence = existing cases on a date ÷ population on that date.","260 ÷ 2,000, then × 100."],
+  w:["Existing cases ÷ population = 260 ÷ 2,000","= 0.13","× 100 = <span class='eq'>13%</span>"]},
+ {lv:1,tp:"Rate",sc:"An Active Ageing Centre follows <b>3,200</b> seniors for one year. There are <b>128</b> fall-related emergency visits.",data:[["3,200","seniors"],["1 year","follow-up"],["128","fall-related ED visits"]],ask:"What is the rate per 1,000 seniors per year?",
+  f:[{l:"Rate",a:40,tol:.1,u:"per 1,000 per year"}],
+  h:["A rate = events ÷ population over a time period, then scale it up so it's easy to read.","128 ÷ 3,200 per year. Then × 1,000."],
+  w:["128 ÷ 3,200 = 0.04 per senior per year","× 1,000 = <span class='eq'>40 per 1,000 seniors per year</span>"]},
+ {lv:1,tp:"Cumulative incidence",sc:"<b>1,500</b> workers are screened at the start of a 2-year study. <b>300</b> already have hypertension. Over the 2 years, <b>60</b> new cases are diagnosed.",data:[["1,500","workers screened"],["300","already have hypertension"],["60","new cases in 2 years"]],ask:"What is the 2-year cumulative incidence of hypertension?",
+  f:[{l:"Cumulative incidence",a:5,tol:.05,u:"%",pct:1}],
+  h:["Cumulative incidence = new cases ÷ population AT RISK at the start. Can someone who already has hypertension become a new case?","At risk = 1,500 − 300 = 1,200. Then 60 ÷ 1,200."],
+  w:["At risk = 1,500 − 300 = 1,200","New cases ÷ at risk = 60 ÷ 1,200 = 0.05","× 100 = <span class='eq'>5%</span>","Common mistake: 60 ÷ 1,500 = 4% (wrong denominator)."]},
+ {lv:1,tp:"Period prevalence",sc:"A town has <b>5,000</b> residents. At the start of 2025, <b>150</b> have diabetes. During 2025, <b>50</b> more are newly diagnosed.",data:[["5,000","residents"],["150","existing cases (start)"],["50","new cases in 2025"]],ask:"What is the period prevalence of diabetes for 2025?",
+  f:[{l:"Period prevalence",a:4,tol:.05,u:"%",pct:1}],
+  h:["Period prevalence counts everyone who had the disease at ANY time in the period – old and new cases.","(150 + 50) ÷ 5,000."],
+  w:["All cases in 2025 = 150 + 50 = 200","200 ÷ 5,000 = 0.04","× 100 = <span class='eq'>4%</span>"]},
+ {lv:1,tp:"Case fatality",sc:"During a dengue outbreak, <b>1,250</b> cases are confirmed and <b>5</b> patients die of dengue.",data:[["1,250","confirmed cases"],["5","deaths"]],ask:"What is the case fatality?",
+  f:[{l:"Case fatality",a:.4,tol:.01,u:"%",pct:1}],
+  h:["Case fatality = deaths among cases ÷ all cases. The denominator is the cases, not the whole population.","5 ÷ 1,250, then × 100."],
+  w:["5 ÷ 1,250 = 0.004","× 100 = <span class='eq'>0.4%</span>","4 in every 1,000 people with dengue died."]},
+ {lv:2,tp:"Cumulative incidence · lost to follow-up",sc:"<b>8,000</b> healthy seniors are followed from 1 Jan to 31 Dec. Those lost to follow-up were disease-free when they left.",data:[["31 Mar","200 lost to follow-up"],["30 Jun","40 new cases"],["30 Sep","24 new cases"]],ask:"What is the cumulative incidence from 1 Jul to 31 Dec? (2 d.p.)",
+  f:[{l:"Cumulative incidence (1 Jul – 31 Dec)",a:.31,tol:.01,u:"%",pct:1}],
+  h:["Who is still at risk on 1 July? Remove anyone who has left AND anyone who is already a case.","At risk on 1 Jul = 8,000 − 200 − 40. Only the 24 cases on 30 Sep fall inside the window."],
+  w:["At risk on 1 Jul = 8,000 − 200 (lost) − 40 (already cases) = 7,760","New cases in window = 24","24 ÷ 7,760 = 0.00309","× 100 = <span class='eq'>0.31%</span>"]},
+ {lv:2,tp:"Incidence rate · person-time",sc:"Six nursing-home residents are followed for up to 12 months for a first fall.",data:[["R1 · R2 · R3","12 months each, no fall"],["R4","fell at month 3"],["R5","fell at month 9"],["R6","moved out at month 6"]],ask:"Find the person-time, then the incidence rate.",
+  f:[{l:"Total person-time",a:4.5,tol:.01,u:"person-years"},{l:"Incidence rate",a:44.4,tol:.15,u:"falls per 100 person-years"}],
+  h:["Count each resident's months until they fall, leave, or the study ends. Add them up, then ÷ 12 to get person-years.","Person-months = 12 + 12 + 12 + 3 + 9 + 6 = 54 → 54 ÷ 12 = 4.5 person-years. Falls = 2."],
+  w:["Person-months = 12 + 12 + 12 + 3 + 9 + 6 = 54","54 ÷ 12 = <span class='eq'>4.5 person-years</span>","Falls ÷ person-time = 2 ÷ 4.5 = 0.444 per person-year","× 100 = <span class='eq'>44.4 falls per 100 person-years</span>"]},
+ {lv:2,tp:"Rates & ratio of rates",sc:"Two towns report new dengue cases in the same month.",data:[["Town A","40 cases · 25,000 at risk"],["Town B","30 cases · 12,000 at risk"]],ask:"Which town has the higher risk, and by how much?",
+  f:[{l:"Town A rate",a:160,tol:.5,u:"per 100,000"},{l:"Town B rate",a:250,tol:.5,u:"per 100,000"},{l:"Ratio of B to A",a:1.56,tol:.01,u:": 1",ratio:1}],
+  h:["Counts mislead when populations differ. Convert each town to a rate per 100,000 first.","A: 40 ÷ 25,000 × 100,000. B: 30 ÷ 12,000 × 100,000. Then divide B's rate by A's rate."],
+  w:["Town A: 40 ÷ 25,000 × 100,000 = <span class='eq'>160 per 100,000</span>","Town B: 30 ÷ 12,000 × 100,000 = <span class='eq'>250 per 100,000</span>","Ratio B : A = 250 ÷ 160 = <span class='eq'>1.56 : 1</span>","Town B has fewer cases but 1.56 times the risk."]}
+];
+const LVN=["EASY","MEDIUM","CHALLENGING"],LVC=["#00e5ff","#ffa13d","#ff3d5a"];
+let pq=0;const PS=PQ.map(()=>({st:"",tries:0,hint:0,first:false,vals:[]}));totalComps+=PQ.length;
+const pqNav=$("#pqNav");
+PQ.forEach((q,i)=>{const b=el("button","pqd","<span>"+(i+1)+"</span>");b.style.setProperty("--lc",LVC[q.lv]);b.title=LVN[q.lv]+" · "+q.tp;b.onclick=()=>pqShow(i);pqNav.appendChild(b)});
+function pqParse(v,f){v=String(v).trim().replace(/,/g,"");if(!v)return NaN;if(f.ratio){const m=v.match(/^([\d.]+)\s*[:\/]\s*([\d.]+)$/);if(m)return +m[1]/+m[2]}let n=parseFloat(v.replace("%",""));return n}
+function pqUpdate(){const b=$$(".pqd",pqNav);PS.forEach((s,i)=>{b[i].className="pqd"+(i===pq?" cur":"")+(s.st==="solved"?" solved":s.st==="rev"?" rev":s.tries?" tried":"")});
+  const sol=PS.filter(s=>s.st==="solved").length;$("#pqS").textContent=sol;$("#pqF").textContent=PS.filter(s=>s.first).length+" FIRST TRY";
+  if(PS.every(s=>s.st==="solved"||s.st==="rev"))pqEnd()}
+function pqShow(i){pq=i;const q=PQ[i],s=PS[i],c=$("#pqCard");c.innerHTML="";
+  c.appendChild(el("div","pqh","<span class='qn'>Q"+(i+1)+"</span><span class='tag' style='border-color:"+LVC[q.lv]+";color:"+LVC[q.lv]+"'>"+LVN[q.lv]+"</span><span class='tag b'>"+q.tp.toUpperCase()+"</span>"));
+  c.appendChild(el("p","pqsc",q.sc));
+  c.appendChild(el("div","pqdata",q.data.map(d=>"<div><b>"+d[0]+"</b><span>"+d[1]+"</span></div>").join("")));
+  c.appendChild(el("div","pqask","▸ "+q.ask));
+  const ins=q.f.map((f,j)=>{const r=el("div","pqf","<label>"+f.l+"</label>");const inp=el("input","inp");inp.inputMode="decimal";inp.placeholder="your answer";inp.value=s.vals[j]||"";const u=el("span","u",f.u),v=el("span","vv");r.append(inp,u,v);c.appendChild(r);
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")chk.click()});inp.oninput=()=>{s.vals[j]=inp.value};return{inp,v,f}});
+  const fb=el("div","pqfb");c.appendChild(fb);
+  const hw=el("div","");c.appendChild(hw);
+  const bar=el("div","pqbar"),l=el("div","row"),r=el("div","row");
+  const chk=el("button","btn","Check ▸"),hb=el("button","btn ghost",""),prv=el("button","btn ghost sm","◂ Prev"),nxt=el("button","btn b sm","Next ▸");
+  l.append(chk,hb);r.append(prv,nxt);bar.append(l,r);c.appendChild(bar);
+  prv.disabled=i===0;nxt.disabled=i===PQ.length-1;prv.onclick=()=>pqShow(i-1);nxt.onclick=()=>pqShow(i+1);
+  const lockIfDone=()=>{if(s.st==="solved"||s.st==="rev"){ins.forEach((x,j)=>{x.inp.value=s.st==="rev"&&!s.vals[j]?"":x.inp.value})}};
+  function drawHints(){hw.innerHTML="";for(let k=0;k<s.hint;k++){if(k<2)hw.appendChild(el("div","pqhint","<div class='ht'>HINT "+(k+1)+"</div>"+q.h[k]));else hw.appendChild(el("div","pqhint","<div class='ht'>FULL WORKED SOLUTION</div><ol>"+q.w.map(x=>"<li>"+x+"</li>").join("")+"</ol>"))}
+    hb.textContent=s.hint===0?"💡 Hint 1":s.hint===1?"💡 Hint 2":s.hint===2?"👁 Show full working":"Working shown";hb.disabled=s.hint>=3}
+  hb.onclick=()=>{if(s.hint===2&&s.st!=="solved"&&!confirm("Show the full worked solution? This question will be marked as REVEALED (not counted as solved)."))return;s.hint++;if(s.hint===3&&s.st!=="solved"){s.st="rev"}drawHints();pqUpdate()};
+  chk.onclick=()=>{let all=true,msg=[];
+    ins.forEach(x=>{const n=pqParse(x.inp.value,x.f);let ok=Number.isFinite(n)&&Math.abs(n-x.f.a)<=x.f.tol;
+      x.inp.className="inp "+(ok?"ok":"bad");x.v.textContent=ok?"✔":"✘";x.v.style.color=ok?"var(--ok)":"var(--bad)";
+      if(!ok){all=false;if(!Number.isFinite(n))msg.push("Enter a number for “"+x.f.l+"”.");
+        else if(x.f.pct&&Math.abs(n*100-x.f.a)<=x.f.tol)msg.push("“"+x.f.l+"”: that looks like a proportion – multiply by 100 to give a percentage.");
+        else if(x.f.ratio&&Math.abs(1/n-x.f.a)<=x.f.tol*2)msg.push("“"+x.f.l+"”: check the order – which group comes first?");
+        else msg.push("“"+x.f.l+"” is not quite right.")}});
+    s.tries++;
+    if(all){if(s.st!=="rev"){if(s.st!=="solved"){s.first=s.tries===1&&s.hint===0;s.st="solved";markDone(null,"pq"+i)}}
+      fb.className="pqfb show";fb.innerHTML="<b class='hb'>✔ CORRECT"+(s.first?" – FIRST TRY!":"")+"</b> "+(i<PQ.length-1?"Move on to the next question.":"That's the last one – see your results below.")+(s.hint<3?" <a href='#' class='swk'>See the worked solution</a>":"");
+      const sw=$(".swk",fb);if(sw)sw.onclick=e=>{e.preventDefault();s.hint=3;drawHints()}}
+    else{fb.className="pqfb bad show";fb.innerHTML="<b style='color:var(--bad)'>✘ NOT YET.</b> "+msg.join(" ")+(s.hint<3?" Try again, or open a hint.":"")}
+    pqUpdate()};
+  if(s.st==="solved"){ins.forEach(x=>{x.inp.className="inp ok";x.v.textContent="✔";x.v.style.color="var(--ok)"});fb.className="pqfb show";fb.innerHTML="<b class='hb'>✔ SOLVED</b> – you've already got this one."}
+  drawHints();pqUpdate();
+}
+function pqEnd(){const e=$("#pqEnd");e.style.display="";const sol=PS.filter(s=>s.st==="solved").length,ft=PS.filter(s=>s.first).length;
+  const rank=sol===10&&ft>=8?"EPIDEMIOLOGIST":sol>=8?"ANALYST":sol>=5?"TRAINEE":"CADET";
+  e.innerHTML="<div class='score' style='text-align:center'><div class='kick' style='font-size:.62rem;letter-spacing:5px;color:var(--b)'>PRACTICE COMPLETE</div><div class='big' style='font-size:3rem'>"+sol+" / 10</div><div style='color:var(--b);letter-spacing:4px;font-weight:800;margin:6px 0 14px'>RANK: "+rank+" · "+ft+" FIRST TRY</div></div>"+
+   "<table class='cmp pqres'><thead><tr><th>Q</th><th>TOPIC</th><th>RESULT</th></tr></thead><tbody>"+PQ.map((q,i)=>{const s=PS[i];return "<tr><td>Q"+(i+1)+" · "+LVN[q.lv]+"</td><td>"+q.tp+"</td><td style='color:"+(s.st==="solved"?"var(--ok)":"var(--o2)")+"'>"+(s.st==="solved"?(s.first?"✔ First try":"✔ Solved ("+s.tries+" tries)"):"👁 Revealed – try a similar one again")+"</td></tr>"}).join("")+"</tbody></table>"+
+   "<div class='row' style='justify-content:center;margin-top:16px'><button class='btn' id='pqRetry'>Reset &amp; retry</button></div>";
+  $("#pqRetry").onclick=()=>{PS.forEach(s=>{s.st="";s.tries=0;s.hint=0;s.first=false;s.vals=[]});e.style.display="none";pqShow(0);$("#p6").scrollIntoView({behavior:"smooth"})}}
+pqShow(0);
+
 updateXP();
-const hs=parseInt((location.hash||"").slice(1),10);go(isNaN(hs)||hs<0||hs>5?0:hs);
+const hs=parseInt((location.hash||"").slice(1),10);go(isNaN(hs)||hs<0||hs>=panels.length?0:hs);
 })();
 </script>
 </body>
