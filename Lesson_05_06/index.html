@@ -421,6 +421,29 @@ main svg text{font-family:'Orbitron',system-ui,sans-serif}
 .step .n span{transform:rotate(-45deg)}
 .step>div{flex:1;min-width:0}
 @media(max-width:640px){.step .n{width:40px;height:40px;margin:8px 8px 0 4px}}
+/* ===== BlazePod break ===== */
+.bpwrap{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.bpwrap{grid-template-columns:1fr}}
+.qr{width:200px;height:200px;display:block;margin:0 auto;border:3px solid var(--o);box-shadow:var(--glow-o);padding:6px;background:#fff}
+.share{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.share a,.share button{display:flex;align-items:center;gap:10px;justify-content:center;text-decoration:none;border:1px solid var(--b);background:rgba(0,229,255,.06);color:#fff;font:700 .66rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:12px;cursor:pointer;text-transform:uppercase;transition:.2s}
+.share a:hover,.share button:hover{border-color:var(--o);box-shadow:var(--glow-o)}
+.share svg{width:20px;height:20px;flex:none}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
+.tips div{border:1px solid rgba(255,106,0,.45);padding:10px;text-align:center;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;background:rgba(255,106,0,.05)}
+.tips b{display:block;font-size:1.5rem;margin-bottom:4px}
+.urlbox{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem;color:var(--b);word-break:break-all;margin-top:8px}
+.mylog{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+.mylog .inp{width:100%}
+.mis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:700px){.mis{grid-template-columns:1fr 1fr}}
+.mis button{border:1px solid rgba(0,229,255,.35);background:transparent;color:var(--ink);font:700 .62rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:12px 8px;cursor:pointer;text-transform:uppercase;text-align:left}
+.mis button em{display:block;font-style:normal;color:var(--o);font-size:.95rem;font-weight:900}
+.mis button.on{background:linear-gradient(135deg,rgba(255,106,0,.35),rgba(0,229,255,.15));border-color:var(--o);color:#fff}
+.mis button.dn::after{content:" ✓";color:var(--ok)}
+.biasm{height:18px;background:rgba(0,229,255,.1);position:relative;margin:8px 0}
+.biasm i{position:absolute;top:-4px;bottom:-4px;width:3px;background:#fff}
+.biasm b{position:absolute;top:0;bottom:0;background:var(--o);opacity:.6;transition:.5s}
 </style>
 </head>
 <body>
@@ -462,7 +485,8 @@ main svg text{font-family:'Orbitron',system-ui,sans-serif}
     <button class="mod" data-go="4"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M4 24h40" stroke="#00e5ff"/><path d="M24 12v24" stroke="#ff6a00"/><path d="M14 18l-8 6 8 6M34 18l8 6-8 6" stroke="#00e5ff"/></g></svg><em>04</em><b>Study Designs</b><small>Cross-sectional · case-control · cohort</small></button>
     <button class="mod" data-go="5"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="6" y="6" width="36" height="36" stroke="#00e5ff"/><path d="M24 6v36M6 24h36" stroke="#00e5ff"/><text x="10" y="20" fill="#ff6a00" stroke="none" font-size="11" font-weight="900" font-family="Orbitron">a</text></g></svg><em>05</em><b>Risk &amp; Odds</b><small>RR · OR · AR calculators</small></button>
     <button class="mod" data-go="6"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="8" y="14" width="32" height="20" rx="8" stroke="#ff6a00"/><path d="M16 21v6M13 24h6" stroke="#00e5ff"/><circle cx="31" cy="22" r="2" fill="#00e5ff"/><circle cx="34" cy="26" r="2" fill="#00e5ff"/></g></svg><em>06</em><b>Hands-on 2</b><small>Run 3 study designs</small></button>
-    <button class="mod" data-go="7"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="10" y="10" width="28" height="28" transform="rotate(45 24 24)" stroke="#ff6a00"/><path d="M18 24l4 4 8-9" stroke="#00e5ff"/></g></svg><em>07</em><b>Review Quiz</b><small>12 questions · guides</small></button>
+    <button class="mod" data-go="7"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="14" y="4" width="20" height="40" rx="4" stroke="#00e5ff"/><circle cx="24" cy="20" r="6" fill="#ff6a00" stroke="none"/><circle cx="24" cy="20" r="9" stroke="#ff6a00"/></g></svg><em>07</em><b>BlazePod Break</b><small>Play on your phone · detect bias</small></button>
+    <button class="mod" data-go="8"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="10" y="10" width="28" height="28" transform="rotate(45 24 24)" stroke="#ff6a00"/><path d="M18 24l4 4 8-9" stroke="#00e5ff"/></g></svg><em>08</em><b>Review Quiz</b><small>12 questions · guides</small></button>
   </div>
 </section>
 
@@ -688,16 +712,99 @@ main svg text{font-family:'Orbitron',system-ui,sans-serif}
     </div>
   </div>
   <div class="note">Run each design twice. Numbers change every time – that's sampling variation, and why we test with p-values.</div>
-  <div class="pager"><button class="btn ghost" data-go="5">◂ Risk &amp; Odds</button><button class="btn" data-go="7">Review Quiz ▸</button></div>
+  <div class="pager"><button class="btn ghost" data-go="5">◂ Risk &amp; Odds</button><button class="btn" data-go="7">BlazePod Break ▸</button></div>
 </section>
 
-<!-- 07 REVIEW QUIZ -->
+<!-- 07 BLAZEPOD BREAK -->
+<section class="panel" id="pBP" data-name="BLAZEPOD BREAK">
+  <div class="ph"><div class="kick" style="color:var(--b)">ACTIVE BREAK · 10 MIN</div><h2>Virtual <span>BlazePod</span></h2><p>Move your head to hit the orange pods. 30 seconds. Then use the class data to spot designs, bias and significance.</p></div>
+
+  <div class="card o step"><div class="n"><span>01</span></div><div>
+    <h3>Send it to your phone</h3>
+    <div class="bpwrap">
+      <div><svg class="qr" viewBox="0 0 37 37" shape-rendering="crispEdges" role="img" aria-label="QR code for the Virtual BlazePod app"><rect width="37" height="37" fill="#fff"/><path d="M2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM8 2h1v1h-1zM10 2h1v1h-1zM11 2h1v1h-1zM12 2h1v1h-1zM13 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM18 2h1v1h-1zM19 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM23 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM29 2h1v1h-1zM30 2h1v1h-1zM31 2h1v1h-1zM32 2h1v1h-1zM33 2h1v1h-1zM34 2h1v1h-1zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM13 3h1v1h-1zM15 3h1v1h-1zM19 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM23 3h1v1h-1zM25 3h1v1h-1zM28 3h1v1h-1zM34 3h1v1h-1zM2 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM11 4h1v1h-1zM13 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM30 4h1v1h-1zM31 4h1v1h-1zM32 4h1v1h-1zM34 4h1v1h-1zM2 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM16 5h1v1h-1zM18 5h1v1h-1zM19 5h1v1h-1zM21 5h1v1h-1zM24 5h1v1h-1zM25 5h1v1h-1zM28 5h1v1h-1zM30 5h1v1h-1zM31 5h1v1h-1zM32 5h1v1h-1zM34 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM11 6h1v1h-1zM16 6h1v1h-1zM19 6h1v1h-1zM21 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM26 6h1v1h-1zM28 6h1v1h-1zM30 6h1v1h-1zM31 6h1v1h-1zM32 6h1v1h-1zM34 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM12 7h1v1h-1zM13 7h1v1h-1zM14 7h1v1h-1zM15 7h1v1h-1zM16 7h1v1h-1zM19 7h1v1h-1zM20 7h1v1h-1zM21 7h1v1h-1zM26 7h1v1h-1zM28 7h1v1h-1zM34 7h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM29 8h1v1h-1zM30 8h1v1h-1zM31 8h1v1h-1zM32 8h1v1h-1zM33 8h1v1h-1zM34 8h1v1h-1zM10 9h1v1h-1zM14 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM21 9h1v1h-1zM24 9h1v1h-1zM25 9h1v1h-1zM26 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM7 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM11 10h1v1h-1zM12 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM20 10h1v1h-1zM23 10h1v1h-1zM25 10h1v1h-1zM28 10h1v1h-1zM31 10h1v1h-1zM33 10h1v1h-1zM34 10h1v1h-1zM6 11h1v1h-1zM7 11h1v1h-1zM10 11h1v1h-1zM13 11h1v1h-1zM14 11h1v1h-1zM18 11h1v1h-1zM21 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM28 11h1v1h-1zM29 11h1v1h-1zM31 11h1v1h-1zM32 11h1v1h-1zM34 11h1v1h-1zM2 12h1v1h-1zM5 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM12 12h1v1h-1zM16 12h1v1h-1zM20 12h1v1h-1zM24 12h1v1h-1zM25 12h1v1h-1zM26 12h1v1h-1zM29 12h1v1h-1zM30 12h1v1h-1zM31 12h1v1h-1zM33 12h1v1h-1zM34 12h1v1h-1zM2 13h1v1h-1zM3 13h1v1h-1zM6 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM15 13h1v1h-1zM16 13h1v1h-1zM20 13h1v1h-1zM21 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM28 13h1v1h-1zM29 13h1v1h-1zM31 13h1v1h-1zM4 14h1v1h-1zM5 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM8 14h1v1h-1zM9 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM14 14h1v1h-1zM17 14h1v1h-1zM19 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM30 14h1v1h-1zM31 14h1v1h-1zM34 14h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM11 15h1v1h-1zM13 15h1v1h-1zM15 15h1v1h-1zM18 15h1v1h-1zM19 15h1v1h-1zM21 15h1v1h-1zM29 15h1v1h-1zM32 15h1v1h-1zM33 15h1v1h-1zM3 16h1v1h-1zM4 16h1v1h-1zM5 16h1v1h-1zM8 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM24 16h1v1h-1zM28 16h1v1h-1zM29 16h1v1h-1zM30 16h1v1h-1zM31 16h1v1h-1zM32 16h1v1h-1zM4 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM12 17h1v1h-1zM18 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM27 17h1v1h-1zM28 17h1v1h-1zM29 17h1v1h-1zM32 17h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM8 18h1v1h-1zM10 18h1v1h-1zM11 18h1v1h-1zM14 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM23 18h1v1h-1zM24 18h1v1h-1zM25 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM30 18h1v1h-1zM31 18h1v1h-1zM32 18h1v1h-1zM4 19h1v1h-1zM6 19h1v1h-1zM7 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM12 19h1v1h-1zM13 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM17 19h1v1h-1zM20 19h1v1h-1zM22 19h1v1h-1zM24 19h1v1h-1zM25 19h1v1h-1zM26 19h1v1h-1zM27 19h1v1h-1zM28 19h1v1h-1zM30 19h1v1h-1zM31 19h1v1h-1zM33 19h1v1h-1zM34 19h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM10 20h1v1h-1zM15 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM26 20h1v1h-1zM27 20h1v1h-1zM29 20h1v1h-1zM30 20h1v1h-1zM32 20h1v1h-1zM33 20h1v1h-1zM2 21h1v1h-1zM4 21h1v1h-1zM5 21h1v1h-1zM6 21h1v1h-1zM7 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM15 21h1v1h-1zM16 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM24 21h1v1h-1zM27 21h1v1h-1zM28 21h1v1h-1zM30 21h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM10 22h1v1h-1zM15 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM23 22h1v1h-1zM31 22h1v1h-1zM32 22h1v1h-1zM34 22h1v1h-1zM2 23h1v1h-1zM6 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM10 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM15 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM22 23h1v1h-1zM25 23h1v1h-1zM27 23h1v1h-1zM28 23h1v1h-1zM31 23h1v1h-1zM34 23h1v1h-1zM4 24h1v1h-1zM7 24h1v1h-1zM8 24h1v1h-1zM11 24h1v1h-1zM14 24h1v1h-1zM15 24h1v1h-1zM16 24h1v1h-1zM18 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM28 24h1v1h-1zM32 24h1v1h-1zM33 24h1v1h-1zM34 24h1v1h-1zM3 25h1v1h-1zM7 25h1v1h-1zM11 25h1v1h-1zM15 25h1v1h-1zM17 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM24 25h1v1h-1zM25 25h1v1h-1zM26 25h1v1h-1zM29 25h1v1h-1zM31 25h1v1h-1zM33 25h1v1h-1zM34 25h1v1h-1zM2 26h1v1h-1zM6 26h1v1h-1zM7 26h1v1h-1zM8 26h1v1h-1zM9 26h1v1h-1zM10 26h1v1h-1zM11 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM19 26h1v1h-1zM20 26h1v1h-1zM21 26h1v1h-1zM24 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1zM27 26h1v1h-1zM28 26h1v1h-1zM29 26h1v1h-1zM30 26h1v1h-1zM34 26h1v1h-1zM10 27h1v1h-1zM12 27h1v1h-1zM14 27h1v1h-1zM16 27h1v1h-1zM17 27h1v1h-1zM18 27h1v1h-1zM21 27h1v1h-1zM22 27h1v1h-1zM26 27h1v1h-1zM30 27h1v1h-1zM31 27h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM5 28h1v1h-1zM6 28h1v1h-1zM7 28h1v1h-1zM8 28h1v1h-1zM10 28h1v1h-1zM11 28h1v1h-1zM13 28h1v1h-1zM15 28h1v1h-1zM16 28h1v1h-1zM20 28h1v1h-1zM21 28h1v1h-1zM23 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM28 28h1v1h-1zM30 28h1v1h-1zM33 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM10 29h1v1h-1zM11 29h1v1h-1zM15 29h1v1h-1zM18 29h1v1h-1zM21 29h1v1h-1zM22 29h1v1h-1zM23 29h1v1h-1zM24 29h1v1h-1zM25 29h1v1h-1zM26 29h1v1h-1zM30 29h1v1h-1zM31 29h1v1h-1zM32 29h1v1h-1zM34 29h1v1h-1zM2 30h1v1h-1zM4 30h1v1h-1zM5 30h1v1h-1zM6 30h1v1h-1zM8 30h1v1h-1zM11 30h1v1h-1zM12 30h1v1h-1zM15 30h1v1h-1zM20 30h1v1h-1zM21 30h1v1h-1zM22 30h1v1h-1zM23 30h1v1h-1zM24 30h1v1h-1zM25 30h1v1h-1zM26 30h1v1h-1zM27 30h1v1h-1zM28 30h1v1h-1zM29 30h1v1h-1zM30 30h1v1h-1zM32 30h1v1h-1zM34 30h1v1h-1zM2 31h1v1h-1zM4 31h1v1h-1zM5 31h1v1h-1zM6 31h1v1h-1zM8 31h1v1h-1zM10 31h1v1h-1zM11 31h1v1h-1zM12 31h1v1h-1zM15 31h1v1h-1zM17 31h1v1h-1zM18 31h1v1h-1zM19 31h1v1h-1zM22 31h1v1h-1zM25 31h1v1h-1zM29 31h1v1h-1zM34 31h1v1h-1zM2 32h1v1h-1zM4 32h1v1h-1zM5 32h1v1h-1zM6 32h1v1h-1zM8 32h1v1h-1zM10 32h1v1h-1zM11 32h1v1h-1zM12 32h1v1h-1zM13 32h1v1h-1zM14 32h1v1h-1zM15 32h1v1h-1zM16 32h1v1h-1zM17 32h1v1h-1zM18 32h1v1h-1zM19 32h1v1h-1zM23 32h1v1h-1zM24 32h1v1h-1zM26 32h1v1h-1zM28 32h1v1h-1zM29 32h1v1h-1zM2 33h1v1h-1zM8 33h1v1h-1zM14 33h1v1h-1zM18 33h1v1h-1zM19 33h1v1h-1zM24 33h1v1h-1zM25 33h1v1h-1zM26 33h1v1h-1zM28 33h1v1h-1zM29 33h1v1h-1zM30 33h1v1h-1zM34 33h1v1h-1zM2 34h1v1h-1zM3 34h1v1h-1zM4 34h1v1h-1zM5 34h1v1h-1zM6 34h1v1h-1zM7 34h1v1h-1zM8 34h1v1h-1zM10 34h1v1h-1zM12 34h1v1h-1zM14 34h1v1h-1zM16 34h1v1h-1zM18 34h1v1h-1zM19 34h1v1h-1zM20 34h1v1h-1zM21 34h1v1h-1zM23 34h1v1h-1zM25 34h1v1h-1zM27 34h1v1h-1zM30 34h1v1h-1zM32 34h1v1h-1z" fill="#03060b"/></svg><p class="mute" style="text-align:center;margin-top:6px">Scan with your phone camera</p></div>
+      <div>
+        <p class="mute">No camera on hand? Send the link to yourself:</p>
+        <div class="share">
+          <a id="shWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="#25D366" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>WhatsApp</a>
+          <a id="shTg" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="#29A9EB" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 6.8-1.6 7.7c-.1.5-.4.7-.9.4l-2.5-1.8-1.2 1.1c-.1.1-.3.3-.6.3l.2-2.6 4.7-4.2c.2-.2 0-.3-.3-.1L8.6 13.3 6.1 12.5c-.5-.2-.5-.5.1-.8l9.8-3.8c.4-.1.8.1.6.9z"/></svg>Telegram</a>
+          <a id="shEm"><svg viewBox="0 0 24 24"><path fill="none" stroke="#00e5ff" stroke-width="2" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>Email</a>
+          <button id="shCp"><svg viewBox="0 0 24 24"><path fill="none" stroke="#ff6a00" stroke-width="2" d="M8 8h12v12H8zM4 16V4h12"/></svg><span>Copy link</span></button>
+        </div>
+        <p class="mute" style="margin-top:8px">Tip: in WhatsApp pick <b class="hb">“Message yourself”</b>; in Telegram pick <b class="hb">“Saved Messages”</b>.</p>
+        <div class="urlbox">https://aaron-chen-angus.github.io/blazepod-reaction-game/</div>
+      </div>
+    </div>
+    <div class="tips"><div><b>📱</b>Portrait mode</div><div><b>👓</b>Take off glasses</div><div><b>💡</b>Face the light</div><div><b>✋</b>Arm's length · steady phone</div><div><b>⏱</b>Play 2 rounds · 30 s each</div></div>
+  </div></div>
+
+  <div class="card o step"><div class="n"><span>02</span></div><div>
+    <h3>Log your result</h3>
+    <div class="mylog">
+      <div><label class="f">AVERAGE REACTION TIME (ms)</label><input class="inp" id="myRT" type="number" placeholder="e.g. 560"></div>
+      <div><label class="f">ACCURACY (%)</label><input class="inp" id="myAcc" type="number" placeholder="e.g. 80"></div>
+      <div><label class="f">SLEPT 7 h OR MORE LAST NIGHT?</label><select class="inp" id="mySl"><option value="1">Yes</option><option value="0">No</option></select></div>
+      <div><button class="btn" id="myGo">Place me on the chart ▸</button></div>
+    </div>
+    <svg class="strip" id="bpStrip" viewBox="0 0 900 150" style="margin-top:12px"></svg>
+    <p class="mute" id="myTxt"></p><div class="illus">CLASS DOTS = 60 SIMULATED SESSIONS · YOUR DOT = YOU</div>
+  </div></div>
+
+  <div class="card o step"><div class="n"><span>03</span></div><div>
+    <h3>BlazePod detective · 4 missions</h3>
+    <div class="mis" id="mis"><button class="on" data-k="0"><em>M1</em>Hypothesis test</button><button data-k="1"><em>M2</em>Sampling &amp; bias</button><button data-k="2"><em>M3</em>Name the design</button><button data-k="3"><em>M4</em>RR &amp; OR</button></div>
+
+    <div class="mp" data-k="0">
+      <p class="pqsc">Do students who <b>slept 7 h or more</b> react faster than those who slept less?</p>
+      <div class="hb-out" style="margin-top:0"><div><span class="k hb">H₀</span>No significant difference in average reaction time between the two sleep groups.</div><div><span class="k hl">H₁</span>There is a significant difference between the two sleep groups.</div></div>
+      <div class="seg" id="m1n" style="margin:14px 0 4px"><button class="on" data-n="10">First 10 students</button><button data-n="60">Whole class (60)</button></div>
+      <svg class="strip" id="m1s" viewBox="0 0 900 170"></svg>
+      <div class="res" id="m1r"></div>
+      <div class="ctl" id="m1q"></div>
+      <div class="fb2" id="m1f"></div>
+    </div>
+
+    <div class="mp" data-k="1" style="display:none">
+      <p class="pqsc">The true class average is the <b class="hb">white line</b>. Pick 12 players – does your sample tell the truth?</p>
+      <div class="seg" id="m2s" style="margin:8px 0"><button class="on" data-m="rand">Simple random</button><button data-m="strat">Stratified (by sleep)</button><button data-m="vol">First 12 volunteers</button><button data-m="glass">Random · glasses ON</button></div>
+      <div class="biasm" id="m2bar"><b></b><i></i></div>
+      <div class="res" id="m2r"></div>
+      <div class="note" id="m2t"></div>
+      <div class="row" style="margin-top:10px"><button class="btn sm" id="m2re">Draw again ↻</button></div>
+      <div class="comp-m" data-c="sortBP"></div>
+    </div>
+
+    <div class="mp" data-k="2" style="display:none"><div class="comp-m" data-c="sortBPd"></div></div>
+
+    <div class="mp" data-k="3" style="display:none">
+      <div class="grid g2">
+        <div class="aq"><div class="qh">COHORT · RELATIVE RISK</div>
+          <p style="font-size:.8rem">80 not-yet-fast students: 40 practise BlazePod daily for 4 weeks, 40 don't. At retest, <b class="hl">24</b> of the practisers and <b class="hl">12</b> of the others are fast reactors.</p>
+          <table class="t22"><thead><tr><th></th><th>FAST</th><th>NOT FAST</th></tr></thead><tbody><tr><td class="rh">PRACTISED</td><td class="cell">24</td><td class="cell">16</td></tr><tr><td class="rh">DID NOT</td><td class="cell">12</td><td class="cell">28</td></tr></tbody></table>
+          <div class="ctl"><span class="mute">RR =</span><input class="inp" id="bpRR" placeholder="?" style="width:100px"><button class="btn sm" data-bp="RR">Check</button><button class="btn ghost sm" data-bpr="RR">Reveal</button><span class="verd" id="bpRR-v"></span></div>
+          <div class="aqv" id="bpRR-r"><div>Risk practised = 24 ÷ 40 = 0.60</div><div>Risk not practised = 12 ÷ 40 = 0.30</div><div>RR = 0.60 ÷ 0.30 = <span class="hl">2.0</span> → practisers were twice as likely to become fast.</div></div></div>
+        <div class="aq"><div class="qh">CASE-CONTROL · ODDS RATIO</div>
+          <p style="font-size:.8rem">30 fast reactors (cases) and 30 slow (controls) are asked: coffee this morning? Cases: <b class="hl">18</b> yes · Controls: <b class="hl">9</b> yes.</p>
+          <table class="t22"><thead><tr><th></th><th>CASES</th><th>CONTROLS</th></tr></thead><tbody><tr><td class="rh">COFFEE</td><td class="cell">18</td><td class="cell">9</td></tr><tr><td class="rh">NO COFFEE</td><td class="cell">12</td><td class="cell">21</td></tr></tbody></table>
+          <div class="ctl"><span class="mute">OR =</span><input class="inp" id="bpOR" placeholder="?" style="width:100px"><button class="btn sm" data-bp="OR">Check</button><button class="btn ghost sm" data-bpr="OR">Reveal</button><span class="verd" id="bpOR-v"></span></div>
+          <div class="aqv" id="bpOR-r"><div>Odds in cases = 18 ÷ 12 = 1.5</div><div>Odds in controls = 9 ÷ 21 = 0.43</div><div>OR = 1.5 ÷ 0.43 = <span class="hl">3.5</span> → fast reactors had 3.5× the odds of having had coffee.</div></div></div>
+      </div>
+      <div class="note">Can you trust the OR? Coffee drinkers may also be the ones who slept less – a possible <b>confounder</b>. And students may not recall their morning accurately – <b>recall bias</b>.</div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="row" style="justify-content:space-between"><div><h3 style="margin:0">See the real class data</h3><p class="mute">The dashboard shows group <b>means</b> (e.g. by gender, age band). Is a gap real? You'd still need a <b class="hl">p-value</b> – just like Hands-on 1.</p></div>
+    <a class="btn b" href="https://smile-rp.shinyapps.io/Virtual_BlazePod/" target="_blank" rel="noopener">Open BlazePod dashboard ↗</a></div></div>
+  <div class="pager"><button class="btn ghost" data-go="6">◂ Hands-on 2</button><button class="btn" data-go="8">Review Quiz ▸</button></div>
+</section>
+
+<!-- 08 REVIEW QUIZ -->
 <section class="panel" id="p7" data-name="REVIEW QUIZ">
   <div class="ph"><div class="kick">CONSOLIDATE</div><h2>Review <span>Quiz</span></h2><p>12 questions. Stuck? Open <span class="hl">How to approach</span> first. Your first answer counts.</p></div>
   <div class="card o"><div class="row" style="justify-content:space-between"><div class="qnav" id="qNav"></div><div class="pqscore"><b id="qS">0</b><span>/ 12 CORRECT</span></div></div></div>
   <div class="card" id="qCard"></div>
   <div class="card o" id="qEnd" style="display:none"></div>
-  <div class="pager"><button class="btn ghost" data-go="6">◂ Hands-on 2</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
+  <div class="pager"><button class="btn ghost" data-go="7">◂ BlazePod</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
 </section>
 </main>
 <footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · POPULATION HEALTH STUDIES · REPUBLIC POLYTECHNIC</div></footer>
@@ -747,6 +854,12 @@ const C={
  sortDes:{type:"sort",title:"CHALLENGE · NAME THAT DESIGN",bins:["Cross-sectional","Case-control","Cohort"],
   items:[["Survey 2,000 Singapore residents this month on diabetes and diet",0],["Everyone plays Cognitive Challenge today; compare gamers vs non-gamers",0],["50 dengue patients and 100 neighbours are asked where they went last week",1],["Children with leukaemia vs healthy children: compare past exposure to pesticides",1],["Follow 5,000 healthy smokers and non-smokers for 10 years",2],["Track seniors who do and don't attend exercise classes for future falls",2]],
   why:"Snapshot now → cross-sectional. Start from disease and look back → case-control. Start from exposure (disease-free) and look forward → cohort."},
+ sortBP:{type:"sort",title:"CHALLENGE · BLAZEPOD BIAS SPOTTER",bins:["Selection bias","Information bias","Confounding"],
+  items:[["Only the students who finish first send in their scores",0],["Scores are collected from the front row only",0],["Some students played with glasses on, so eye tracking lagged",1],["Students guess their sleep hours from memory",1],["Gamers also sleep less – so sleep looks linked to speed because of gaming",2],["Older students are slower and also drink more coffee",2]],
+  why:"Selection = who ends up in the data. Information = how speed or exposure is measured or recalled. Confounding = a third factor linked to both."},
+ sortBPd:{type:"sort",title:"CHALLENGE · NAME THE BLAZEPOD DESIGN",bins:["Cross-sectional","Case-control","Cohort"],
+  items:[["Everyone plays today; compare reaction time of students who slept < 7 h vs ≥ 7 h",0],["Orientation week: what % of first-years are slow reactors?",0],["Take the 10 fastest and 10 slowest players and ask what they had for breakfast",1],["Students who sprained an ankle this term vs uninjured students: compare their earlier BlazePod scores",1],["Practise BlazePod daily vs not, retest after 4 weeks: who becomes fast?",2],["Follow Year 1 gamers and non-gamers to Year 3, testing every term",2]],
+  why:"One session, everyone at once → cross-sectional. Start from the outcome and look back → case-control. Start from the exposure and follow forward → cohort."},
  mRR:{type:"mcq",title:"CHALLENGE · INTERPRET",q:"A cohort study finds RR = 0.6 for regular exercise and fall injury. What does it mean?",
   o:["Exercisers have 40% lower risk – exercise is protective","Exercisers have 60% higher risk","No association","The odds ratio is 0.6"],
   why:"RR < 1 means a negative association: the exposure is protective. 0.6 means 60% of the risk – a 40% reduction."}
@@ -947,6 +1060,73 @@ $$("#ra,#rb,#rc,#rd").forEach(i=>i.oninput=rr);$$("#oa,#ob,#oc,#od").forEach(i=>
   // reset cohort changes when switching design
   const base=pop.map(p=>p.f);$$("#dsSeg button").forEach(b=>b.addEventListener("click",()=>{pop.forEach((p,i)=>p.f=base[i]);paint()}));
   const origRun=$("#dsRun").onclick;$("#dsRun").onclick=()=>{pop.forEach((p,i)=>p.f=base[i]);origRun()};
+})();
+
+/* ---------- BLAZEPOD BREAK ---------- */
+(function(){
+  const URL="https://aaron-chen-angus.github.io/blazepod-reaction-game/",MSG="Virtual BlazePod – open on your phone in portrait mode (take off glasses): "+URL;
+  $("#shWa").href="https://api.whatsapp.com/send?text="+encodeURIComponent(MSG);
+  $("#shTg").href="https://t.me/share/url?url="+encodeURIComponent(URL)+"&text="+encodeURIComponent("Virtual BlazePod – open on your phone in portrait mode (take off glasses)");
+  $("#shEm").href="mailto:?subject="+encodeURIComponent("Virtual BlazePod link")+"&body="+encodeURIComponent(MSG);
+  $("#shCp").onclick=()=>{const done=()=>{$("#shCp span").textContent="Copied ✓";setTimeout(()=>$("#shCp span").textContent="Copy link",2000)};
+    try{navigator.clipboard.writeText(URL).then(done,()=>{fallback();done()})}catch(e){fallback();done()}
+    function fallback(){const t=el("textarea");t.value=URL;document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(_){}t.remove()}};
+
+  /* seeded class data */
+  let sd=5;const rnd=()=>{sd|=0;sd=sd+0x6D2B79F5|0;let t=Math.imul(sd^sd>>>15,1|sd);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+  const nrm=(m,s)=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return m+s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+  const CL=[];for(let i=0;i<60;i++){const sl=i%2===0,gm=rnd()<0.4;const rt=Math.round(nrm(585-(sl?40:0)-(gm?25:0),55));CL.push({sl,gm,rt})}
+  const trueMean=CL.reduce((a,c)=>a+c.rt,0)/60;
+  const SX=v=>60+820*(v-380)/(800-380);
+  function axis(s,y0,y1){for(let v=400;v<=800;v+=100){sv("line",{x1:SX(v),x2:SX(v),y1:y0,y2:y1,stroke:"rgba(0,229,255,.12)"},s);sv("text",{x:SX(v),y:y1+16,"text-anchor":"middle"},s).textContent=v+" ms"}}
+
+  /* my result */
+  function strip(me){const s=$("#bpStrip");s.innerHTML="";axis(s,10,118);CL.forEach((c,i)=>sv("circle",{cx:SX(c.rt),cy:40+((i*23)%50),r:4.5,fill:c.sl?B:O,"fill-opacity":.7},s));
+    sv("line",{x1:SX(trueMean),x2:SX(trueMean),y1:14,y2:112,stroke:"#fff","stroke-width":2,"stroke-dasharray":"5 4"},s);sv("text",{x:SX(trueMean)+6,y:22,style:"fill:#fff"},s).textContent="CLASS MEAN "+Math.round(trueMean);
+    if(me){const x=SX(Math.max(380,Math.min(800,me)));sv("circle",{cx:x,cy:64,r:11,fill:"none",stroke:"#fff","stroke-width":3,style:"filter:drop-shadow(0 0 8px #fff)"},s);sv("text",{x:x,y:96,"text-anchor":"middle",style:"fill:#fff;font-size:12px"},s).textContent="YOU"}
+    sv("text",{x:4,y:146,style:"fill:#00e5ff"},s).textContent="● SLEPT ≥ 7 h";sv("text",{x:150,y:146,style:"fill:#ff6a00"},s).textContent="● SLEPT < 7 h"}
+  strip(null);totalComps++;
+  $("#myGo").onclick=()=>{const rt=+$("#myRT").value;if(!(rt>100&&rt<3000)){$("#myTxt").innerHTML="<span style='color:var(--bad)'>Enter your average reaction time in ms (e.g. 560).</span>";return}
+    strip(rt);const faster=CL.filter(c=>c.rt>rt).length;$("#myTxt").innerHTML="You were faster than <b class='hl'>"+Math.round(100*faster/60)+"%</b> of the class. One session is a <b>snapshot</b> – exposure (sleep) and outcome (speed) measured at the same time: that's <b class='hb'>cross-sectional</b>.";markDone(null,"bpme")};
+
+  /* missions nav */
+  $$("#mis button").forEach(b=>b.onclick=()=>{$$("#mis button").forEach(x=>x.classList.toggle("on",x===b));$$(".mp").forEach(p=>p.style.display=p.dataset.k===b.dataset.k?"":"none")});
+  const misDone=k=>$$("#mis button")[k].classList.add("dn");
+
+  /* M1 hypothesis */
+  let m1n=10;totalComps++;
+  function m1(){const d=CL.slice(0,m1n),a=d.filter(c=>c.sl).map(c=>c.rt),b=d.filter(c=>!c.sl).map(c=>c.rt),r=welch(a,b);const s=$("#m1s");s.innerHTML="";axis(s,10,140);
+    [[a,45,B,"≥ 7 h",r.mx],[b,105,O,"< 7 h",r.my]].forEach(g=>{sv("text",{x:4,y:g[1]+4,style:"fill:"+g[2]},s).textContent=g[3];g[0].forEach((v,i)=>sv("circle",{cx:SX(v),cy:g[1]+((i*29)%26-13),r:4.5,fill:g[2],"fill-opacity":.8},s));sv("line",{x1:SX(g[4]),x2:SX(g[4]),y1:g[1]-24,y2:g[1]+24,stroke:"#fff","stroke-width":3},s)});
+    $("#m1r").innerHTML="<div><b>"+a.length+" / "+b.length+"</b><span>n per group</span></div><div><b>"+Math.round(r.mx)+"</b><span>Mean ≥ 7 h (ms)</span></div><div><b>"+Math.round(r.my)+"</b><span>Mean &lt; 7 h (ms)</span></div><div class='o'><b>"+pfmt(r.p)+"</b><span>p-value (t-test)</span></div>";
+    const q=$("#m1q"),f=$("#m1f");q.innerHTML="<span class='mute'>Your decision:</span>";f.className="fb2";const sig=r.p<0.05;
+    [["REJECT H₀",true],["ACCEPT H₀",false]].forEach(o=>{const bt=el("button","btn sm ghost",o[0]);bt.onclick=()=>{const ok=o[1]===sig;f.className="fb2 show"+(ok?"":" bad");
+      f.innerHTML=ok?"<b class='hb'>CORRECT.</b> p = "+pfmt(r.p)+(sig?" &lt; 0.05 → significant difference.":" ≥ 0.05 → no significant difference.")+(m1n===10?" Now switch to the <b>whole class</b> – what changes?":" With 60 students the same real gap becomes detectable: <b>sample size matters</b>."):"<b style='color:var(--bad)'>NOT QUITE.</b> Compare p with 0.05.";
+      if(ok&&m1n===60){markDone(null,"bpm1");misDone(0)}};q.appendChild(bt)})}
+  $$("#m1n button").forEach(b=>b.onclick=()=>{m1n=+b.dataset.n;$$("#m1n button").forEach(x=>x.classList.toggle("on",x===b));m1()});m1();
+
+  /* M2 sampling & bias */
+  let m2="rand";const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const M2T={rand:"<b class='hb'>Simple random</b> – everyone has an equal chance. Sample means scatter around the truth (chance), not off to one side.",
+    strat:"<b class='hb'>Stratified</b> – 6 from each sleep group, matching the class. Keeps the balance; usually closest to the truth.",
+    vol:"<b class='hl'>Selection bias</b> – the first to volunteer are the keen gamers, who react faster. The sample is <b>systematically</b> too fast.",
+    glass:"<b class='hl'>Information bias</b> – random players, but glasses cause tracking errors that slow every reading by ~60 ms. A bigger sample won't fix a measuring error."};
+  function m2run(){let s;const idx=[...Array(60).keys()];
+    if(m2==="rand"||m2==="glass")s=shuf(idx).slice(0,12);
+    if(m2==="strat")s=shuf(idx.filter(i=>CL[i].sl)).slice(0,6).concat(shuf(idx.filter(i=>!CL[i].sl)).slice(0,6));
+    if(m2==="vol")s=idx.slice().sort((a,b)=>CL[a].rt-CL[b].rt).slice(0,18).sort(()=>Math.random()-.5).slice(0,12);
+    const vals=s.map(i=>CL[i].rt+(m2==="glass"?60:0)),mean=vals.reduce((a,b)=>a+b,0)/12,err=mean-trueMean;
+    const X=v=>100*(v-460)/(720-460);const bar=$("#m2bar");$("b",bar).style.left=Math.min(X(mean),X(trueMean))+"%";$("b",bar).style.width=Math.abs(X(mean)-X(trueMean))+"%";$("i",bar).style.left=X(trueMean)+"%";
+    $("#m2r").innerHTML="<div><b>"+Math.round(trueMean)+"</b><span>True class mean (ms)</span></div><div class='o'><b>"+Math.round(mean)+"</b><span>Sample mean (ms)</span></div><div><b>"+(err>0?"+":"")+Math.round(err)+"</b><span>Error (ms)</span></div>";
+    $("#m2t").innerHTML=M2T[m2]}
+  $$("#m2s button").forEach(b=>b.onclick=()=>{m2=b.dataset.m;$$("#m2s button").forEach(x=>x.classList.toggle("on",x===b));m2run()});$("#m2re").onclick=m2run;m2run();
+
+  /* M4 RR / OR */
+  const ANS={RR:2,OR:3.5};totalComps+=2;
+  $$("[data-bp]").forEach(b=>b.onclick=()=>{const k=b.dataset.bp,v=parseFloat($("#bp"+k).value),ok=Math.abs(v-ANS[k])<=0.05,vd=$("#bp"+k+"-v");vd.textContent=ok?"✔ CORRECT":"✘ TRY AGAIN";vd.style.color=ok?"var(--ok)":"var(--bad)";$("#bp"+k).className="inp "+(ok?"ok":"bad");
+    if(ok){$("#bp"+k+"-r").classList.add("show");markDone(null,"bp"+k);if(doneSet.has("bpRR")&&doneSet.has("bpOR"))misDone(3)}});
+  $$("[data-bpr]").forEach(b=>b.onclick=()=>$("#bp"+b.dataset.bpr+"-r").classList.toggle("show"));
+  // mark M2/M3 tabs when their sorters clear
+  new MutationObserver(()=>{$$(".mp").forEach(p=>{const c=$(".comp",p);if(c&&c.classList.contains("done"))misDone(+p.dataset.k)})}).observe($("#pBP"),{subtree:true,attributes:true,attributeFilter:["class"]});
 })();
 
 /* ---------- REVIEW QUIZ ---------- */
