@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S249 // Stats Grid</title>
+<meta name="description" content="S249 Data Analytics for Population Health – Lessons 7 & 8: Introduction to Biostatistics (mean, median, mode, SD, SEM, probability, p-values, Excel, CDA bulletin analysis).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03060b; --panel:rgba(8,18,32,.8);
+  --o:#ff6a00; --o2:#ffa13d; --b:#00e5ff; --b2:#2d8cff;
+  --ink:#d7f6ff; --mute:#7fa3b5; --ok:#00e5ff; --bad:#ff3d5a;
+  --glow-o:0 0 6px rgba(255,106,0,.9),0 0 22px rgba(255,106,0,.45);
+  --glow-b:0 0 6px rgba(0,229,255,.9),0 0 22px rgba(0,229,255,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Orbitron',system-ui,sans-serif;font-size:14px;line-height:1.7;letter-spacing:.2px;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(900px 500px at 15% -5%,rgba(255,106,0,.16),transparent 60%),
+  radial-gradient(900px 600px at 95% 10%,rgba(0,229,255,.14),transparent 60%),
+  linear-gradient(#03060b,#050b14)}
+.floor{position:fixed;left:-50%;right:-50%;bottom:0;height:55vh;z-index:-2;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(0,229,255,.28) 0 1px,transparent 1px 70px),repeating-linear-gradient(0deg,rgba(0,229,255,.28) 0 1px,transparent 1px 70px);
+  transform:perspective(420px) rotateX(62deg);transform-origin:bottom;
+  -webkit-mask-image:linear-gradient(to top,#000 5%,transparent 85%);mask-image:linear-gradient(to top,#000 5%,transparent 85%);
+  animation:floor 6s linear infinite;opacity:.5}
+@keyframes floor{to{background-position:0 70px,70px 0}}
+.scan{position:fixed;inset:0;z-index:50;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+h1,h2,h3,h4{font-weight:800;text-transform:uppercase;letter-spacing:2px;line-height:1.25}
+a{color:var(--b)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{padding:20px 0 10px}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:42px;height:42px;border:2px solid var(--o);box-shadow:var(--glow-o),inset 0 0 12px rgba(255,106,0,.4);transform:rotate(45deg);flex:none;position:relative;margin:6px}
+.logo::after{content:"";position:absolute;inset:8px;border:2px solid var(--b);box-shadow:var(--glow-b)}
+.brand h1{font-size:clamp(.95rem,2.4vw,1.45rem);color:var(--b);text-shadow:var(--glow-b)}
+.brand h1 b{color:var(--o);text-shadow:var(--glow-o);font-weight:900}
+.brand small{display:block;font-size:.6rem;letter-spacing:3px;color:var(--mute);font-weight:500}
+.xp{margin-left:auto;min-width:200px;flex:1;max-width:320px}
+.xp span{font-size:.6rem;letter-spacing:2px;color:var(--mute);display:flex;justify-content:space-between}
+.xp .bar{height:8px;border:1px solid var(--b);margin-top:4px;position:relative;box-shadow:var(--glow-b);clip-path:polygon(0 0,100% 0,98% 100%,2% 100%)}
+.xp .bar i{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--o),var(--o2));box-shadow:var(--glow-o);transition:width .6s}
+nav{position:sticky;top:0;z-index:40;background:linear-gradient(rgba(3,6,11,.95),rgba(3,6,11,.86));backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,229,255,.25);margin-bottom:22px}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px;scrollbar-width:thin}
+.tab{flex:none;background:transparent;border:1px solid rgba(0,229,255,.25);color:var(--mute);font:600 .64rem 'Orbitron',sans-serif;letter-spacing:1.5px;text-transform:uppercase;padding:9px 14px;cursor:pointer;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:.2s;white-space:nowrap}
+.tab em{font-style:normal;color:var(--o);margin-right:6px}
+.tab:hover{color:var(--b);border-color:var(--b)}
+.tab[aria-selected=true]{color:#fff;background:linear-gradient(135deg,rgba(255,106,0,.35),rgba(0,229,255,.2));border-color:var(--o);box-shadow:var(--glow-o)}
+.tab.seen::after{content:" ✓";color:var(--b)}
+.panel{display:none;animation:in .5s ease}
+.panel.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.ph{margin-bottom:18px}
+.ph .kick{font-size:.62rem;letter-spacing:4px;color:var(--o);text-shadow:var(--glow-o);font-weight:700}
+.ph h2{font-size:clamp(1.3rem,3.6vw,2.2rem);color:#fff;text-shadow:var(--glow-b);margin-top:4px}
+.ph h2 span{color:var(--b)}
+.ph p{color:var(--mute);max-width:820px;margin-top:6px}
+.sec{font-size:.68rem;letter-spacing:4px;color:var(--b);text-shadow:var(--glow-b);font-weight:800;margin:30px 0 12px;display:flex;align-items:center;gap:12px}
+.sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--b),transparent)}
+.sec em{font-style:normal;color:var(--o);text-shadow:var(--glow-o)}
+.card{position:relative;background:var(--panel);border:1px solid rgba(0,229,255,.28);padding:18px 20px;margin-bottom:16px;backdrop-filter:blur(3px)}
+.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--o);box-shadow:var(--glow-o)}
+.card::before{top:-2px;left:-2px;border-right:0;border-bottom:0}
+.card::after{bottom:-2px;right:-2px;border-left:0;border-top:0}
+.card.o{border-color:rgba(255,106,0,.45)}
+.card.o::before,.card.o::after{border-color:var(--b);box-shadow:var(--glow-b)}
+.card h3{font-size:.85rem;color:var(--b);text-shadow:var(--glow-b);margin-bottom:8px}
+.card.o h3{color:var(--o2);text-shadow:var(--glow-o)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.hl{color:var(--o2);font-weight:700}
+.hb{color:var(--b);font-weight:700}
+.mute{color:var(--mute);font-size:.78rem}
+.tag{display:inline-block;font-size:.56rem;letter-spacing:2px;padding:2px 8px;border:1px solid var(--o);color:var(--o2);margin:2px 4px 2px 0;vertical-align:middle}
+.tag.b{border-color:var(--b);color:var(--b)}
+.note{border-left:3px solid var(--o);padding:8px 14px;background:rgba(255,106,0,.07);color:#ffd9b8;font-size:.78rem;margin-top:10px}
+.illus{font-size:.56rem;letter-spacing:2px;color:var(--mute);margin-top:8px}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--o),#ff8a2a);color:#05080d;font:800 .7rem 'Orbitron',sans-serif;letter-spacing:2px;text-transform:uppercase;padding:11px 20px;border:0;cursor:pointer;text-decoration:none;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:var(--glow-o);transition:.2s}
+.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn.b{background:linear-gradient(135deg,var(--b),var(--b2))}
+.btn.ghost{background:transparent;color:var(--b);border:1px solid var(--b);clip-path:none}
+.btn.sm{padding:7px 12px;font-size:.6rem}
+.btn:disabled{opacity:.35;cursor:not-allowed;filter:none;transform:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--b);flex-wrap:wrap}
+.seg button{background:transparent;border:0;color:var(--b);font:700 .62rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:8px 14px;cursor:pointer;text-transform:uppercase}
+.seg button.on{background:var(--b);color:#03060b;box-shadow:var(--glow-b)}
+
+/* formula */
+.fx{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 8px;font-weight:800;text-align:center}
+.fx .lhs{color:var(--o);text-shadow:var(--glow-o);font-size:1.05rem;letter-spacing:2px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;font-size:.8rem;letter-spacing:1px}
+.frac .n{padding:0 10px 6px;color:#fff}
+.frac .d{padding:6px 10px 0;border-top:2px solid var(--b);box-shadow:0 -1px 8px -4px var(--b);color:var(--b)}
+.big{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;color:var(--o);text-shadow:var(--glow-o);line-height:1.1}
+
+/* cover */
+.cover{position:relative;border:1px solid rgba(255,106,0,.45);background:linear-gradient(180deg,rgba(255,106,0,.06),rgba(0,229,255,.04));overflow:hidden;margin-bottom:18px}
+.cover canvas{display:block;width:100%;height:440px}
+.cover .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:26px;pointer-events:none;background:linear-gradient(90deg,rgba(3,6,11,.92) 0%,rgba(3,6,11,.7) 42%,rgba(3,6,11,0) 70%)}
+.cover .kick{font-size:.64rem;letter-spacing:5px;color:var(--b);text-shadow:var(--glow-b);font-weight:700}
+.cover h2{font-size:clamp(1.8rem,5.4vw,3.6rem);color:#fff;font-weight:900;letter-spacing:3px;line-height:1.05;margin-top:8px;text-shadow:0 0 24px rgba(0,229,255,.5)}
+.cover h2 b{color:var(--o);text-shadow:var(--glow-o);display:block}
+.cover .sub{color:var(--mute);font-size:.72rem;letter-spacing:2px;margin-top:10px;max-width:440px}
+.live{display:flex;gap:10px;flex-wrap:wrap}
+.live div{border:1px solid rgba(0,229,255,.45);background:rgba(3,6,11,.75);padding:8px 12px;min-width:120px}
+.live b{display:block;font-size:1.4rem;font-weight:900;color:var(--b);text-shadow:var(--glow-b);line-height:1.2}
+.live div.o{border-color:var(--o)}
+.live div.o b{color:var(--o);text-shadow:var(--glow-o)}
+.live span{font-size:.52rem;letter-spacing:2px;color:var(--mute)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.56rem;letter-spacing:2px;color:var(--mute);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.mods{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.mod{background:var(--panel);border:1px solid rgba(0,229,255,.3);padding:16px;cursor:pointer;text-align:left;color:var(--ink);font-family:'Orbitron',sans-serif;transition:.25s;position:relative;overflow:hidden}
+.mod:hover{border-color:var(--o);box-shadow:var(--glow-o);transform:translateY(-3px)}
+.mod svg{width:46px;height:46px;display:block;margin-bottom:10px}
+.mod em{font-style:normal;color:var(--o);font-weight:900;font-size:.7rem;letter-spacing:2px}
+.mod b{display:block;font-size:.8rem;letter-spacing:1.5px;margin-top:2px;text-transform:uppercase}
+.mod small{display:block;color:var(--mute);font-size:.58rem;letter-spacing:1px;margin-top:4px;line-height:1.5}
+.alert{border:1px solid var(--o);background:repeating-linear-gradient(135deg,rgba(255,106,0,.12) 0 12px,rgba(255,106,0,.05) 12px 24px);padding:14px 18px;display:flex;gap:14px;align-items:center;box-shadow:var(--glow-o);margin:16px 0}
+.alert .ic{flex:none;width:38px;height:38px;border:2px solid var(--o);transform:rotate(45deg);display:grid;place-items:center;font-weight:900;color:var(--o)}
+.alert .ic span{transform:rotate(-45deg)}
+.alert b{color:var(--o2);letter-spacing:2px}
+.alert p{font-size:.76rem}
+
+/* population boxes */
+.pbox{position:relative;height:130px;border:2px solid var(--b);box-shadow:var(--glow-b),inset 0 0 20px rgba(0,229,255,.15);overflow:hidden;margin:8px 0 10px}
+.pbox.open{border-left-color:transparent;border-right-color:transparent;border-color:var(--o);box-shadow:var(--glow-o),inset 0 0 20px rgba(255,106,0,.15)}
+.pbox.open{border-left:2px dashed rgba(255,106,0,.35);border-right:2px dashed rgba(255,106,0,.35)}
+.pbox i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--b);box-shadow:var(--glow-b)}
+.pbox.closed i{animation:bob 3s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translate(8px,-10px)}}
+.pbox.open i{background:var(--o);box-shadow:var(--glow-o);left:-20px;animation:flow linear infinite}
+@keyframes flow{from{left:-6%}to{left:104%}}
+.pbox .lock{position:absolute;right:8px;top:6px;font-size:.55rem;letter-spacing:2px;color:var(--b)}
+.pbox.open .lock{color:var(--o)}
+
+/* time chart, place map */
+.chart{width:100%;display:block}
+.chart text{font:600 10px 'Orbitron',sans-serif;fill:var(--mute)}
+.map{display:grid;grid-template-columns:repeat(3,1fr);grid-template-areas:". n ne" "w c e";gap:10px;max-width:560px;margin:10px auto}
+.tile{border:1px solid var(--b);padding:12px 8px;text-align:center;transition:.4s;background:rgba(0,229,255,.05);clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%)}
+.tile b{display:block;font-size:.62rem;letter-spacing:2px}
+.tile span{font-size:1.15rem;font-weight:900}
+.tile small{display:block;font-size:.5rem;color:var(--mute);letter-spacing:1px}
+.tile.top{box-shadow:var(--glow-o);border-color:var(--o)}
+.tile.top span{color:var(--o2)}
+
+/* interactive components (shared) */
+.comp{border:1px solid rgba(255,106,0,.5);background:linear-gradient(180deg,rgba(255,106,0,.07),rgba(7,16,28,.8));padding:18px 20px;margin:18px 0;position:relative}
+.comp>.ct{position:absolute;top:-11px;left:14px;background:var(--bg);padding:0 10px;font-size:.58rem;letter-spacing:3px;color:var(--o);text-shadow:var(--glow-o);font-weight:800}
+.comp.done{border-color:var(--b);box-shadow:0 0 14px rgba(0,229,255,.25)}
+.comp.done>.ct{color:var(--b);text-shadow:var(--glow-b)}
+.comp.done>.ct::after{content:" ✓ CLEARED"}
+.comp .q{font-weight:600;color:#fff;margin-bottom:12px;font-size:.84rem}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.35);color:var(--ink);padding:9px 14px;font:500 .76rem 'Orbitron',sans-serif;cursor:pointer;transition:.18s;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--o);background:rgba(255,106,0,.1)}
+.opt.ok{border-color:var(--ok);background:rgba(0,229,255,.2);box-shadow:var(--glow-b);color:#fff}
+.opt.ok::before{content:"✔ "}
+.opt.bad{border-color:var(--bad);background:rgba(255,61,90,.15);color:#ffc2cb}
+.opt.bad::before{content:"✘ "}
+.opt:disabled{cursor:default}
+.fb2{margin-top:12px;padding:10px 14px;border-left:3px solid var(--b);background:rgba(0,229,255,.07);font-size:.76rem;display:none}
+.fb2.bad{border-color:var(--bad);background:rgba(255,61,90,.08)}
+.fb2.show{display:block;animation:in .3s}
+.pool,.zone{min-height:46px;display:flex;flex-wrap:wrap;gap:8px;padding:8px;border:1px dashed rgba(0,229,255,.35)}
+.pool{margin-bottom:12px}
+.bins{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.bin h4{font-size:.66rem;color:var(--o2);margin-bottom:6px;text-shadow:var(--glow-o)}
+.bin .zone{min-height:84px;border-color:rgba(255,106,0,.5)}
+.zone.over,.pool.over{background:rgba(255,106,0,.12);border-color:var(--o)}
+.chip{background:rgba(0,229,255,.1);border:1px solid var(--b);padding:6px 12px;font-size:.68rem;cursor:grab;user-select:none;transition:.15s;line-height:1.4}
+.chip:hover{box-shadow:var(--glow-b)}
+.chip.sel{background:var(--o);color:#05080d;border-color:var(--o);box-shadow:var(--glow-o);font-weight:700}
+.chip.ok{background:rgba(0,229,255,.28);border-color:var(--ok);color:#fff}
+.chip.ok::before{content:"✔ "}
+.chip.bad{background:rgba(255,61,90,.2);border-color:var(--bad);color:#ffc2cb}
+.chip.bad::before{content:"✘ "}
+.chip.lock{cursor:default}
+.hint{font-size:.62rem;color:var(--mute);letter-spacing:1px;margin-bottom:10px}
+.ctl{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* reveal */
+.rev{border:1px solid rgba(0,229,255,.3);margin:10px 0 0;background:rgba(0,229,255,.04)}
+.rev summary{cursor:pointer;padding:9px 14px;font-weight:700;list-style:none;color:var(--b);font-size:.64rem;letter-spacing:2px;text-transform:uppercase}
+.rev summary::-webkit-details-marker{display:none}
+.rev summary::before{content:"▸";color:var(--o);margin-right:10px;display:inline-block;transition:.2s}
+.rev[open] summary::before{transform:rotate(90deg)}
+.rev[open]{border-color:var(--o)}
+.rev>div{padding:2px 14px 12px 34px;font-size:.78rem}
+.work div{padding:3px 0}
+.work .eq{color:var(--o2);font-weight:700}
+
+/* inputs */
+.inp{background:rgba(3,6,11,.8);border:1px solid var(--b);color:#fff;font:700 .85rem 'Orbitron',sans-serif;padding:9px 12px;width:150px;outline:none}
+.inp:focus{border-color:var(--o);box-shadow:var(--glow-o)}
+select.inp{width:auto}
+.inp.ok{border-color:var(--ok);box-shadow:var(--glow-b)}
+.inp.bad{border-color:var(--bad)}
+label.f{display:block;font-size:.58rem;letter-spacing:2px;color:var(--mute);margin-bottom:4px;text-transform:uppercase}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:linear-gradient(90deg,var(--o),var(--b));outline:none;margin:12px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#03060b;border:2px solid var(--o);transform:rotate(45deg);box-shadow:var(--glow-o);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#03060b;border:2px solid var(--o);box-shadow:var(--glow-o);cursor:pointer;border-radius:0}
+.sl{display:flex;justify-content:space-between;font-size:.6rem;letter-spacing:1.5px;color:var(--mute)}
+.sl b{color:#fff;font-size:.78rem}
+.res{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-top:12px}
+.res div{border:1px solid rgba(0,229,255,.35);padding:10px 12px;background:rgba(3,6,11,.6)}
+.res b{display:block;font-size:1.25rem;font-weight:900;color:var(--b);text-shadow:var(--glow-b);line-height:1.25}
+.res div.o{border-color:var(--o)}
+.res div.o b{color:var(--o);text-shadow:var(--glow-o)}
+.res span{font-size:.52rem;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.hidden-res .res div.o b{filter:blur(9px)}
+
+/* E-learning */
+.aq{border:1px solid rgba(0,229,255,.3);padding:14px 16px;margin-bottom:12px;background:rgba(3,6,11,.5)}
+.aq .qh{font-size:.62rem;letter-spacing:3px;color:var(--o);font-weight:800;margin-bottom:8px}
+.ffrac{display:inline-flex;flex-direction:column;font-size:.7rem;text-align:center;margin:6px 0 10px;max-width:100%}
+.ffrac span:first-child{padding-bottom:5px;color:#fff}
+.ffrac span:last-child{padding-top:5px;border-top:2px solid var(--b);color:var(--b)}
+.aqv{display:none;margin-top:10px;padding:10px 14px;border-left:3px solid var(--o);background:rgba(255,106,0,.08);font-size:.76rem}
+.aqv.show{display:block;animation:in .3s}
+.verd{font-size:.66rem;letter-spacing:2px;font-weight:800;margin-left:6px}
+
+/* timelines */
+.tlw{overflow-x:auto}
+.tlsvg{width:100%;min-width:640px;display:block}
+.tlsvg text{font:600 10px 'Orbitron',sans-serif;fill:var(--mute)}
+.tlsvg .lbl{font-size:9px}
+
+/* bathtub */
+.tub{width:100%;max-width:560px;display:block;margin:0 auto}
+.tub text{font:700 11px 'Orbitron',sans-serif;letter-spacing:1px}
+#tubH{margin-top:16px}
+.flowpath{stroke-dasharray:6 8;animation:dashf .6s linear infinite}
+@keyframes dashf{to{stroke-dashoffset:-14}}
+.cmp{width:100%;border-collapse:collapse;font-size:.74rem}
+.cmp th{color:var(--o2);text-align:left;padding:8px;border-bottom:1px solid var(--o);font-size:.64rem;letter-spacing:2px}
+.cmp td{padding:8px;border-bottom:1px solid rgba(0,229,255,.15);vertical-align:top}
+.cmp td:first-child{color:var(--mute);font-size:.62rem;letter-spacing:1px}
+.cmp th:nth-child(2){color:var(--o2)} .cmp th:nth-child(3){color:var(--b)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(260px,1fr) minmax(280px,1.2fr);gap:18px}
+@media(max-width:760px){.calc{grid-template-columns:1fr}}
+.out{border:1px solid var(--o);padding:18px;background:linear-gradient(180deg,rgba(255,106,0,.1),rgba(3,6,11,.6));box-shadow:inset 0 0 30px rgba(255,106,0,.12)}
+.out .big{word-break:break-word}
+.out .unit{color:var(--b);font-size:.7rem;letter-spacing:2px;margin-top:4px}
+.out .work{margin-top:14px;font-size:.74rem;border-top:1px dashed rgba(0,229,255,.3);padding-top:10px}
+.err{color:var(--bad);font-size:.72rem;margin-top:8px;min-height:1em}
+.dl{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.dl svg{width:54px;height:54px;flex:none}
+.task{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(0,229,255,.18)}
+.task .t{font-size:.76rem}
+.task .t em{font-style:normal;color:var(--o);font-weight:900;margin-right:8px}
+.task .a{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.task .inp{width:110px;font-size:.75rem;padding:7px 9px}
+.task .ans{grid-column:1/-1;display:none;font-size:.72rem;color:#ffd9b8;padding:6px 10px;border-left:3px solid var(--o);background:rgba(255,106,0,.07)}
+.task .ans.show{display:block}
+@media(max-width:620px){.task{grid-template-columns:1fr}.task .a{justify-content:flex-start}}
+
+#cs{scroll-margin-top:70px}
+.csw{display:grid;grid-template-columns:minmax(260px,1fr) minmax(280px,1fr);gap:22px;align-items:start;margin-top:10px}
+#csGrid{width:100%;max-width:440px;display:block;margin:0 auto}
+#csR{grid-template-columns:repeat(2,1fr)}
+#csR div.o{box-shadow:var(--glow-o)}
+#csR .pyt{grid-column:1/-1}
+#msSeg button{min-width:38px}
+#msSeg button.dn:not(.on){color:var(--o2)}
+#msSeg button.dn::after{content:"✓";margin-left:3px}
+.mc{border:1px solid rgba(0,229,255,.3);background:rgba(3,6,11,.55);padding:14px 16px;margin:12px 0}
+.mch{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.7rem}
+.mcr{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:12px}
+.mcf{display:flex;flex-direction:column;align-items:center;gap:4px}
+.mcf label{font-size:.55rem;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.mcf i{width:170px;height:2px;background:var(--b);box-shadow:var(--glow-b)}
+.mcf .inp{width:150px;text-align:center}
+.mcr .op{font-size:1.2rem;font-weight:900;color:var(--b)}
+.mcr .mres{font-size:clamp(1.6rem,4vw,2.3rem)}
+@media(max-width:760px){.csw{grid-template-columns:1fr}}
+.ptsvg{width:100%;max-width:640px;display:block;margin:10px 0}
+.ptsvg text{font:600 9px 'Orbitron',sans-serif;fill:var(--mute)}
+.ptr{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px dashed rgba(0,229,255,.2);font-size:.8rem;animation:in .4s}
+.ptr b{color:var(--o2)}
+.ptr.tot{border-top:1px solid var(--o)}
+.tag.g{border-color:#8894a0;color:#b8c2cc}
+.pqtop{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.pqnav{display:flex;gap:8px;flex-wrap:wrap}
+.pqd{width:40px;height:40px;border:2px solid var(--lc);background:transparent;color:var(--ink);font:800 .72rem 'Orbitron',sans-serif;cursor:pointer;transform:rotate(45deg);margin:6px;transition:.2s;position:relative}
+.pqd span{display:block;transform:rotate(-45deg)}
+.pqd:hover{box-shadow:0 0 12px var(--lc)}
+.pqd.cur{background:var(--lc);color:#03060b;box-shadow:0 0 14px var(--lc)}
+.pqd.solved{background:rgba(0,229,255,.32)}
+.pqd.rev{background:rgba(255,106,0,.18)}
+.pqd.solved::after{content:"✔";position:absolute;top:-10px;right:-10px;transform:rotate(-45deg);font-size:.6rem;color:var(--ok)}
+.pqd.tried::after{content:"◐";position:absolute;top:-10px;right:-10px;transform:rotate(-45deg);font-size:.6rem;color:var(--o2)}
+.pqd.rev::after{content:"👁";position:absolute;top:-10px;right:-10px;transform:rotate(-45deg);font-size:.55rem}
+.pqscore{text-align:right}
+.pqscore b{font-size:2rem;font-weight:900;color:var(--o);text-shadow:var(--glow-o)}
+.pqscore span{font-size:.6rem;letter-spacing:2px;color:var(--mute);margin-left:6px}
+.pqscore small{display:block;font-size:.58rem;letter-spacing:2px;color:var(--b)}
+.pqh{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.pqh .qn{font-size:1.4rem;font-weight:900;color:#fff;margin-right:6px}
+.pqsc{font-size:.9rem;color:#fff;line-height:1.75;margin-bottom:6px}
+.pqsc b{color:var(--o2)}
+.pqdata{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:12px 0}
+.pqdata div{border:1px solid rgba(0,229,255,.3);padding:8px 10px;background:rgba(0,229,255,.04)}
+.pqdata b{display:block;color:var(--b);font-size:1.05rem;font-weight:900}
+.pqdata span{font-size:.55rem;letter-spacing:1.5px;color:var(--mute);text-transform:uppercase}
+.pqask{font-weight:700;color:var(--o2);margin:10px 0 4px;font-size:.84rem}
+.pqf{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px dashed rgba(0,229,255,.15)}
+.pqf label{flex:1;min-width:200px;font-size:.76rem}
+.pqf .inp{width:140px;text-align:center}
+.pqf .u{font-size:.66rem;color:var(--mute);width:170px}
+.pqf .vv{font-size:1rem;width:20px}
+.pqfb{margin-top:12px;padding:10px 14px;font-size:.78rem;display:none;border-left:3px solid var(--b);background:rgba(0,229,255,.07)}
+.pqfb.bad{border-color:var(--bad);background:rgba(255,61,90,.08)}
+.pqfb.show{display:block;animation:in .3s}
+.pqhint{margin-top:10px;border:1px solid rgba(255,106,0,.45);background:rgba(255,106,0,.06);padding:10px 14px;font-size:.78rem;animation:in .35s}
+.pqhint .ht{font-size:.56rem;letter-spacing:3px;color:var(--o);font-weight:800;margin-bottom:4px}
+.pqhint ol{padding-left:20px}
+.pqhint li{padding:3px 0}
+.pqhint li::marker{color:var(--o);font-weight:800}
+.pqhint .eq{color:var(--o2);font-weight:700}
+.pqbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}
+.pqres td{font-size:.72rem}
+.pager{display:flex;justify-content:space-between;gap:10px;margin:26px 0 10px;flex-wrap:wrap}
+footer{border-top:1px solid rgba(0,229,255,.2);margin-top:40px;padding:20px 0 60px;font-size:.6rem;color:var(--mute);letter-spacing:1px;text-align:center}
+@media(max-width:640px){.live{display:grid;grid-template-columns:1fr 1fr}.live div{min-width:0}.live b{font-size:1.1rem}body{font-size:13px}.card{padding:15px}.cover canvas{height:520px}.cover .ov{background:linear-gradient(180deg,rgba(3,6,11,.9) 0%,rgba(3,6,11,.55) 55%,rgba(3,6,11,.85) 100%);padding:18px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== Lesson 05-06 additions ===== */
+main svg text{font-family:'Orbitron',system-ui,sans-serif}
+.mods{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:6px 0 10px}
+@media(max-width:700px){.pipe{grid-template-columns:1fr 1fr;gap:8px}}
+.pnode{position:relative;background:transparent;border:1px solid rgba(0,229,255,.35);color:var(--ink);font:700 .66rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:16px 10px 14px;cursor:pointer;text-transform:uppercase;transition:.25s;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%)}
+.pnode em{display:block;font-style:normal;color:var(--o);font-size:1.1rem;font-weight:900}
+.pnode:hover{background:rgba(0,229,255,.08)}
+.pnode.on{background:linear-gradient(135deg,rgba(255,106,0,.35),rgba(0,229,255,.15));color:#fff;border-color:var(--o)}
+.hyp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.hyp{grid-template-columns:1fr}}
+.hcard{padding:18px;border:2px solid var(--b);background:rgba(0,229,255,.06);text-align:center}
+.hcard.o{border-color:var(--o);background:rgba(255,106,0,.07)}
+.hcard .h{font-size:2rem;font-weight:900;color:var(--b);text-shadow:var(--glow-b)}
+.hcard.o .h{color:var(--o);text-shadow:var(--glow-o)}
+.hcard p{font-size:.78rem;margin-top:6px}
+.gauge{width:100%;max-width:420px;display:block;margin:0 auto}
+.gauge text{font:700 11px 'Orbitron',sans-serif}
+.verdict{text-align:center;font-weight:900;letter-spacing:3px;font-size:1.05rem;padding:12px;border:2px solid var(--b);margin-top:8px;transition:.3s}
+.verdict.sig{border-color:var(--o);color:var(--o2);box-shadow:var(--glow-o)}
+.verdict.ns{color:var(--b);box-shadow:var(--glow-b)}
+.verdict small{display:block;font-size:.62rem;letter-spacing:1.5px;color:var(--mute);font-weight:600;margin-top:4px}
+.strip{width:100%;display:block}
+.strip text{font:700 10px 'Orbitron',sans-serif;fill:var(--mute)}
+.grid100{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px;margin:10px auto}
+.grid100 i{aspect-ratio:1;background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.25)}
+.grid100 i.s{background:var(--o);border-color:var(--o);box-shadow:0 0 6px var(--o)}
+.grid100 i.n{background:rgba(0,229,255,.45)}
+.stations{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.stn{border:1px solid rgba(0,229,255,.35);padding:12px;text-align:center;background:rgba(3,6,11,.55)}
+.stn b{display:block;font-size:1.6rem}
+.stn span{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase}
+.stn small{display:block;color:var(--mute);font-size:.56rem;margin-top:4px;letter-spacing:1px}
+.hb-out{border:1px solid var(--o);background:rgba(255,106,0,.06);padding:14px 16px;margin-top:12px}
+.hb-out div{padding:4px 0;font-size:.82rem}
+.hb-out .k{display:inline-block;width:38px;font-weight:900}
+.path{counter-reset:p;list-style:none;padding:0!important}
+.path li{counter-increment:p;padding:8px 0 8px 42px;position:relative;border-bottom:1px dashed rgba(0,229,255,.18);font-size:.8rem}
+.path li::before{content:counter(p);position:absolute;left:4px;top:7px;width:24px;height:24px;border:1px solid var(--o);color:var(--o);display:grid;place-items:center;font-weight:900;font-size:.7rem;box-shadow:var(--glow-o)}
+.path li b{color:var(--b)}
+.rout{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0b1320;border:1px solid rgba(0,229,255,.25);padding:10px 12px;font-size:.72rem;color:#cfe;white-space:pre;overflow-x:auto;margin-top:8px}
+.rout .hl2{background:rgba(255,106,0,.35);color:#fff;outline:1px solid var(--o)}
+.samp{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-width:420px;margin:10px auto}
+.samp i{aspect-ratio:1;border-radius:50%;background:rgba(0,229,255,.35);transition:.35s;position:relative}
+.samp i.old{background:rgba(255,106,0,.45)}
+.samp i.pick{box-shadow:0 0 0 3px #fff,0 0 12px #fff;transform:scale(1.12)}
+.samp i.dim{opacity:.25}
+.samp.cl i:nth-child(10n+3),.samp.cl i:nth-child(10n+5),.samp.cl i:nth-child(10n+7),.samp.cl i:nth-child(10n+9){margin-left:3px}
+.dart{width:100%;max-width:260px;display:block;margin:0 auto}
+.tm{width:100%;display:block}
+.tm text{font:700 11px 'Orbitron',sans-serif}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
+.facts div{border:1px solid rgba(0,229,255,.3);padding:10px 12px;background:rgba(3,6,11,.5)}
+.facts span{display:block;font-size:.52rem;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.facts b{font-size:.8rem;color:#fff}
+.t22{border-collapse:collapse;margin:8px 0;font-size:.74rem}
+.t22 th,.t22 td{border:1px solid rgba(0,229,255,.3);padding:6px 8px;text-align:center}
+.t22 th{color:var(--o2);font-size:.6rem;letter-spacing:1.5px}
+.t22 td.rh{color:var(--b);font-size:.6rem;letter-spacing:1.5px;font-weight:800}
+.t22 input{width:70px;background:rgba(3,6,11,.8);border:1px solid var(--b);color:#fff;font:800 .85rem 'Orbitron',sans-serif;text-align:center;padding:6px}
+.t22 input:focus{outline:none;border-color:var(--o);box-shadow:var(--glow-o)}
+.t22 .cell{font:900 .95rem 'Orbitron',sans-serif;color:#fff}
+.rbar{height:14px;background:rgba(0,229,255,.12);position:relative;margin:4px 0 10px}
+.rbar i{position:absolute;left:0;top:0;bottom:0;background:var(--o);box-shadow:var(--glow-o);transition:width .5s}
+.rbar.b i{background:var(--b);box-shadow:var(--glow-b)}
+.interp{margin-top:10px;padding:10px 14px;border-left:3px solid var(--o);background:rgba(255,106,0,.07);font-size:.8rem}
+.pop{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;max-width:640px;margin:10px auto}
+.pop i{aspect-ratio:1;display:block;transition:opacity .4s,transform .4s,background .4s}
+.pop i.g{transform:rotate(45deg) scale(.82)}
+.pop i.ng{border-radius:50%}
+.pop i.f{background:var(--o);box-shadow:0 0 5px var(--o)}
+.pop i.nf{background:rgba(0,229,255,.55)}
+.pop i.dim{opacity:.12}
+.pop i.flash{box-shadow:0 0 0 2px #fff,0 0 12px #fff}
+.qnav{display:flex;gap:6px;flex-wrap:wrap}
+.qnb{width:34px;height:34px;border:1px solid var(--b);background:transparent;color:var(--ink);font:800 .66rem 'Orbitron',sans-serif;cursor:pointer}
+.qnb.cur{background:var(--b);color:#03060b}
+.qnb.ok{border-color:var(--ok);background:rgba(0,229,255,.25)}
+.qnb.no{border-color:var(--bad);background:rgba(255,61,90,.2)}
+.guide{margin-top:10px;border:1px dashed var(--o);padding:10px 14px;font-size:.78rem;background:rgba(255,106,0,.05);display:none}
+.guide.show{display:block;animation:in .3s}
+.guide b{color:var(--o2);letter-spacing:2px;font-size:.6rem;display:block;margin-bottom:4px}
+.step{display:flex;gap:16px;align-items:flex-start}
+.step .n{flex:none;width:54px;height:54px;border:2px solid var(--o);display:grid;place-items:center;font-weight:900;color:var(--o);box-shadow:var(--glow-o);transform:rotate(45deg);margin:8px 14px 0 8px}
+.step .n span{transform:rotate(-45deg)}
+.step>div{flex:1;min-width:0}
+@media(max-width:640px){.step .n{width:40px;height:40px;margin:8px 8px 0 4px}}
+/* ===== BlazePod break ===== */
+.bpwrap{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.bpwrap{grid-template-columns:1fr}}
+.qr{width:200px;height:200px;display:block;margin:0 auto;border:3px solid var(--o);box-shadow:var(--glow-o);padding:6px;background:#fff}
+.share{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.share a,.share button{display:flex;align-items:center;gap:10px;justify-content:center;text-decoration:none;border:1px solid var(--b);background:rgba(0,229,255,.06);color:#fff;font:700 .66rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:12px;cursor:pointer;text-transform:uppercase;transition:.2s}
+.share a:hover,.share button:hover{border-color:var(--o);box-shadow:var(--glow-o)}
+.share svg{width:20px;height:20px;flex:none}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
+.tips div{border:1px solid rgba(255,106,0,.45);padding:10px;text-align:center;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;background:rgba(255,106,0,.05)}
+.tips b{display:block;font-size:1.5rem;margin-bottom:4px}
+.urlbox{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem;color:var(--b);word-break:break-all;margin-top:8px}
+.mylog{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+.mylog .inp{width:100%}
+.mis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:700px){.mis{grid-template-columns:1fr 1fr}}
+.mis button{border:1px solid rgba(0,229,255,.35);background:transparent;color:var(--ink);font:700 .62rem 'Orbitron',sans-serif;letter-spacing:1.5px;padding:12px 8px;cursor:pointer;text-transform:uppercase;text-align:left}
+.mis button em{display:block;font-style:normal;color:var(--o);font-size:.95rem;font-weight:900}
+.mis button.on{background:linear-gradient(135deg,rgba(255,106,0,.35),rgba(0,229,255,.15));border-color:var(--o);color:#fff}
+.mis button.dn::after{content:" ✓";color:var(--ok)}
+.biasm{height:18px;background:rgba(0,229,255,.1);position:relative;margin:8px 0}
+.biasm i{position:absolute;top:-4px;bottom:-4px;width:3px;background:#fff}
+.biasm b{position:absolute;top:0;bottom:0;background:var(--o);opacity:.6;transition:.5s}
+
+/* ===== Lesson 07-08 ===== */
+main svg text{font-family:'Orbitron',system-ui,sans-serif}
+.mods{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.viz{width:100%;display:block}
+.viz text{font:600 10px 'Orbitron',sans-serif;fill:var(--mute)}
+.tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));margin-top:12px}
+.tiles div{border:1px solid rgba(0,229,255,.35);padding:10px 12px;background:rgba(3,6,11,.6)}
+.tiles b{display:block;font-size:1.2rem;font-weight:900;color:var(--b);text-shadow:var(--glow-b);line-height:1.25;word-break:break-word}
+.tiles div.o{border-color:var(--o)}
+.tiles div.o b{color:var(--o);text-shadow:var(--glow-o)}
+.tiles div.w b{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.6)}
+.tiles span{font-size:.5rem;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.sorted{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sorted span{border:1px solid rgba(0,229,255,.35);padding:4px 9px;font-size:.72rem;font-weight:700}
+.sorted span.md{border-color:var(--b);background:rgba(0,229,255,.25);color:#fff;box-shadow:var(--glow-b)}
+.sorted span.mo{border-color:#fff}
+.sdtab{border-collapse:collapse;font-size:.76rem;width:100%;max-width:520px}
+.sdtab th,.sdtab td{border:1px solid rgba(0,229,255,.25);padding:6px 8px;text-align:center}
+.sdtab th{color:var(--o2);font-size:.58rem;letter-spacing:1.5px}
+.sdtab td.h{opacity:.08}
+.sdtab tr.tot td{border-top:2px solid var(--o);font-weight:800;color:#fff}
+.sdsteps{counter-reset:s;list-style:none;padding:0!important;margin-top:10px}
+.sdsteps li{counter-increment:s;padding:6px 0 6px 38px;position:relative;font-size:.8rem;opacity:.15;transition:.4s}
+.sdsteps li.on{opacity:1}
+.sdsteps li::before{content:counter(s);position:absolute;left:4px;top:5px;width:22px;height:22px;border:1px solid var(--o);color:var(--o);display:grid;place-items:center;font-weight:900;font-size:.66rem}
+.sdsteps .eq{color:var(--o2);font-weight:800}
+.dice{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:52px;margin:10px 0}
+.die{width:46px;height:46px;border:2px solid var(--o);display:grid;place-items:center;font-size:1.3rem;font-weight:900;color:#fff;box-shadow:var(--glow-o);animation:roll .5s ease}
+@keyframes roll{from{transform:rotate(-200deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
+/* spreadsheet */
+.xl{border:1px solid rgba(0,229,255,.4);background:#050b14;font-family:ui-monospace,Menlo,Consolas,monospace}
+.xlbar{display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(0,229,255,.3);padding:6px 8px;background:#07101c}
+.xlbar .nm{min-width:54px;text-align:center;border:1px solid rgba(0,229,255,.35);padding:5px;color:var(--b);font-weight:700;font-size:.78rem}
+.xlbar .fxl{color:var(--o);font-style:italic;font-weight:800;font-family:Georgia,serif}
+.xlbar input{flex:1;background:#03060b;border:1px solid rgba(0,229,255,.35);color:#fff;padding:6px 8px;font:600 .82rem ui-monospace,Menlo,Consolas,monospace;outline:none}
+.xlbar input:focus{border-color:var(--o);box-shadow:var(--glow-o)}
+.xlgrid{overflow:auto;max-height:440px}
+.xlgrid table{border-collapse:collapse;font-size:.78rem;min-width:100%}
+.xlgrid th{position:sticky;top:0;background:#0b1a2b;color:var(--mute);font-weight:600;padding:4px;border:1px solid rgba(0,229,255,.15);font-size:.66rem;z-index:1}
+.xlgrid th.rh{position:sticky;left:0;z-index:2;width:34px}
+.xlgrid td{border:1px solid rgba(0,229,255,.12);height:24px;min-width:104px;padding:0 6px;color:#d7f6ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;cursor:cell;user-select:none}
+.xlgrid td.num{text-align:right}
+.xlgrid td.fx{color:var(--o2)}
+.xlgrid td.err{color:var(--bad)}
+.xlgrid td.sel{outline:2px solid var(--o);outline-offset:-2px;background:rgba(255,106,0,.12)}
+.xlgrid td.ref{background:rgba(0,229,255,.18);outline:1px dashed var(--b);outline-offset:-1px}
+.xlgrid td.lbl{color:var(--b);font-weight:700}
+.xlgrid td input{width:100%;background:#03060b;border:0;color:#fff;font:600 .78rem ui-monospace,Menlo,Consolas,monospace;outline:none;height:22px}
+.xltabs{display:flex;gap:2px;border-top:1px solid rgba(0,229,255,.3);background:#07101c;padding:4px 6px 0}
+.xltabs button{background:transparent;border:1px solid rgba(0,229,255,.25);border-bottom:0;color:var(--mute);font:700 .62rem 'Orbitron',sans-serif;letter-spacing:1px;padding:6px 12px;cursor:pointer}
+.xltabs button.on{background:#050b14;color:var(--o2);border-color:var(--o)}
+.cheat{width:100%;border-collapse:collapse;font-size:.74rem}
+.cheat td,.cheat th{padding:7px 8px;border-bottom:1px solid rgba(0,229,255,.15);text-align:left;vertical-align:top}
+.cheat th{color:var(--o2);font-size:.58rem;letter-spacing:2px}
+.cheat code{word-break:break-all;color:var(--b);font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;font-size:.8rem}
+.mis2{display:grid;gap:8px;margin-top:12px}
+.mi{border:1px solid rgba(255,106,0,.45);padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:rgba(255,106,0,.04)}
+.mi .k{width:26px;height:26px;border:1px solid var(--o);display:grid;place-items:center;font-weight:900;color:var(--o);font-size:.7rem}
+.mi.ok{border-color:var(--ok);background:rgba(0,229,255,.08)}
+.mi.ok .k{border-color:var(--ok);color:var(--ok)}
+.mi p{font-size:.76rem}
+.mi code{color:var(--o2);font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}
+.mi .hintx{grid-column:2/-1;font-size:.72rem;color:#ffd9b8;display:none}
+.mi .hintx.show{display:block}
+/* bulletin */
+.drop{display:block;border:2px dashed var(--b);padding:26px;text-align:center;cursor:pointer;transition:.2s;background:rgba(0,229,255,.04)}
+.drop:hover,.drop.over{border-color:var(--o);background:rgba(255,106,0,.08);box-shadow:var(--glow-o)}
+.drop b{display:block;color:#fff;letter-spacing:2px;margin-top:6px}
+.btab{overflow:auto;max-height:420px;border:1px solid rgba(0,229,255,.25)}
+.btab table{border-collapse:collapse;font-size:.72rem;width:100%}
+.btab th,.btab td{border:1px solid rgba(0,229,255,.15);padding:4px 6px;text-align:right;white-space:nowrap}
+.btab th{background:#0b1a2b;position:sticky;top:0;z-index:1}
+.btab th input{width:88px;background:#03060b;border:1px solid rgba(255,106,0,.5);color:var(--o2);font:700 .62rem 'Orbitron',sans-serif;padding:3px;text-align:center}
+.btab td:nth-child(2),.btab th:nth-child(2){text-align:left}.btab td:first-child,.btab th:first-child{text-align:center}
+.btab td[contenteditable]{outline:none}
+.btab td[contenteditable]:focus{background:rgba(255,106,0,.15)}
+.btab tr.off td{opacity:.3;text-decoration:line-through}
+.btab td.colsel,.btab th.colsel{background:rgba(255,106,0,.12)}
+.status{font-size:.72rem;letter-spacing:1px;margin-top:8px;color:var(--mute)}
+.status.ok{color:var(--ok)}.status.bad{color:var(--bad)}
+.report{display:none}
+.report.show{display:block;animation:in .5s}
+.interp2 li{margin:6px 0 6px 18px;font-size:.8rem}
+.interp2 li::marker{color:var(--o)}
+@media(max-width:640px){.cheat td,.cheat th{padding:6px 4px;font-size:.66rem}.xlgrid td{min-width:84px}}
+textarea.inp{width:100%;min-height:120px;font:600 .74rem ui-monospace,Menlo,Consolas,monospace}
+/* practice */
+.lvl0{--lc:#00e5ff}.lvl1{--lc:#ffa13d}.lvl2{--lc:#ff3d5a}
+.opts2{display:grid;gap:8px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="floor"></div><div class="scan"></div>
+<header><div class="wrap brand">
+  <div class="logo"></div>
+  <div><h1>S249 // <b>STATS</b> GRID<small>DATA ANALYTICS FOR POPULATION HEALTH · LESSONS 7 &amp; 8</small></h1></div>
+  <div class="xp"><span><b>SYSTEM SYNC</b><b id="xpn">0%</b></span><div class="bar"><i id="xpb"></i></div></div>
+</div></header>
+<nav><div class="wrap" role="tablist" id="tabs"></div></nav>
+
+<main class="wrap">
+
+<!-- 00 COVER -->
+<section class="panel on" id="p0" data-name="COVER">
+  <div class="cover">
+    <canvas id="cvs" aria-label="Data points fall into a histogram that forms a bell curve; mean, SD and SEM update live"></canvas>
+    <div class="ov">
+      <div>
+        <div class="kick">LESSONS 07 – 08 · INTRODUCTION TO BIOSTATISTICS</div>
+        <h2>Make the<br>Numbers <b>Talk.</b></h2>
+        <p class="sub">Every dot is one measurement. Watch the centre settle, the spread appear – and the error shrink as data grows.</p>
+      </div>
+      <div>
+        <div class="live">
+          <div><b id="cvN">0</b><span>n · SAMPLE SIZE</span></div>
+          <div class="o"><b id="cvM">–</b><span>MEAN</span></div>
+          <div><b id="cvS">–</b><span>STANDARD DEVIATION</span></div>
+          <div class="o"><b id="cvE">–</b><span>STANDARD ERROR</span></div>
+        </div>
+        <div class="legend"><span><i style="background:#ff6a00"></i>MEAN</span><span><i style="background:rgba(0,229,255,.5)"></i>± 1 SD</span><span>SEM = SD ÷ √n</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="mods">
+    <button class="mod" data-go="1"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M6 40V8M6 40h36" stroke="#00e5ff"/><path d="M10 34l9-10 7 6 12-16" stroke="#ff6a00"/></g></svg><em>01</em><b>Why Stats?</b><small>Statistics in epidemiology</small></button>
+    <button class="mod" data-go="2"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M4 38h40" stroke="#00e5ff"/><path d="M24 14l-6 10h12z" fill="#ff6a00" stroke="none"/><circle cx="12" cy="32" r="3" fill="#00e5ff"/><circle cx="20" cy="32" r="3" fill="#00e5ff"/><circle cx="30" cy="32" r="3" fill="#00e5ff"/><circle cx="38" cy="32" r="3" fill="#00e5ff"/></g></svg><em>02</em><b>Centre</b><small>Mean · median · mode</small></button>
+    <button class="mod" data-go="3"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M4 38C14 38 16 10 24 10S34 38 44 38" stroke="#00e5ff"/><path d="M16 24h16" stroke="#ff6a00"/><path d="M16 20v8M32 20v8" stroke="#ff6a00"/></g></svg><em>03</em><b>Spread</b><small>Range · SD · SEM · CI</small></button>
+    <button class="mod" data-go="4"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="8" y="8" width="32" height="32" rx="4" stroke="#ff6a00"/><circle cx="17" cy="17" r="3" fill="#00e5ff"/><circle cx="31" cy="31" r="3" fill="#00e5ff"/><circle cx="24" cy="24" r="3" fill="#00e5ff"/></g></svg><em>04</em><b>Chance</b><small>Probability · p-value · α</small></button>
+    <button class="mod" data-go="5"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2"><rect x="6" y="8" width="36" height="32" stroke="#00e5ff"/><path d="M6 16h36M6 24h36M6 32h36M18 8v32M30 8v32" stroke="#00e5ff" stroke-opacity=".5"/><text x="20" y="22" fill="#ff6a00" stroke="none" font-size="8" font-weight="900" font-family="Orbitron">fx</text></g></svg><em>05</em><b>Excel Lab</b><small>Live formulas · missions</small></button>
+    <button class="mod" data-go="6"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><path d="M12 4h18l8 8v32H12z" stroke="#00e5ff"/><path d="M18 34v-6M24 34V22M30 34v-9" stroke="#ff6a00"/></g></svg><em>06</em><b>Bulletin Lab</b><small>CDA bulletin → report → Excel</small></button>
+    <button class="mod" data-go="7"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><circle cx="24" cy="24" r="17" stroke="#00e5ff"/><path d="M24 14v10l7 5" stroke="#ff6a00"/></g></svg><em>07</em><b>Practice</b><small>15 guided calculations</small></button>
+    <button class="mod" data-go="8"><svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5"><rect x="10" y="10" width="28" height="28" transform="rotate(45 24 24)" stroke="#ff6a00"/><path d="M18 24l4 4 8-9" stroke="#00e5ff"/></g></svg><em>08</em><b>Review Quiz</b><small>12 questions · worked solutions</small></button>
+  </div>
+  <div class="alert"><div class="ic"><span>!</span></div><p><b>E-LEARNING (LESSON 7)</b><br>Pick a disease from a CDA weekly bulletin and explain what its numbers mean for public health. Use the <span class="hl">06 Bulletin Lab</span> to analyse it, then submit in your class MS Teams.</p></div>
+</section>
+
+<!-- 01 WHY STATS -->
+<section class="panel" id="p1" data-name="WHY STATS?">
+  <div class="ph"><div class="kick">LESSON 7 · ROLE OF STATISTICS</div><h2>Numbers that <span>Protect</span></h2></div>
+  <div class="grid g2">
+    <div class="card"><h3>Statistics</h3><p class="mute">The science of <b class="hl">collecting</b>, <b class="hl">summarising</b> and <b class="hl">interpreting</b> data to draw conclusions.</p></div>
+    <div class="card o"><h3>Biostatistics</h3><p class="mute">Statistics applied to <b class="hb">biological and medical</b> data. Essential for scientific investigation and for judging research.</p></div>
+  </div>
+  <div class="card"><div class="pipe" id="pipe"><button class="pnode on" data-k="0"><em>01</em>Collect</button><button class="pnode" data-k="1"><em>02</em>Summarise</button><button class="pnode" data-k="2"><em>03</em>Analyse</button><button class="pnode" data-k="3"><em>04</em>Decide</button></div><div id="pipeTxt" class="note"></div></div>
+
+  <div class="sec"><em>01</em> EXAMPLE · RISK FACTORS</div>
+  <div class="card o"><p style="font-size:.84rem">4,488 people (1,790 with Parkinson's disease, 2,698 controls). Carriers of Asian gene variants who did <b>not</b> drink caffeine had much higher odds of Parkinson's.</p>
+    <svg class="viz" id="pdBar" viewBox="0 0 640 150"></svg>
+    <p class="mute">OR compared with wild-type carriers who drink caffeine. Source: SingHealth Duke-NUS research news (in Lesson 7 slides).</p></div>
+
+  <div class="sec"><em>02</em> EXAMPLE · TRENDS OVER TIME</div>
+  <div class="card"><div class="row" style="justify-content:space-between"><p class="mute">Prevalence (%) of developmental disabilities among US children.</p><div class="seg" id="ddSeg"><button class="on" data-k="0">Any disability</button><button data-k="1">ADHD</button><button data-k="2">Autism (ASD)</button></div></div>
+    <svg class="viz" id="ddBar" viewBox="0 0 640 200"></svg>
+    <p class="mute" id="ddTxt"></p></div>
+  <div class="comp-m" data-c="mWhy"></div>
+  <div class="comp-m" data-c="sortData"></div>
+  <div class="pager"><button class="btn ghost" data-go="0">◂ Cover</button><button class="btn" data-go="2">Centre ▸</button></div>
+</section>
+
+<!-- 02 CENTRE -->
+<section class="panel" id="p2" data-name="CENTRE">
+  <div class="ph"><div class="kick">LESSON 7 · MEASURES OF CENTRAL TENDENCY</div><h2>Where is the <span>Middle?</span></h2></div>
+  <div class="grid g3">
+    <div class="card o"><h3>Mean</h3><div class="fx"><span class="frac"><span class="n">sum of values</span><span class="d">number of values</span></span></div><p class="mute" style="text-align:center">The balance point.</p></div>
+    <div class="card"><h3>Median</h3><p style="text-align:center;font-weight:900;font-size:1.1rem;color:#fff;margin:14px 0">1 2 <span class="hb" style="font-size:1.5rem">3</span> 4 5</p><p class="mute" style="text-align:center">The middle value once <b>sorted</b>. Even count → average the middle two.</p></div>
+    <div class="card"><h3>Mode</h3><p style="text-align:center;font-weight:900;font-size:1.1rem;color:#fff;margin:14px 0">2 <span class="hl" style="font-size:1.5rem">7 7 7</span> 4</p><p class="mute" style="text-align:center">The most frequent value. Can have none, one or several.</p></div>
+  </div>
+
+  <div class="sec"><em>LAB</em> BUILD YOUR OWN DATA</div>
+  <div class="card o">
+    <p class="mute">Tap the line to add a value. Tap a dot to remove it. Watch the three measures move.</p>
+    <svg class="viz" id="ct" viewBox="0 0 900 190" style="cursor:crosshair"></svg>
+    <div class="row" style="margin-top:6px"><button class="btn sm b" data-ct="h">Heights (slides)</button><button class="btn sm" data-ct="out">Add an outlier</button><button class="btn sm ghost" data-ct="r">Random 10</button><button class="btn sm ghost" data-ct="c">Clear</button></div>
+    <div class="tiles" id="ctT"></div>
+    <div class="sorted" id="ctS"></div>
+    <div class="note" id="ctN"></div>
+  </div>
+
+  <div class="sec"><em>SHAPE</em> NORMAL vs SKEWED</div>
+  <div class="card"><div class="grid g2" style="align-items:center">
+    <svg class="viz" id="sk" viewBox="0 0 460 220"></svg>
+    <div><div class="sl"><span>SKEW</span><b id="skV">0</b></div><input type="range" id="skS" min="-8" max="8" value="0">
+      <p id="skT" style="font-size:.82rem;margin-top:8px"></p>
+      <div class="legend"><span><i style="background:#ff6a00"></i>MEAN</span><span><i style="background:#00e5ff"></i>MEDIAN</span><span><i style="background:#fff"></i>MODE</span></div></div>
+  </div></div>
+  <div class="comp-m" data-c="mCt"></div>
+  <div class="pager"><button class="btn ghost" data-go="1">◂ Why Stats?</button><button class="btn" data-go="3">Spread ▸</button></div>
+</section>
+
+<!-- 03 SPREAD -->
+<section class="panel" id="p3" data-name="SPREAD">
+  <div class="ph"><div class="kick">LESSON 7–8 · MEASURES OF DISPERSION</div><h2>How Spread <span>Out?</span></h2></div>
+  <div class="grid g3">
+    <div class="card"><h3>Range</h3><p class="mute">Largest − smallest. Quick, but uses only 2 values.</p></div>
+    <div class="card o"><h3>Standard deviation</h3><p class="mute">How closely data <b class="hl">cluster around the mean</b>. Smaller SD = more precise.</p></div>
+    <div class="card"><h3>Standard error (SEM)</h3><div class="fx" style="padding:4px"><span class="lhs" style="font-size:.8rem">SEM =</span><span class="frac"><span class="n">SD</span><span class="d">√n</span></span></div><p class="mute">How much the <b class="hb">sample mean</b> would vary between samples.</p></div>
+  </div>
+
+  <div class="sec"><em>01</em> SAME MEAN · DIFFERENT SPREAD</div>
+  <div class="card o"><p class="mute">Blood glucose (mg/dL), 5 repeats per method (Lesson 8, Practice 3).</p>
+    <svg class="viz" id="pr3" viewBox="0 0 900 200"></svg>
+    <div class="tiles" id="pr3T"></div>
+    <div class="note">Both means = 49.76. The <b>new method</b> has a much smaller SD → its readings are closer to the mean → <b>more precise</b>.</div></div>
+
+  <div class="sec"><em>02</em> SD STEP BY STEP</div>
+  <div class="card"><div class="row" style="justify-content:space-between"><div class="seg" id="sdSeg"><button class="on" data-k="new">New method</button><button data-k="conv">Conventional</button><button data-k="own">My numbers</button></div>
+    <div id="sdOwn" style="display:none" class="row"><input class="inp" id="sdIn" value="12, 15, 11, 14, 13" style="width:220px"><button class="btn sm" id="sdLoad">Load</button></div></div>
+    <div class="grid g2" style="margin-top:12px;align-items:start">
+      <table class="sdtab" id="sdTab"></table>
+      <div><ol class="sdsteps" id="sdSt"></ol><div class="row" style="margin-top:8px"><button class="btn sm" id="sdNx">Next step ▸</button><button class="btn sm ghost" id="sdRs">Restart</button></div></div>
+    </div></div>
+
+  <div class="sec"><em>03</em> THE BELL CURVE</div>
+  <div class="card o"><div class="grid g2" style="align-items:center">
+    <svg class="viz" id="bell" viewBox="0 0 460 220"></svg>
+    <div><div class="sl"><span>STANDARD DEVIATION</span><b id="bsV">15</b></div><input type="range" id="bsS" min="4" max="30" value="15">
+      <div class="seg" id="bkSeg" style="margin-top:6px"><button class="on" data-k="1">± 1 SD · 68%</button><button data-k="2">± 2 SD · 95%</button><button data-k="3">± 3 SD · 99.7%</button></div>
+      <p class="mute" style="margin-top:10px">Normal distribution: symmetric · mean = median = mode · 50% each side.</p></div>
+  </div></div>
+
+  <div class="sec"><em>04</em> SEM · DRAW MANY SAMPLES</div>
+  <div class="card"><p class="mute">Population: student heights, mean 152.6 cm, SD 14.75 cm. Draw samples of size <b>n</b> and plot each sample's <span class="hl">mean</span>.</p>
+    <div class="sl" style="margin-top:8px"><span>SAMPLE SIZE n</span><b id="snV">10</b></div><input type="range" id="snS" min="2" max="100" value="10">
+    <svg class="viz" id="semH" viewBox="0 0 900 210"></svg>
+    <div class="tiles" id="semT"></div>
+    <div class="row" style="margin-top:10px"><button class="btn sm" id="semOne">Draw 1 sample</button><button class="btn sm b" id="semMany">Draw 200 samples</button><button class="btn sm ghost" id="semClr">Clear</button></div>
+    <div class="note">Bigger n → sample means bunch up tighter → <b>smaller SEM</b>. 95% CI of the mean ≈ mean ± 1.96 × SEM.</div></div>
+  <div class="card"><table class="cmp"><thead><tr><th></th><th>STANDARD DEVIATION</th><th>STANDARD ERROR</th></tr></thead><tbody>
+    <tr><td>DESCRIBES</td><td>Spread of values <b>within</b> one sample</td><td>Precision of the sample <b>mean</b></td></tr>
+    <tr><td>BIGGER n</td><td>Stays about the same</td><td>Gets smaller</td></tr>
+    <tr><td>EXCEL</td><td><code class="hb">=STDEV(B1:B10)</code></td><td><code class="hb">=STDEV(B1:B10)/SQRT(10)</code></td></tr></tbody></table></div>
+  <div class="comp-m" data-c="mSd"></div>
+  <div class="pager"><button class="btn ghost" data-go="2">◂ Centre</button><button class="btn" data-go="4">Chance ▸</button></div>
+</section>
+
+<!-- 04 CHANCE -->
+<section class="panel" id="p4" data-name="CHANCE">
+  <div class="ph"><div class="kick">LESSON 8 · PROBABILITY · P-VALUE · SIGNIFICANCE</div><h2>Chance or <span>Real?</span></h2></div>
+  <div class="sec"><em>01</em> ROLL THE DICE</div>
+  <div class="card o"><p class="mute">Probability of rolling any one number = <b class="hl">1/6 ≈ 16.7%</b>. Does a few rolls match? Do many?</p>
+    <div class="dice" id="dice"></div>
+    <svg class="viz" id="dBar" viewBox="0 0 640 190"></svg>
+    <div class="row" style="justify-content:center"><button class="btn sm" data-r="4">Roll 4</button><button class="btn sm" data-r="24">Roll 24</button><button class="btn sm b" data-r="600">Roll 600</button><button class="btn sm ghost" data-r="0">Reset</button></div>
+    <p class="mute" id="dTxt" style="text-align:center;margin-top:8px"></p></div>
+
+  <div class="grid g2">
+    <div class="card"><h3>Independent events</h3><p class="mute">One does <b>not</b> affect the other. e.g. having a lung-cancer gene and choosing to smoke.</p></div>
+    <div class="card o"><h3>Dependent events</h3><p class="mute">One <b>changes the chance</b> of the other. e.g. study time and final grade.</p></div>
+  </div>
+  <div class="comp-m" data-c="sortDep"></div>
+
+  <div class="sec"><em>02</em> P-VALUE vs SIGNIFICANCE LEVEL (α)</div>
+  <div class="card o"><div class="grid g2" style="align-items:center">
+    <div><label class="f">SIGNIFICANCE LEVEL α</label><div class="seg" id="aSeg"><button class="on" data-a="0.05">0.05</button><button data-a="0.01">0.01</button><button data-a="0.001">0.001</button></div>
+      <label class="f" style="margin-top:14px">P-VALUE</label><div class="row"><input class="inp" id="pIn" value="0.03"><button class="btn sm" id="pGo">Decide ▸</button></div>
+      <div class="hb-out" style="margin-top:14px"><div><span class="k hb">H₀</span>No significant difference in salary of polytechnic graduates by gender.</div><div><span class="k hl">H₁</span>There is a significant difference by gender.</div></div></div>
+    <div><div class="verdict" id="pVer"></div><p class="mute" style="margin-top:10px">p ≤ α → <b class="hl">reject H₀</b> (significant). p &gt; α → <b class="hb">fail to reject H₀</b>.</p></div>
+  </div></div>
+  <div class="comp-m" data-c="sortP"></div>
+  <div class="pager"><button class="btn ghost" data-go="3">◂ Spread</button><button class="btn" data-go="5">Excel Lab ▸</button></div>
+</section>
+
+<!-- 05 EXCEL LAB -->
+<section class="panel" id="p5" data-name="EXCEL LAB">
+  <div class="ph"><div class="kick">HANDS-ON · EXCEL FORMULAS</div><h2>Excel <span>Lab</span></h2><p>A live mini-spreadsheet. Click a cell, type a formula starting with <b class="hl">=</b>, press Enter.</p></div>
+  <div class="card"><table class="cheat"><thead><tr><th>TO FIND</th><th>FORMULA</th><th>TIP</th></tr></thead><tbody>
+    <tr><td>Mean</td><td><code>=AVERAGE(B1:B10)</code></td><td>B1:B10 = cells B1 to B10</td></tr>
+    <tr><td>Median</td><td><code>=MEDIAN(B1:B10)</code></td><td>No need to sort first</td></tr>
+    <tr><td>Mode</td><td><code>=MODE(B1:B10)</code></td><td>#N/A if no value repeats</td></tr>
+    <tr><td>Standard deviation</td><td><code>=STDEV(B1:B10)</code></td><td>Sample SD (same as STDEV.S)</td></tr>
+    <tr><td>Sample size n</td><td><code>=COUNT(B1:B10)</code></td><td>Counts the numbers</td></tr>
+    <tr><td>SEM</td><td><code>=B12/SQRT(10)</code></td><td>SD ÷ √n · or <code>=STDEV(B1:B10)/SQRT(COUNT(B1:B10))</code></td></tr>
+    <tr><td>Range</td><td><code>=MAX(B1:B10)-MIN(B1:B10)</code></td><td>Largest − smallest</td></tr></tbody></table></div>
+  <div class="card o">
+    <div class="xl" id="xl">
+      <div class="xlbar"><span class="nm" id="xlNm">B11</span><span class="fxl">fx</span><input id="xlFx" spellcheck="false" autocomplete="off"></div>
+      <div class="xlgrid" id="xlGrid"></div>
+      <div class="xltabs" id="xlTabs"></div>
+    </div>
+    <p class="mute" style="margin-top:8px">Tip: while typing a formula, <b class="hb">click or drag over cells</b> to insert them – just like Excel.</p>
+    <div class="row" style="margin-top:6px"><button class="btn sm ghost" id="xlReset">Reset this sheet</button></div>
+  </div>
+  <div class="card"><h3>// Missions · <span id="xlMT"></span></h3><div class="mis2" id="xlMis"></div></div>
+  <div class="pager"><button class="btn ghost" data-go="4">◂ Chance</button><button class="btn" data-go="6">Bulletin Lab ▸</button></div>
+</section>
+
+<!-- 06 BULLETIN LAB -->
+<section class="panel" id="p6" data-name="BULLETIN LAB">
+  <div class="ph"><div class="kick" style="color:var(--b)">E-LEARNING ACTIVITY · LESSON 7</div><h2>Bulletin <span>Lab</span></h2><p>Turn a CDA Weekly Infectious Diseases Bulletin into a statistics report.</p></div>
+
+  <div class="card o step"><div class="n"><span>01</span></div><div>
+    <h3>Get a bulletin</h3><p class="mute">Open the CDA page, pick any week, download the PDF.</p>
+    <div class="row" style="margin-top:10px"><a class="btn" href="https://www.cda.gov.sg/resources/weekly-infectious-diseases-bulletin-2026/" target="_blank" rel="noopener">Open CDA bulletins ↗</a></div>
+  </div></div>
+
+  <div class="card o step"><div class="n"><span>02</span></div><div>
+    <h3>Upload it</h3>
+    <label class="drop" id="drop"><input type="file" id="pdfIn" accept="application/pdf,.pdf" hidden><span style="font-size:2rem">📄</span><b>DROP THE PDF HERE · OR TAP TO CHOOSE</b><span class="mute">Processed in your browser – nothing is uploaded.</span></label>
+    <div class="row" style="margin-top:10px"><button class="btn sm ghost" id="useSample">Try with sample data</button><button class="btn sm ghost" id="showPaste">Paste data instead</button></div>
+    <div id="pasteBox" style="display:none;margin-top:10px"><p class="mute">One row per disease: <code class="hb">Disease, number, number, …</code> First row = column headers.</p><textarea class="inp" id="pasteIn" placeholder="Disease, EW 42, EW 43&#10;Dengue fever, 85, 92&#10;Salmonellosis, 31, 27"></textarea><button class="btn sm" id="pasteGo" style="margin-top:6px">Use this data</button></div>
+    <div class="status" id="bStat"></div>
+  </div></div>
+
+  <div class="card o step" id="bReview" style="display:none"><div class="n"><span>03</span></div><div>
+    <h3>Check the table</h3>
+    <p class="mute">Untick rows that are not diseases (e.g. totals). Click a number to fix it. Rename columns if needed.</p>
+    <div class="row" style="margin:10px 0"><label class="f" style="margin:0">TABLE</label><select class="inp" id="bGrp"></select><label class="f" style="margin:0">ANALYSE COLUMN</label><select class="inp" id="bCol"></select><label class="f" style="margin:0">FOCUS DISEASE</label><select class="inp" id="bDis"></select></div>
+    <div class="btab" id="bTab"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="bRun">Generate report ▸</button></div>
+  </div></div>
+
+  <div class="report" id="bRep">
+    <div class="card o step"><div class="n"><span>04</span></div><div>
+      <h3>Summary report · <span id="rTitle"></span></h3>
+      <div class="tiles" id="rT"></div>
+      <div class="sec" style="margin-top:20px"><em>A</em> TOP 10 DISEASES</div>
+      <svg class="viz" id="rTop" viewBox="0 0 900 330"></svg>
+      <div class="sec"><em>B</em> DISTRIBUTION ACROSS DISEASES</div>
+      <svg class="viz" id="rDist" viewBox="0 0 900 190"></svg>
+      <div class="row"><label class="row mute" style="font-size:.62rem;letter-spacing:1px;cursor:pointer"><input type="checkbox" id="rLog"> LOG SCALE (spreads out small counts)</label></div>
+      <div class="sec"><em>C</em> FOCUS · <span id="rFocusN"></span></div>
+      <svg class="viz" id="rTrend" viewBox="0 0 900 230"></svg>
+      <div class="tiles" id="rFT"></div>
+      <div class="sec"><em>D</em> WHAT THE NUMBERS SAY</div>
+      <ul class="interp2" id="rInt"></ul>
+      <div class="card" style="margin-top:14px"><h3>For your E-learning write-up</h3><ul class="interp2">
+        <li>Which disease did you pick, and how many cases this week? How does that compare with its weekly mean ± SD?</li>
+        <li>Is it rising or falling? What could explain this (season, outbreak, travel, vector control)?</li>
+        <li>Why might the mean be misleading here? Would the median be better?</li>
+        <li>What could public health agencies do with this information?</li></ul></div>
+      <div class="row" style="margin-top:14px"><button class="btn" id="rXlsx">Download Excel report ⬇</button><button class="btn b" id="rToLab">Practise in Excel Lab ▸</button></div>
+      <div class="status" id="rStat"></div>
+    </div></div>
+  </div>
+  <div class="pager"><button class="btn ghost" data-go="5">◂ Excel Lab</button><button class="btn" data-go="7">Practice ▸</button></div>
+</section>
+
+<!-- 07 PRACTICE -->
+<section class="panel" id="p7" data-name="PRACTICE">
+  <div class="ph"><div class="kick">SELF-CHECK</div><h2>Guided <span>Practice</span></h2><p>15 calculations from easy to challenging. Try first. Open hints only if you're stuck.</p></div>
+  <div class="card o"><div class="pqtop"><div class="pqnav" id="pqNav"></div><div class="pqscore"><b id="pqS">0</b><span>/ 15 SOLVED</span><small id="pqF">0 FIRST TRY</small></div></div>
+    <div class="legend" style="margin-top:6px"><span><i style="background:#00e5ff"></i>LOW</span><span><i style="background:#ffa13d"></i>MEDIUM</span><span><i style="background:#ff3d5a"></i>HIGH</span><span style="margin-left:auto">✔ SOLVED · ◐ ATTEMPTED · 👁 REVEALED</span></div></div>
+  <div class="card" id="pqCard"></div>
+  <div class="card o" id="pqEnd" style="display:none"></div>
+  <div class="pager"><button class="btn ghost" data-go="6">◂ Bulletin Lab</button><button class="btn" data-go="8">Review Quiz ▸</button></div>
+</section>
+
+<!-- 08 REVIEW QUIZ -->
+<section class="panel" id="p8" data-name="REVIEW QUIZ">
+  <div class="ph"><div class="kick">CONSOLIDATE</div><h2>Review <span>Quiz</span></h2><p>12 questions: low → medium → high. Open <span class="hl">How to approach</span> if you need a nudge. Your first answer counts.</p></div>
+  <div class="card o"><div class="row" style="justify-content:space-between"><div class="qnav" id="qNav"></div><div class="pqscore"><b id="qS">0</b><span>/ 12 CORRECT</span></div></div></div>
+  <div class="card" id="qCard"></div>
+  <div class="card o" id="qEnd" style="display:none"></div>
+  <div class="pager"><button class="btn ghost" data-go="7">◂ Practice</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
+</section>
+</main>
+<footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · INTRODUCTION TO BIOSTATISTICS · REPUBLIC POLYTECHNIC</div></footer>
+<script>
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s),$$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const NS="http://www.w3.org/2000/svg";const sv=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches,O="#ff6a00",B="#00e5ff";
+const rnorm=(mu,sd)=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+const fmt=(x,d)=>Number.isFinite(x)?(+x.toFixed(d==null?2:d)).toLocaleString("en-US",{maximumFractionDigits:d==null?2:d}):"–";
+
+/* ---------- STATS ---------- */
+const ST={
+ mean:a=>a.reduce((s,v)=>s+v,0)/a.length,
+ median:a=>{const s=a.slice().sort((x,y)=>x-y),n=s.length;return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):NaN},
+ modes:a=>{const c=new Map();a.forEach(v=>c.set(v,(c.get(v)||0)+1));let m=0;c.forEach(v=>m=Math.max(m,v));if(m<2)return[];return[...c].filter(e=>e[1]===m).map(e=>e[0]).sort((x,y)=>x-y)},
+ sd:a=>{const n=a.length;if(n<2)return NaN;const m=ST.mean(a);return Math.sqrt(a.reduce((s,v)=>s+(v-m)*(v-m),0)/(n-1))},
+ q:(a,p)=>{const s=a.slice().sort((x,y)=>x-y),h=(s.length-1)*p,l=Math.floor(h);return s[l]+(s[Math.min(l+1,s.length-1)]-s[l])*(h-l)}
+};
+ST.sem=a=>ST.sd(a)/Math.sqrt(a.length);
+const modeTxt=a=>{const m=ST.modes(a);return m.length?m.map(v=>fmt(v)).join(", "):"none"};
+window.__ST=ST;
+
+/* ---------- XP ---------- */
+let totalComps=0,doneComps=0;const doneSet=new Set();
+function markDone(box,id){if(id){if(doneSet.has(id))return;doneSet.add(id)}if(box)box.classList.add("done");doneComps++;updateXP()}
+function updateXP(){const p=Math.round(100*doneComps/Math.max(1,totalComps));$("#xpb").style.width=p+"%";$("#xpn").textContent=p+"%"}
+
+/* ---------- CHALLENGES ---------- */
+const C={
+ mWhy:{type:"mcq",title:"CHALLENGE · ROLE OF STATISTICS",q:"During COVID-19, daily case and death numbers were published. What was their main public health role?",
+  o:["To support decisions and keep authorities accountable","To replace doctors' diagnoses","To prove that every case was preventable","To make the news more exciting"],
+  why:"Reported numbers help track spread, plan resources and evaluate measures – a critical tool for decision-making and accountability."},
+ sortData:{type:"sort",title:"CHALLENGE · QUANTITATIVE OR QUALITATIVE?",bins:["Quantitative (numbers)","Qualitative (words)"],
+  items:[["Weekly dengue case counts",0],["Blood glucose 48.9 mg/dL",0],["Number of polyclinic visits",0],["Patients describe their pain in interviews",1],["Survey comments about clinic service",1],["Focus-group views on vaccination",1]],
+  why:"Quantitative data are numbers analysed with statistics. Qualitative data are words analysed by interpretation and categories."},
+ mCt:{type:"mcq",title:"CHALLENGE · WHICH CENTRE?",q:"Hospital stay lengths (days): 2, 3, 3, 4, 5, 40. Which measure best describes a 'typical' stay?",
+  o:["Median – the outlier 40 pulls the mean up","Mean – it always uses all the data","Mode – it's always best","Range – it shows the middle"],
+  why:"Mean = 9.5 days, but most stays are 2–5. The median (3.5) resists the extreme value 40."},
+ mSd:{type:"mcq",title:"CHALLENGE · SD OR SEM?",q:"A study increases its sample size from 25 to 100 people. What happens to the SEM?",
+  o:["It halves (√100 is twice √25)","It doubles","It stays the same","It becomes zero"],
+  why:"SEM = SD ÷ √n. √25 = 5, √100 = 10, so the SEM is divided by 2."},
+ sortDep:{type:"sort",title:"CHALLENGE · INDEPENDENT OR DEPENDENT?",bins:["Independent","Dependent"],
+  items:[["Winning a card game and running out of bread",0],["Two separate coin tosses",0],["Parking illegally and getting a parking ticket",1],["Hours of study and exam grade",1],["Rolling a 6 on one die and a 6 on another die",0],["Smoking and developing lung cancer",1]],
+  why:"Independent: one event does not change the other's chance. Dependent: one event changes the likelihood of the other."},
+ sortP:{type:"sort",title:"PRACTICE 1 · REJECT OR FAIL TO REJECT? (α = 0.05)",bins:["Reject H₀","Fail to reject H₀"],
+  items:[["p = 0.005",0],["p = 0.01",0],["p = 0.21",1],["p = 0.049",0],["p = 0.08",1],["p = 0.50",1]],
+  why:"Compare each p with α = 0.05: p ≤ 0.05 → reject H₀ (significant); p > 0.05 → fail to reject H₀."}
+};
+function mcq(cfg){const box=el("div","comp");box.appendChild(el("span","ct",cfg.title));box.appendChild(el("div","q",cfg.q));const opts=el("div","opts"),fb=el("div","fb2");box.append(opts,fb);let done=false;
+  shuffle(cfg.o.map((t,i)=>({t,i}))).forEach(x=>{const b=el("button","opt",x.t);b.onclick=()=>{if(done)return;if(x.i===0){done=true;$$(".opt",opts).forEach(o=>o.disabled=true);b.classList.add("ok");fb.className="fb2 show";fb.innerHTML="<b class='hb'>CORRECT.</b> "+cfg.why;markDone(box)}else{b.classList.add("bad");b.disabled=true;fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>NOT QUITE.</b> Try again."}};opts.appendChild(b)});return box}
+function sorter(cfg){const box=el("div","comp");box.appendChild(el("span","ct",cfg.title));box.appendChild(el("div","hint","Tap a chip, then tap a box – or drag and drop."));
+  const pool=el("div","pool"),bins=el("div","bins");box.append(pool,bins);const zones=cfg.bins.map(n=>{const b=el("div","bin");b.appendChild(el("h4","",n));const z=el("div","zone");b.appendChild(z);bins.appendChild(b);return z});
+  const fb=el("div","fb2"),ctl=el("div","ctl"),chk=el("button","btn","Check ▸"),rst=el("button","btn ghost","Reset");ctl.append(chk,rst);box.append(ctl,fb);let sel=null,solved=false,dragEl=null;
+  const chips=shuffle(cfg.items).map(x=>{const c=el("div","chip",x[0]);c.draggable=true;c._b=x[1];pool.appendChild(c);c.onclick=e=>{e.stopPropagation();if(solved)return;if(sel&&sel!==c)sel.classList.remove("sel");sel=sel===c?null:c;c.classList.toggle("sel",sel===c)};c.ondragstart=e=>{dragEl=c;try{e.dataTransfer.setData("text/plain","x")}catch(_){}};c.ondragend=()=>dragEl=null;return c});
+  const put=(c,z)=>{z.appendChild(c);c.classList.remove("sel","ok","bad");sel=null};
+  [pool,...zones].forEach(z=>{z.onclick=()=>{if(sel&&!solved)put(sel,z)};z.ondragover=e=>{e.preventDefault();z.classList.add("over")};z.ondragleave=()=>z.classList.remove("over");z.ondrop=e=>{e.preventDefault();z.classList.remove("over");if(dragEl&&!solved)put(dragEl,z)}});
+  chk.onclick=()=>{if(solved)return;let r=0,u=0;chips.forEach(c=>{const zi=zones.indexOf(c.parentNode);c.classList.remove("ok","bad","sel");if(zi<0){u++;return}if(zi===c._b){c.classList.add("ok");r++}else c.classList.add("bad")});
+    if(u){fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>PLACE EVERY CHIP</b> first.";return}
+    if(r===chips.length){solved=true;chips.forEach(c=>{c.classList.add("lock");c.draggable=false});chk.disabled=true;fb.className="fb2 show";fb.innerHTML="<b class='hb'>ALL CORRECT.</b> "+cfg.why;markDone(box)}
+    else{fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>"+r+" / "+chips.length+" correct.</b> Move the ✘ chips and check again."}};
+  rst.onclick=()=>{if(solved)return;chips.forEach(c=>{pool.appendChild(c);c.classList.remove("ok","bad","sel")});fb.className="fb2"};return box}
+$$(".comp-m").forEach(m=>{const c=C[m.dataset.c];if(!c)return;totalComps++;m.replaceWith(c.type==="mcq"?mcq(c):sorter(c))});
+
+/* ---------- TABS ---------- */
+const panels=$$("main > .panel");
+panels.forEach((p,i)=>{const b=el("button","tab","<em>0"+i+"</em>"+p.dataset.name);b.setAttribute("role","tab");b.setAttribute("aria-selected",i===0);b.dataset.i=i;b.onclick=()=>go(i);$("#tabs").appendChild(b)});
+function go(i){panels.forEach((p,k)=>p.classList.toggle("on",k===i));$$(".tab").forEach((t,k)=>{t.setAttribute("aria-selected",k===i);if(k===i)t.classList.add("seen")});
+  const t=$$(".tab")[i];if(t&&t.scrollIntoView)t.scrollIntoView({inline:"center",block:"nearest"});window.scrollTo({top:0,behavior:"smooth"});try{history.replaceState(null,"","#"+i)}catch(e){}resizeCv();document.dispatchEvent(new CustomEvent("tab",{detail:i}))}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(+g.dataset.go)});
+$("#tabs").addEventListener("keydown",e=>{const c=+$(".tab[aria-selected=true]").dataset.i;if(e.key==="ArrowRight")go(Math.min(panels.length-1,c+1));if(e.key==="ArrowLeft")go(Math.max(0,c-1))});
+const segs=(id,fn)=>$$(id+" button").forEach(b=>b.addEventListener("click",()=>{$$(id+" button").forEach(x=>x.classList.toggle("on",x===b));fn(b)}));
+
+/* ---------- COVER ---------- */
+const cv=$("#cvs"),cx=cv.getContext("2d");let W=0,H=0,data=[],falling=[];
+function resizeCv(){const r=cv.getBoundingClientRect();if(!r.width)return;const d=Math.min(2,devicePixelRatio||1);cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0);W=r.width;H=r.height}
+const BINS=36,LO=100,HI=205;const L0=()=>W<640?16:W*0.42,R0=()=>W-20;const XB=v=>L0()+(R0()-L0())*(v-LO)/(HI-LO);
+function drawCv(){cx.clearRect(0,0,W,H);const base=H*0.8,bw=(R0()-L0())/BINS,cnt=new Array(BINS).fill(0);
+  data.forEach(v=>{const b=Math.floor((v-LO)/(HI-LO)*BINS);if(b>=0&&b<BINS)cnt[b]++});const mx=Math.max(8,...cnt),uh=Math.min(10,(H*0.55)/mx);
+  const n=data.length;if(n>1){const m=ST.mean(data),s=ST.sd(data);cx.fillStyle="rgba(0,229,255,.08)";cx.fillRect(XB(m-s),H*0.14,XB(m+s)-XB(m-s),base-H*0.14);
+    cx.strokeStyle="rgba(0,229,255,.5)";cx.setLineDash([4,4]);[m-s,m+s].forEach(v=>{cx.beginPath();cx.moveTo(XB(v),H*0.14);cx.lineTo(XB(v),base);cx.stroke()});cx.setLineDash([]);
+    cx.strokeStyle=O;cx.shadowColor=O;cx.shadowBlur=12;cx.lineWidth=3;cx.beginPath();cx.moveTo(XB(m),H*0.1);cx.lineTo(XB(m),base);cx.stroke();cx.shadowBlur=0;cx.lineWidth=1;
+    // normal curve
+    cx.strokeStyle="rgba(255,255,255,.6)";cx.beginPath();for(let k=0;k<=120;k++){const v=LO+(HI-LO)*k/120,y=base-n*bw*(HI-LO)/(R0()-L0())*Math.exp(-0.5*((v-m)/s)**2)/(s*Math.sqrt(2*Math.PI))*uh/1;k?cx.lineTo(XB(v),y):cx.moveTo(XB(v),y)}cx.stroke()}
+  for(let b=0;b<BINS;b++){for(let k=0;k<cnt[b];k++){cx.fillStyle=B;cx.shadowColor=B;cx.shadowBlur=6;cx.fillRect(L0()+b*bw+1,base-(k+1)*uh+1,bw-2,uh-2)}}cx.shadowBlur=0;
+  falling.forEach(f=>{f.y+=f.vy;f.vy+=0.6;cx.fillStyle="#fff";cx.shadowColor=O;cx.shadowBlur=10;cx.beginPath();cx.arc(XB(f.v),f.y,3.5,0,7);cx.fill()});cx.shadowBlur=0;
+  falling=falling.filter(f=>{if(f.y>=base-6){data.push(f.v);return false}return true});
+  cx.strokeStyle="rgba(0,229,255,.5)";cx.beginPath();cx.moveTo(L0(),base);cx.lineTo(R0(),base);cx.stroke();cx.fillStyle="rgba(127,163,181,.8)";cx.font="600 10px Orbitron,sans-serif";for(let v=110;v<=200;v+=30)cx.fillText(v+" cm",XB(v)-14,base+16);
+  if(n>1){$("#cvN").textContent=n;$("#cvM").textContent=ST.mean(data).toFixed(1);$("#cvS").textContent=ST.sd(data).toFixed(2);$("#cvE").textContent=ST.sem(data).toFixed(2)}else $("#cvN").textContent=n}
+resizeCv();addEventListener("resize",resizeCv);
+let lastD=0;(function loop(t){if($("#p0").classList.contains("on")){if(t-lastD>(RM?600:90)){lastD=t;if(data.length+falling.length>=260){data=[];falling=[]}else falling.push({v:Math.max(LO,Math.min(HI-0.1,rnorm(152.6,14.75))),y:H*0.05,vy:1})}drawCv()}requestAnimationFrame(loop)})(0);
+
+/* ---------- WHY STATS ---------- */
+const PIPE=["<b class='hl'>Collect</b> – experiments, interviews, surveys, records. <i>e.g. clinics notify dengue cases to CDA.</i>","<b class='hl'>Summarise</b> – tables, bar charts, pie charts, histograms, line graphs. <i>e.g. the weekly bulletin.</i>","<b class='hl'>Analyse</b> – mean, median, mode, SD, SEM, p-values. <i>e.g. is this week higher than usual?</i>","<b class='hl'>Decide</b> – prevent and control disease. <i>e.g. step up mosquito checks in a cluster.</i>"];
+$$("#pipe .pnode").forEach(b=>b.onclick=()=>{$$("#pipe .pnode").forEach(x=>x.classList.toggle("on",x===b));$("#pipeTxt").innerHTML=PIPE[+b.dataset.k]});$("#pipeTxt").innerHTML=PIPE[0];
+(function(){const s=$("#pdBar"),d=[["G2385R",8.6],["R1628P",4.6],["S1647T",4.0]],X=v=>140+460*v/10;
+  for(let v=0;v<=10;v+=2){sv("line",{x1:X(v),x2:X(v),y1:6,y2:120,stroke:"rgba(0,229,255,.12)"},s);sv("text",{x:X(v),y:138,"text-anchor":"middle"},s).textContent=v}
+  sv("line",{x1:X(1),x2:X(1),y1:4,y2:122,stroke:"#fff","stroke-dasharray":"4 4"},s);sv("text",{x:X(1)+4,y:12,style:"fill:#fff"},s).textContent="OR = 1";
+  d.forEach((r,i)=>{const y=22+i*34;sv("text",{x:130,y:y+14,"text-anchor":"end",style:"fill:#00e5ff"},s).textContent=r[0];const b=sv("rect",{x:X(0),y,width:0,height:20,fill:O,style:"filter:drop-shadow(0 0 6px #ff6a00);transition:width 1s"},s);
+    sv("text",{x:X(r[1])+8,y:y+15,style:"fill:#fff;font-weight:900"},s).textContent="OR "+r[1];setTimeout(()=>b.setAttribute("width",X(r[1])-X(0)),200+i*150)})})();
+const DD=[["Any developmental disability",[16.22,16.8,17.76]],["ADHD",[8.47,9.1,9.54]],["Autism spectrum disorder",[1.12,1.6,2.49]]];
+function ddDraw(k){const s=$("#ddBar");s.innerHTML="";const d=DD[k][1],mx=Math.max(...d)*1.2,L=["2009–11","2012–14","2015–17"];
+  d.forEach((v,i)=>{const x=110+i*170,h=150*v/mx;const r=sv("rect",{x,y:170,width:100,height:0,fill:i===2?O:"rgba(0,229,255,.6)",stroke:i===2?O:B,style:"transition:all .8s"},s);setTimeout(()=>{r.setAttribute("y",170-h);r.setAttribute("height",h)},40);
+    sv("text",{x:x+50,y:162-h,"text-anchor":"middle",style:"fill:#fff;font-weight:900;font-size:13px"},s).textContent=v+"%";sv("text",{x:x+50,y:190,"text-anchor":"middle"},s).textContent=L[i]});
+  const ch=((d[2]-d[0])/d[0]*100);$("#ddTxt").innerHTML=DD[k][0]+": <b class='hl'>"+(ch>0?"+":"")+ch.toFixed(0)+"%</b> relative change. Trends like this guide services and policy."}
+segs("#ddSeg",b=>ddDraw(+b.dataset.k));ddDraw(0);
+
+/* ---------- CENTRE LAB ---------- */
+const HEIGHTS=[139,150,170,145,169,138,145,180,145,145];let ctD=HEIGHTS.slice();
+function ctDraw(){const s=$("#ct");s.innerHTML="";const lo=ctD.length?Math.min(...ctD):100,hi=ctD.length?Math.max(...ctD):200;let a=Math.floor((Math.min(lo,120))/10)*10,b=Math.ceil((Math.max(hi,190))/10)*10;
+  const X=v=>40+820*(v-a)/(b-a),V=x=>a+(x-40)*(b-a)/820,base=120;s._V=V;
+  sv("rect",{x:30,y:20,width:840,height:120,fill:"transparent"},s);
+  sv("line",{x1:40,x2:860,y1:base,y2:base,stroke:B,"stroke-width":2},s);const step=(b-a)>200?50:10;
+  for(let v=a;v<=b;v+=step){sv("line",{x1:X(v),x2:X(v),y1:base,y2:base+6,stroke:B},s);sv("text",{x:X(v),y:base+20,"text-anchor":"middle"},s).textContent=v}
+  const stack={};ctD.forEach((v,i)=>{const k=Math.round(v);stack[k]=(stack[k]||0)+1;const c=sv("circle",{cx:X(v),cy:base-8-(stack[k]-1)*15,r:6.5,fill:B,stroke:"#03060b","stroke-width":1.5,style:"cursor:pointer;filter:drop-shadow(0 0 4px #00e5ff)"},s);c.dataset.i=i});
+  if(ctD.length){const m=ST.mean(ctD),md=ST.median(ctD),mo=ST.modes(ctD);
+    mo.forEach(v=>sv("text",{x:X(v),y:30,"text-anchor":"middle",style:"fill:#fff;font-size:12px"},s).textContent="◆ MODE");
+    sv("line",{x1:X(md),x2:X(md),y1:36,y2:base,stroke:B,"stroke-width":2,"stroke-dasharray":"5 4"},s);sv("text",{x:X(md),y:base+36,"text-anchor":"middle",style:"fill:#00e5ff;font-size:11px"},s).textContent="MEDIAN "+fmt(md,1);
+    sv("path",{d:"M"+X(m)+" "+(base+2)+"l-11 18h22z",fill:O,style:"filter:drop-shadow(0 0 6px #ff6a00)"},s);sv("text",{x:X(m),y:base+56,"text-anchor":"middle",style:"fill:#ffa13d;font-size:11px"},s).textContent="MEAN "+fmt(m,1)+" ▲ BALANCE";}
+  const n=ctD.length;$("#ctT").innerHTML="<div><b>"+n+"</b><span>n</span></div><div class='o'><b>"+(n?fmt(ST.mean(ctD),2):"–")+"</b><span>Mean</span></div><div><b>"+(n?fmt(ST.median(ctD),1):"–")+"</b><span>Median</span></div><div class='w'><b>"+(n?modeTxt(ctD):"–")+"</b><span>Mode</span></div><div><b>"+(n?Math.max(...ctD)-Math.min(...ctD):"–")+"</b><span>Range</span></div>";
+  const sorted=ctD.map((v,i)=>v).sort((x,y)=>x-y),mid=n%2?[(n-1)/2]:[n/2-1,n/2],mo=ST.modes(ctD);
+  $("#ctS").innerHTML=n?"<span style='border:0;color:var(--mute);font-size:.6rem;letter-spacing:2px'>SORTED:</span>"+sorted.map((v,i)=>"<span class='"+(mid.includes(i)?"md":"")+(mo.includes(v)?" mo":"")+"'>"+v+"</span>").join(""):"";
+  const m=ST.mean(ctD),md=ST.median(ctD);$("#ctN").innerHTML=!n?"Add some values.":Math.abs(m-md)<2?"Mean and median are close – the data are fairly <b>symmetric</b>.":m>md?"Mean &gt; median – a few <b>high values</b> pull the mean up (right-skewed). The median is more typical.":"Mean &lt; median – a few <b>low values</b> pull the mean down (left-skewed)."}
+$("#ct").addEventListener("click",e=>{const s=$("#ct");if(e.target.tagName==="circle"){ctD.splice(+e.target.dataset.i,1);ctDraw();return}const p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());if(q.x<40||q.x>860)return;ctD.push(Math.round(s._V(q.x)));ctDraw()});
+$$("[data-ct]").forEach(b=>b.onclick=()=>{const k=b.dataset.ct;if(k==="h")ctD=HEIGHTS.slice();if(k==="out")ctD.push(400);if(k==="c")ctD=[];if(k==="r")ctD=Array.from({length:10},()=>Math.round(rnorm(155,15)));ctDraw()});ctDraw();
+
+/* skew */
+(function(){const s=$("#sk");const phi=x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI);const Phi=x=>{const t=1/(1+0.2316419*Math.abs(x)),d=0.3989423*Math.exp(-x*x/2);let p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return x>0?1-p:p};
+  function draw(){const al=+$("#skS").value/2;$("#skV").textContent=al;s.innerHTML="";const xs=[],ys=[];for(let k=0;k<=400;k++){const x=-4+8*k/400;xs.push(x);ys.push(2*phi(x)*Phi(al*x))}
+    const dl=al/Math.sqrt(1+al*al),mean=dl*Math.sqrt(2/Math.PI);let cum=0,tot=ys.reduce((a,b)=>a+b,0),med=0;for(let k=0;k<ys.length;k++){cum+=ys[k];if(cum>=tot/2){med=xs[k];break}}const mode=xs[ys.indexOf(Math.max(...ys))];
+    const X=x=>20+420*(x+4)/8,mx=Math.max(...ys),Y=y=>190-170*y/mx;let p="M"+X(-4)+" 190";xs.forEach((x,k)=>p+="L"+X(x).toFixed(1)+" "+Y(ys[k]).toFixed(1));p+="L"+X(4)+" 190Z";
+    sv("path",{d:p,fill:"rgba(0,229,255,.12)",stroke:B,"stroke-width":2.5,style:"filter:drop-shadow(0 0 6px #00e5ff)"},s);sv("line",{x1:20,x2:440,y1:190,y2:190,stroke:B,"stroke-opacity":.5},s);
+    [[mode,"#fff"],[med,B],[mean,O]].forEach((m,i)=>sv("line",{x1:X(m[0]),x2:X(m[0]),y1:20+i*6,y2:190,stroke:m[1],"stroke-width":3,"stroke-dasharray":i===1?"6 4":""},s));
+    $("#skT").innerHTML=al===0?"<b class='hb'>Symmetric (normal)</b>: mean = median = mode.":al>0?"<b class='hl'>Right (positive) skew</b>: long tail of high values. Mean &gt; median &gt; mode. Typical for disease counts and hospital stays.":"<b class='hl'>Left (negative) skew</b>: long tail of low values. Mean &lt; median &lt; mode."}
+  $("#skS").oninput=draw;draw()})();
+
+/* ---------- SPREAD ---------- */
+const NEW=[45.2,53.5,48.9,52.3,48.9],CONV=[46.5,54,41.5,65.3,41.5];
+(function(){const s=$("#pr3"),X=v=>60+800*(v-35)/(70-35);
+  for(let v=35;v<=70;v+=5){sv("line",{x1:X(v),x2:X(v),y1:14,y2:166,stroke:"rgba(0,229,255,.1)"},s);sv("text",{x:X(v),y:186,"text-anchor":"middle"},s).textContent=v}
+  [[NEW,"NEW",55,B],[CONV,"CONVENTIONAL",125,O]].forEach(g=>{const m=ST.mean(g[0]),sd=ST.sd(g[0]);sv("rect",{x:X(m-sd),y:g[2]-22,width:X(m+sd)-X(m-sd),height:44,fill:g[3],"fill-opacity":.12,stroke:g[3],"stroke-dasharray":"4 4"},s);
+    sv("text",{x:X(m+sd)+6,y:g[2]-12,style:"fill:"+g[3]},s).textContent="± 1 SD";sv("text",{x:6,y:g[2]+4,style:"fill:"+g[3]},s).textContent=g[1];
+    const st={};g[0].forEach(v=>{st[v]=(st[v]||0)+1;sv("circle",{cx:X(v),cy:g[2]-(st[v]-1)*14+(st[v]>1?7:0),r:6.5,fill:g[3],style:"filter:drop-shadow(0 0 5px "+g[3]+")"},s)});
+    sv("line",{x1:X(m),x2:X(m),y1:g[2]-28,y2:g[2]+28,stroke:"#fff","stroke-width":3},s)});
+  $("#pr3T").innerHTML="<div><b>"+fmt(ST.sd(NEW),4)+"</b><span>SD · new</span></div><div class='o'><b>"+fmt(ST.sd(CONV),4)+"</b><span>SD · conventional</span></div><div><b>"+fmt(ST.sem(NEW),4)+"</b><span>SEM · new</span></div><div class='o'><b>"+fmt(ST.sem(CONV),4)+"</b><span>SEM · conventional</span></div><div class='w'><b>49.76</b><span>Mean · both</span></div>"})();
+
+let sdD=NEW.slice(),sdStep=0;
+function sdRender(){const n=sdD.length,m=ST.mean(sdD),dv=sdD.map(v=>v-m),sq=dv.map(v=>v*v),ss=sq.reduce((a,b)=>a+b,0),vr=ss/(n-1),sd=Math.sqrt(vr);
+  const h=k=>sdStep<k?" class='h'":"";
+  $("#sdTab").innerHTML="<thead><tr><th>x</th><th>x − mean</th><th>(x − mean)²</th></tr></thead><tbody>"+sdD.map((v,i)=>"<tr><td>"+v+"</td><td"+h(2)+">"+fmt(dv[i],2)+"</td><td"+h(3)+">"+fmt(sq[i],4)+"</td></tr>").join("")+
+   "<tr class='tot'><td>Σ "+fmt(sdD.reduce((a,b)=>a+b,0),2)+"</td><td"+h(2)+">0</td><td"+h(3)+">Σ "+fmt(ss,4)+"</td></tr></tbody>";
+  const S=["Mean = Σx ÷ n = "+fmt(sdD.reduce((a,b)=>a+b,0),2)+" ÷ "+n+" = <span class='eq'>"+fmt(m,4)+"</span>","Subtract the mean from each value (deviations add up to 0)","Square each deviation, then add them: Σ = <span class='eq'>"+fmt(ss,4)+"</span>","Divide by n − 1: "+fmt(ss,4)+" ÷ "+(n-1)+" = <span class='eq'>"+fmt(vr,4)+"</span> (variance)","Square root: √"+fmt(vr,4)+" = <span class='eq'>SD "+fmt(sd,4)+"</span> · SEM = SD ÷ √"+n+" = <span class='eq'>"+fmt(sd/Math.sqrt(n),4)+"</span>"];
+  $("#sdSt").innerHTML=S.map((t,i)=>"<li class='"+(i<sdStep?"on":"")+"'>"+t+"</li>").join("");$("#sdNx").disabled=sdStep>=5;if(sdStep>=5)markDone(null,"sdsteps")}
+totalComps++;
+$("#sdNx").onclick=()=>{sdStep++;sdRender()};$("#sdRs").onclick=()=>{sdStep=0;sdRender()};
+segs("#sdSeg",b=>{const k=b.dataset.k;$("#sdOwn").style.display=k==="own"?"":"none";if(k==="new")sdD=NEW.slice();if(k==="conv")sdD=CONV.slice();if(k!=="own"){sdStep=0;sdRender()}});
+$("#sdLoad").onclick=()=>{const v=$("#sdIn").value.split(/[\s,;]+/).map(Number).filter(Number.isFinite);if(v.length>=2&&v.length<=12){sdD=v;sdStep=0;sdRender()}};sdRender();
+
+(function(){const s=$("#bell");let k=1;function draw(){const sd=+$("#bsS").value;$("#bsV").textContent=sd;s.innerHTML="";const m=150,X=v=>20+420*(v-60)/(240-60),pk=1/(7*Math.sqrt(2*Math.PI)),Y=y=>Math.max(16,195-175*y/pk);
+  const f=v=>Math.exp(-0.5*((v-m)/sd)**2)/(sd*Math.sqrt(2*Math.PI));let a="",p="";
+  for(let v=60;v<=240;v+=1){p+=(v===60?"M":"L")+X(v)+" "+Y(f(v)).toFixed(1)}
+  let sh="M"+X(m-k*sd)+" 195";for(let v=m-k*sd;v<=m+k*sd;v+=0.5)sh+="L"+X(v)+" "+Y(f(v)).toFixed(1);sh+="L"+X(m+k*sd)+" 195Z";
+  sv("path",{d:sh,fill:"rgba(255,106,0,.25)"},s);sv("path",{d:p,fill:"none",stroke:B,"stroke-width":2.5,style:"filter:drop-shadow(0 0 6px #00e5ff)"},s);sv("line",{x1:20,x2:440,y1:195,y2:195,stroke:B,"stroke-opacity":.5},s);
+  sv("line",{x1:X(m),x2:X(m),y1:14,y2:195,stroke:"#fff","stroke-width":2},s);sv("text",{x:X(m),y:12,"text-anchor":"middle",style:"fill:#fff"},s).textContent="MEAN = MEDIAN = MODE";
+  sv("text",{x:X(m),y:150,"text-anchor":"middle",style:"fill:#fff;font-size:14px;font-weight:900"},s).textContent=["","68%","95%","99.7%"][k];
+  [m-k*sd,m+k*sd].forEach(v=>sv("text",{x:X(v),y:212,"text-anchor":"middle",style:"fill:#ffa13d"},s).textContent=v)}
+  $("#bsS").oninput=draw;segs("#bkSeg",b=>{k=+b.dataset.k;draw()});draw()})();
+
+(function(){const s=$("#semH");let means=[];const MU=152.6,SG=14.75;
+  function draw(){const n=+$("#snS").value;$("#snV").textContent=n;s.innerHTML="";const lo=120,hi=185,X=v=>40+820*(v-lo)/(hi-lo),bins=65,cnt=new Array(bins).fill(0);
+    means.forEach(v=>{const b=Math.floor((v-lo)/(hi-lo)*bins);if(b>=0&&b<bins)cnt[b]++});const mx=Math.max(5,...cnt),bw=820/bins;
+    for(let v=120;v<=185;v+=5){sv("line",{x1:X(v),x2:X(v),y1:10,y2:170,stroke:"rgba(0,229,255,.08)"},s);sv("text",{x:X(v),y:188,"text-anchor":"middle"},s).textContent=v}
+    cnt.forEach((c,b)=>{if(c)sv("rect",{x:40+b*bw+1,y:170-150*c/mx,width:bw-2,height:150*c/mx,fill:B,"fill-opacity":.75},s)});
+    const se=SG/Math.sqrt(n);sv("rect",{x:X(MU-1.96*se),y:8,width:X(MU+1.96*se)-X(MU-1.96*se),height:8,fill:O,"fill-opacity":.7},s);sv("text",{x:X(MU+1.96*se)+6,y:16,style:"fill:#ffa13d"},s).textContent="95% of sample means";
+    sv("line",{x1:X(MU),x2:X(MU),y1:6,y2:172,stroke:"#fff","stroke-width":2},s);
+    const obs=means.length>1?ST.sd(means):NaN;$("#semT").innerHTML="<div><b>"+means.length+"</b><span>Samples drawn</span></div><div class='o'><b>"+fmt(se,2)+"</b><span>SEM = 14.75 ÷ √"+n+"</span></div><div><b>"+fmt(obs,2)+"</b><span>SD of the sample means</span></div><div class='w'><b>± "+fmt(1.96*se,1)+"</b><span>95% CI half-width (cm)</span></div>"}
+  const one=()=>{const n=+$("#snS").value;let t=0;for(let i=0;i<n;i++)t+=rnorm(MU,SG);means.push(t/n)};
+  $("#snS").oninput=()=>{means=[];draw()};$("#semOne").onclick=()=>{one();draw()};$("#semMany").onclick=()=>{for(let i=0;i<200;i++)one();draw();markDone(null,"sem")};$("#semClr").onclick=()=>{means=[];draw()};totalComps++;draw()})();
+
+/* ---------- CHANCE ---------- */
+(function(){let cnt=[0,0,0,0,0,0];const F=["⚀","⚁","⚂","⚃","⚄","⚅"];
+  function draw(){const s=$("#dBar");s.innerHTML="";const n=cnt.reduce((a,b)=>a+b,0),Y=p=>160-140*p/0.5;
+    for(let p=0;p<=0.5;p+=0.1){sv("line",{x1:60,x2:620,y1:Y(p),y2:Y(p),stroke:"rgba(0,229,255,.1)"},s);sv("text",{x:52,y:Y(p)+4,"text-anchor":"end"},s).textContent=Math.round(p*100)+"%"}
+    cnt.forEach((c,i)=>{const p=n?c/n:0,x=90+i*90;sv("rect",{x,y:Y(Math.min(p,0.5)),width:56,height:160-Y(Math.min(p,0.5)),fill:O,"fill-opacity":.8,style:"transition:all .4s"},s);sv("text",{x:x+28,y:182,"text-anchor":"middle",style:"fill:#fff;font-size:14px"},s).textContent=i+1;if(n)sv("text",{x:x+28,y:Y(Math.min(p,0.5))-6,"text-anchor":"middle",style:"fill:#fff"},s).textContent=Math.round(p*100)+"%"});
+    sv("line",{x1:70,x2:620,y1:Y(1/6),y2:Y(1/6),stroke:B,"stroke-width":2,"stroke-dasharray":"6 4"},s);sv("text",{x:620,y:Y(1/6)-6,"text-anchor":"end",style:"fill:#00e5ff"},s).textContent="EXPECTED 16.7%";
+    $("#dTxt").innerHTML=n?"<b>"+n+"</b> rolls. "+(n<30?"Few rolls → results jump around (chance).":"Many rolls → each face settles near 1/6.")+(n>=600?" That's why bigger samples are more reliable.":""):"Roll to start."}
+  $$("[data-r]").forEach(b=>b.onclick=()=>{const k=+b.dataset.r;if(!k){cnt=[0,0,0,0,0,0];$("#dice").innerHTML="";draw();return}const show=[];for(let i=0;i<k;i++){const r=Math.floor(Math.random()*6);cnt[r]++;if(i<6)show.push(r)}
+    $("#dice").innerHTML=show.map(r=>"<div class='die'>"+(r+1)+"</div>").join("")+(k>6?"<div class='die' style='border-color:#00e5ff;font-size:.7rem'>+"+(k-6)+"</div>":"");draw();if(cnt.reduce((a,b)=>a+b,0)>=600)markDone(null,"dice")});totalComps++;draw()})();
+(function(){let a=0.05;function dec(){const p=parseFloat($("#pIn").value),v=$("#pVer");if(!(p>=0&&p<=1)){v.className="verdict ns";v.innerHTML="ENTER A P-VALUE<small>between 0 and 1</small>";return}const s=p<=a;v.className="verdict "+(s?"sig":"ns");
+  v.innerHTML=(s?"REJECT H₀":"FAIL TO REJECT H₀")+"<small>p = "+p+" "+(s?"≤":"&gt;")+" α = "+a+" · "+(s?"there IS a significant difference in salary by gender":"no significant difference in salary by gender")+"</small>"}
+  segs("#aSeg",b=>{a=+b.dataset.a;dec()});$("#pGo").onclick=dec;$("#pIn").onkeydown=e=>{if(e.key==="Enter")dec()};dec()})();
+
+window.__core={$,$$,el,sv,shuffle,ST,fmt,modeTxt,markDone,updateXP,doneSet,segs,go,O,B,
+  addComps:n=>{totalComps+=n},get totalComps(){return totalComps}};
+})();
+
+/* ================= EXCEL LAB ================= */
+(function(){
+"use strict";
+const {$,$$,el,ST,fmt,markDone,addComps}=window.__core;
+const ERR=e=>({err:e});const isErr=v=>v&&typeof v==="object"&&v.err;
+const colN=s=>{let n=0;for(const c of s)n=n*26+(c.charCodeAt(0)-64);return n-1};
+const colL=n=>{let s="";n++;while(n){const r=(n-1)%26;s=String.fromCharCode(65+r)+s;n=Math.floor((n-1)/26)}return s};
+const parseRef=r=>{const m=/^\$?([A-Z]{1,2})\$?(\d+)$/.exec(r.toUpperCase());return m?{c:colN(m[1]),r:+m[2]-1}:null};
+
+/* ---- tokenizer & parser ---- */
+function tokenize(s){const t=[];let i=0;while(i<s.length){const c=s[i];
+  if(/\s/.test(c)){i++;continue}
+  if(/[0-9.]/.test(c)){let j=i;while(j<s.length&&/[0-9.]/.test(s[j]))j++;if(/[eE]/.test(s[j])&&/[-+0-9]/.test(s[j+1]||"")){j++;if(/[-+]/.test(s[j]))j++;while(/[0-9]/.test(s[j]||""))j++}t.push({t:"num",v:parseFloat(s.slice(i,j))});i=j;continue}
+  if(/[A-Za-z$]/.test(c)){let j=i;while(j<s.length&&/[A-Za-z0-9.$_]/.test(s[j]))j++;const w=s.slice(i,j);
+    if(s[j]==="(")t.push({t:"fn",v:w.toUpperCase()});else if(/^\$?[A-Za-z]{1,2}\$?\d+$/.test(w)){if(s[j]===":"){let k=j+1;while(k<s.length&&/[A-Za-z0-9$]/.test(s[k]))k++;const w2=s.slice(j+1,k);if(/^\$?[A-Za-z]{1,2}\$?\d+$/.test(w2)){t.push({t:"rng",a:w.toUpperCase().replace(/\$/g,""),b:w2.toUpperCase().replace(/\$/g,"")});i=k;continue}}t.push({t:"ref",v:w.toUpperCase().replace(/\$/g,"")})}
+    else t.push({t:"name",v:w.toUpperCase()});i=j;continue}
+  if("+-*/^(),;%".includes(c)){t.push({t:"op",v:c===";"?",":c});i++;continue}
+  if(c==='"'){let j=i+1;while(j<s.length&&s[j]!=='"')j++;t.push({t:"str",v:s.slice(i+1,j)});i=j+1;continue}
+  throw "#ERROR!"}return t}
+function parse(src){const tk=tokenize(src);let p=0;const peek=()=>tk[p],nx=()=>tk[p++];
+  const expect=v=>{const k=nx();if(!k||k.v!==v)throw "#ERROR!"};
+  function E(){let a=T();while(peek()&&peek().t==="op"&&(peek().v==="+"||peek().v==="-")){const o=nx().v;a={k:"bin",o,a,b:T()}}return a}
+  function T(){let a=U();while(peek()&&peek().t==="op"&&(peek().v==="*"||peek().v==="/")){const o=nx().v;a={k:"bin",o,a,b:U()}}return a}
+  function U(){if(peek()&&peek().t==="op"&&(peek().v==="-"||peek().v==="+")){const o=nx().v;const v=U();return o==="-"?{k:"neg",v}:v}return P()}
+  function P(){let a=A();while(peek()&&peek().t==="op"&&peek().v==="^"){nx();a={k:"bin",o:"^",a,b:U()}}if(peek()&&peek().t==="op"&&peek().v==="%"){nx();a={k:"bin",o:"/",a,b:{k:"num",v:100}}}return a}
+  function A(){const k=nx();if(!k)throw "#ERROR!";
+    if(k.t==="num")return{k:"num",v:k.v};if(k.t==="str")return{k:"str",v:k.v};if(k.t==="ref")return{k:"ref",v:k.v};if(k.t==="rng")return{k:"rng",a:k.a,b:k.b};
+    if(k.t==="name")return{k:"bad",v:k.v};
+    if(k.t==="fn"){expect("(");const args=[];if(!(peek()&&peek().v===")")){args.push(E());while(peek()&&peek().v===","){nx();args.push(E())}}expect(")");return{k:"fn",n:k.v,args}}
+    if(k.t==="op"&&k.v==="("){const v=E();expect(")");return v}throw "#ERROR!"}
+  const r=E();if(p<tk.length)throw "#ERROR!";return r}
+
+/* ---- workbook ---- */
+function Sheet(name,cells,missions,opts){return Object.assign({name,cells:Object.assign({},cells),init:Object.assign({},cells),missions,rows:22,cols:5},opts||{})}
+function evalSheet(sh){const cache={},busy={};
+  function cellVal(ref){if(ref in cache)return cache[ref];if(busy[ref])return ERR("#CIRC!");const raw=sh.cells[ref];let v;
+    if(raw==null||raw==="")v=null;else if(typeof raw==="string"&&raw[0]==="="){busy[ref]=1;try{v=ev(parse(raw.slice(1)))}catch(e){v=ERR(typeof e==="string"?e:"#ERROR!")}busy[ref]=0;if(Array.isArray(v))v=v[0]}
+    else{const n=Number(raw);v=raw.trim()!==""&&Number.isFinite(n)?n:raw}
+    return cache[ref]=v}
+  function range(a,b){const A=parseRef(a),Bb=parseRef(b);if(!A||!Bb)return ERR("#REF!");const out=[];for(let r=Math.min(A.r,Bb.r);r<=Math.max(A.r,Bb.r);r++)for(let c=Math.min(A.c,Bb.c);c<=Math.max(A.c,Bb.c);c++)out.push(cellVal(colL(c)+(r+1)));return out}
+  const num=v=>{if(isErr(v))throw v.err;if(v==null)return 0;if(typeof v==="number")return v;const n=Number(v);if(Number.isFinite(n))return n;throw "#VALUE!"};
+  function flat(args){const out=[];for(const a of args){if(a.k==="rng"){const r=range(a.a,a.b);if(isErr(r))throw r.err;r.forEach(v=>{if(isErr(v))throw v.err;if(typeof v==="number")out.push(v)})}
+    else if(a.k==="ref"){const v=cellVal(a.v);if(isErr(v))throw v.err;if(typeof v==="number")out.push(v)}else out.push(num(ev(a)))}return out}
+  const FN={SUM:a=>flat(a).reduce((s,v)=>s+v,0),AVERAGE:a=>{const v=flat(a);if(!v.length)throw "#DIV/0!";return ST.mean(v)},
+    MEDIAN:a=>{const v=flat(a);if(!v.length)throw "#NUM!";return ST.median(v)},
+    MODE:a=>{const v=flat(a),c=new Map();v.forEach(x=>c.set(x,(c.get(x)||0)+1));let best=null,bc=1;for(const x of v){if(c.get(x)>bc){bc=c.get(x);best=x}}if(best==null)throw "#N/A";return best},
+    STDEV:a=>{const v=flat(a);if(v.length<2)throw "#DIV/0!";return ST.sd(v)},
+    "STDEV.P":a=>{const v=flat(a);if(!v.length)throw "#DIV/0!";const m=ST.mean(v);return Math.sqrt(v.reduce((s,x)=>s+(x-m)*(x-m),0)/v.length)},
+    VAR:a=>{const v=flat(a);if(v.length<2)throw "#DIV/0!";return ST.sd(v)**2},
+    COUNT:a=>flat(a).length,MIN:a=>{const v=flat(a);return v.length?Math.min(...v):0},MAX:a=>{const v=flat(a);return v.length?Math.max(...v):0},
+    SQRT:a=>{const x=num(ev(a[0]));if(x<0)throw "#NUM!";return Math.sqrt(x)},ABS:a=>Math.abs(num(ev(a[0]))),
+    ROUND:a=>{const x=num(ev(a[0])),d=a[1]?num(ev(a[1])):0,f=Math.pow(10,d);return Math.round(x*f)/f},POWER:a=>Math.pow(num(ev(a[0])),num(ev(a[1])))};
+  FN["MODE.SNGL"]=FN.MODE;FN["STDEV.S"]=FN.STDEV;FN["VAR.S"]=FN.VAR;FN.MEAN=null;
+  function ev(n){switch(n.k){case"num":return n.v;case"str":return n.v;case"ref":{const v=cellVal(n.v);if(isErr(v))throw v.err;return v==null?0:v}
+    case"rng":throw "#VALUE!";case"bad":throw "#NAME?";case"neg":return -num(ev(n.v));
+    case"bin":{const a=num(ev(n.a)),b=num(ev(n.b));if(n.o==="+")return a+b;if(n.o==="-")return a-b;if(n.o==="*")return a*b;if(n.o==="/"){if(b===0)throw "#DIV/0!";return a/b}return Math.pow(a,b)}
+    case"fn":{const f=FN[n.n];if(!f)throw "#NAME?";return f(n.args)}}}
+  const out={};for(let r=0;r<sh.rows;r++)for(let c=0;c<sh.cols;c++){const ref=colL(c)+(r+1);out[ref]=cellVal(ref)}return out}
+
+/* ---- sheets ---- */
+const H10=[138,139,145,145,145,145,150,169,170,180];
+const hc={A1:"Height (cm)",C1:"sample size (n) = 10",A11:"Mean",A12:"SD",A13:"SEM",A14:"Median",A15:"Mode",A16:"Range"};H10.forEach((v,i)=>hc["B"+(i+1)]=String(v));hc.A1="";
+for(let i=1;i<=10;i++)hc["A"+i]="Student "+i;
+const gc={B3:"New method",C3:"Conventional method",A9:"Mean",A10:"Median",A11:"Mode",A12:"SD",A13:"SEM"};
+[45.2,53.5,48.9,52.3,48.9].forEach((v,i)=>gc["B"+(i+4)]=String(v));[46.5,54,41.5,65.3,41.5].forEach((v,i)=>gc["C"+(i+4)]=String(v));for(let i=1;i<=5;i++)gc["A"+(i+3)]="Reading "+i;gc.A3="Glucose (mg/dL)";
+const M_H=[{c:["B11"],fn:"AVERAGE",v:[152.6],t:"Mean in <code>B11</code>",h:"=AVERAGE(B1:B10)"},{c:["B12"],fn:"STDEV",v:[14.7513],t:"Standard deviation in <code>B12</code>",h:"=STDEV(B1:B10)"},
+  {c:["B13"],fn:"SQRT",v:[4.6648],t:"SEM in <code>B13</code> (SD ÷ √n)",h:"=B12/SQRT(10)"},{c:["B14"],fn:"MEDIAN",v:[145],t:"Median in <code>B14</code>",h:"=MEDIAN(B1:B10)"},
+  {c:["B15"],fn:"MODE",v:[145],t:"Mode in <code>B15</code>",h:"=MODE(B1:B10)"},{c:["B16"],fn:"MAX",v:[42],t:"Range in <code>B16</code>",h:"=MAX(B1:B10)-MIN(B1:B10)"}];
+const M_G=[{c:["B9","C9"],fn:"AVERAGE",v:[49.76,49.76],t:"Mean of both methods in <code>B9</code> and <code>C9</code>",h:"=AVERAGE(B4:B8) · =AVERAGE(C4:C8)"},
+  {c:["B10","C10"],fn:"MEDIAN",v:[48.9,46.5],t:"Median in <code>B10</code> and <code>C10</code>",h:"=MEDIAN(B4:B8) · =MEDIAN(C4:C8)"},
+  {c:["B11","C11"],fn:"MODE",v:[48.9,41.5],t:"Mode in <code>B11</code> and <code>C11</code>",h:"=MODE(B4:B8) · =MODE(C4:C8)"},
+  {c:["B12","C12"],fn:"STDEV",v:[3.2677,10.0816],t:"SD in <code>B12</code> and <code>C12</code>",h:"=STDEV(B4:B8) · =STDEV(C4:C8)"},
+  {c:["B13","C13"],fn:"SQRT",v:[1.4614,4.5086],t:"SEM in <code>B13</code> and <code>C13</code>",h:"=B12/SQRT(5) · =C12/SQRT(5)"}];
+const SHEETS=[Sheet("Heights",hc,M_H,{cols:4,title:"Heights (Lesson 7)"}),Sheet("Glucose",gc,M_G,{cols:4,title:"Glucose · Practice 3 (Lesson 8)"}),Sheet("Bulletin",{A1:"Load a bulletin in 06 Bulletin Lab →"},[],{cols:4,title:"Bulletin data"})];
+let si=0,sel={c:1,r:10},edit=null,drag=null;
+addComps(M_H.length+M_G.length);
+
+/* ---- render ---- */
+const grid=$("#xlGrid"),fx=$("#xlFx");
+function disp(v){if(v==null)return"";if(isErr(v))return v.err;if(typeof v==="number"){if(Number.isInteger(v))return String(v);return String(+v.toFixed(4))}return v}
+function refsIn(txt){const s=new Set();if(!txt||txt[0]!=="=")return s;(txt.match(/\$?[A-Z]{1,2}\$?\d+(:\$?[A-Z]{1,2}\$?\d+)?/gi)||[]).forEach(m=>{const [a,b]=m.replace(/\$/g,"").toUpperCase().split(":");const A=parseRef(a),Bb=parseRef(b||a);if(!A||!Bb)return;for(let r=Math.min(A.r,Bb.r);r<=Math.max(A.r,Bb.r);r++)for(let c=Math.min(A.c,Bb.c);c<=Math.max(A.c,Bb.c);c++)s.add(colL(c)+(r+1))});return s}
+function render(){const sh=SHEETS[si],vals=evalSheet(sh),hl=refsIn(edit?edit.text:"");let h="<table><thead><tr><th class='rh'></th>";for(let c=0;c<sh.cols;c++)h+="<th>"+colL(c)+"</th>";h+="</tr></thead><tbody>";
+  for(let r=0;r<sh.rows;r++){h+="<tr><th class='rh'>"+(r+1)+"</th>";for(let c=0;c<sh.cols;c++){const ref=colL(c)+(r+1),raw=sh.cells[ref],v=vals[ref],isF=typeof raw==="string"&&raw[0]==="=";
+    const cls=[typeof v==="number"?"num":"",isF?"fx":"",isErr(v)?"err":"",(sel.c===c&&sel.r===r)?"sel":"",hl.has(ref)?"ref":"",(typeof v==="string"&&!isF)?"lbl":""].join(" ");
+    h+="<td data-c='"+c+"' data-r='"+r+"' class='"+cls+"'>"+(edit&&edit.via==="cell"&&sel.c===c&&sel.r===r?"":escapeH(disp(v)))+"</td>"}h+="</tr>"}
+  grid.innerHTML=h+"</tbody></table>";
+  const ref=colL(sel.c)+(sel.r+1);$("#xlNm").textContent=ref;if(!edit)fx.value=sh.cells[ref]||"";
+  if(edit&&edit.via==="cell"){const td=grid.querySelector("td.sel"),inp=el("input");inp.value=edit.text;td.appendChild(inp);inp.focus();const L=inp.value.length;inp.setSelectionRange(L,L);inp.oninput=()=>{edit.text=inp.value;fx.value=inp.value;hlOnly()};inp.onkeydown=keyEdit;edit.inp=inp}
+  checkMissions(vals)}
+const escapeH=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function hlOnly(){const hl=refsIn(edit?edit.text:"");$$("td",grid).forEach(td=>{const ref=colL(+td.dataset.c)+(+td.dataset.r+1);td.classList.toggle("ref",hl.has(ref))})}
+function startEdit(text,via){edit={text,via};fx.value=text;render();if(via==="bar")fx.focus()}
+function commit(move){if(!edit)return;const sh=SHEETS[si],ref=colL(sel.c)+(sel.r+1);let t=edit.text;if(t.trim()==="")delete sh.cells[ref];else sh.cells[ref]=t;edit=null;
+  if(move==="down")sel.r=Math.min(sh.rows-1,sel.r+1);if(move==="right")sel.c=Math.min(sh.cols-1,sel.c+1);render();grid.focus()}
+function cancel(){edit=null;render();grid.focus()}
+function keyEdit(e){if(["Enter","Tab","Escape"].includes(e.key))e.stopPropagation();if(e.key==="Enter"){e.preventDefault();commit("down")}else if(e.key==="Tab"){e.preventDefault();commit("right")}else if(e.key==="Escape"){e.preventDefault();cancel()}}
+grid.tabIndex=0;
+grid.addEventListener("keydown",e=>{if(edit)return;const sh=SHEETS[si];const k=e.key;
+  if(k==="ArrowDown"){sel.r=Math.min(sh.rows-1,sel.r+1)}else if(k==="ArrowUp"){sel.r=Math.max(0,sel.r-1)}else if(k==="ArrowLeft"){sel.c=Math.max(0,sel.c-1)}else if(k==="ArrowRight"||k==="Tab"){sel.c=Math.min(sh.cols-1,sel.c+1)}
+  else if(k==="Enter"||k==="F2"){startEdit(sh.cells[colL(sel.c)+(sel.r+1)]||"","cell");e.preventDefault();return}
+  else if(k==="Delete"||k==="Backspace"){delete sh.cells[colL(sel.c)+(sel.r+1)]}
+  else if(k.length===1&&!e.ctrlKey&&!e.metaKey){startEdit(k,"cell");e.preventDefault();return}else return;
+  e.preventDefault();render()});
+const canInsert=()=>edit&&edit.text[0]==="="&&/[=(,+\-*/^:]$/.test(edit.text.trimEnd())||(edit&&drag);
+grid.addEventListener("mousedown",e=>{const td=e.target.closest("td");if(!td)return;const c=+td.dataset.c,r=+td.dataset.r;
+  if(edit&&edit.text[0]==="="&&(canInsert()||(edit._ins&&edit.text.endsWith(edit._ins)))){e.preventDefault();
+    if(edit._ins&&edit.text.endsWith(edit._ins)&&!/[=(,+\-*/^:]$/.test(edit.text))edit.text=edit.text.slice(0,-edit._ins.length);
+    const ref=colL(c)+(r+1);edit.text+=ref;edit._ins=ref;edit._base=edit.text.slice(0,-ref.length);drag={c,r};fx.value=edit.text;if(edit.inp)edit.inp.value=edit.text;hlOnly();
+    if(edit.via==="cell"&&edit.inp)setTimeout(()=>edit&&edit.inp&&edit.inp.focus(),0);else setTimeout(()=>fx.focus(),0);return}
+  e.preventDefault();if(edit)commit();sel={c,r};render();grid.focus()});
+grid.addEventListener("mouseover",e=>{if(!drag||!edit)return;const td=e.target.closest("td");if(!td)return;const c=+td.dataset.c,r=+td.dataset.r;const a=colL(drag.c)+(drag.r+1),b=colL(c)+(r+1);const ins=a===b?a:a+":"+b;edit.text=edit._base+ins;edit._ins=ins;fx.value=edit.text;if(edit.inp)edit.inp.value=edit.text;hlOnly()});
+addEventListener("mouseup",()=>{drag=null});
+grid.addEventListener("dblclick",e=>{const td=e.target.closest("td");if(!td||edit)return;sel={c:+td.dataset.c,r:+td.dataset.r};startEdit(SHEETS[si].cells[colL(sel.c)+(sel.r+1)]||"","cell")});
+fx.addEventListener("focus",()=>{if(!edit){edit={text:fx.value,via:"bar"};hlOnly()}});
+fx.addEventListener("input",()=>{if(!edit)edit={text:"",via:"bar"};edit.text=fx.value;edit._ins=null;hlOnly()});
+fx.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();if(!edit)edit={text:fx.value,via:"bar"};commit("down")}else if(e.key==="Escape"){cancel()}});
+fx.addEventListener("blur",()=>{setTimeout(()=>{if(edit&&edit.via==="bar"&&document.activeElement!==fx&&!drag)commit()},150)});
+
+/* ---- tabs & missions ---- */
+function tabs(){const t=$("#xlTabs");t.innerHTML="";SHEETS.forEach((s,i)=>{const b=el("button",i===si?"on":"",s.name);b.onclick=()=>{if(edit)commit();si=i;sel=i===0?{c:1,r:10}:i===1?{c:1,r:8}:{c:1,r:1};tabs();mis();render()};t.appendChild(b)})}
+const solved=new Set();
+function mis(){const sh=SHEETS[si],w=$("#xlMis");$("#xlMT").textContent=sh.title;w.innerHTML="";
+  if(!sh.missions.length){w.innerHTML="<p class='mute'>Load a bulletin in <b class='hl'>06 Bulletin Lab</b> and press <b>Practise in Excel Lab</b> – your data and missions will appear here.</p>";return}
+  sh.missions.forEach((m,i)=>{const d=el("div","mi"+(solved.has(sh.name+i)?" ok":""),"<span class='k'>"+(solved.has(sh.name+i)?"✔":i+1)+"</span><p>"+m.t+"</p><button class='btn ghost sm'>Hint</button><div class='hintx'>Type: <code>"+m.h+"</code></div>");
+    d.querySelector("button").onclick=()=>d.querySelector(".hintx").classList.toggle("show");d.dataset.k=sh.name+i;w.appendChild(d)})}
+function checkMissions(vals){const sh=SHEETS[si];sh.missions.forEach((m,i)=>{const key=sh.name+i;if(solved.has(key))return;
+  const ok=m.c.every((ref,j)=>{const raw=sh.cells[ref]||"",v=vals[ref];return raw[0]==="="&&(!m.fn||raw.toUpperCase().includes(m.fn))&&typeof v==="number"&&Math.abs(v-m.v[j])<=Math.max(0.01,Math.abs(m.v[j])*0.0005)});
+  if(ok){solved.add(key);if(!m.noxp)markDone(null,"xl"+key);const d=$(".mi[data-k='"+key+"']");if(d){d.classList.add("ok");d.querySelector(".k").textContent="✔"}}})}
+$("#xlReset").onclick=()=>{const sh=SHEETS[si];sh.cells=Object.assign({},sh.init);edit=null;render()};
+
+/* ---- bulletin loader (called from Bulletin Lab) ---- */
+window.__xlLoadBulletin=function(names,vals,colName){const sh=SHEETS[2],n=vals.length,cells={A1:"Disease",B1:colName};names.forEach((d,i)=>{cells["A"+(i+2)]=d;cells["B"+(i+2)]=String(vals[i])});
+  const e=n+1,r0=n+3;["Mean","Median","Mode","SD","n","SEM","Range"].forEach((l,i)=>cells["A"+(r0+i)]=l);
+  sh.rows=Math.max(22,r0+9);sh.cells=cells;sh.init=Object.assign({},cells);
+  const rg="B2:B"+e,c=k=>"B"+(r0+k);const md=(()=>{const cnt=new Map();let best=null,bc=1;vals.forEach(x=>cnt.set(x,(cnt.get(x)||0)+1));vals.forEach(x=>{if(cnt.get(x)>bc){bc=cnt.get(x);best=x}});return best})();
+  sh.missions=[{c:[c(0)],fn:"AVERAGE",v:[ST.mean(vals)],t:"Mean in <code>"+c(0)+"</code>",h:"=AVERAGE("+rg+")",noxp:1},{c:[c(1)],fn:"MEDIAN",v:[ST.median(vals)],t:"Median in <code>"+c(1)+"</code>",h:"=MEDIAN("+rg+")",noxp:1}]
+   .concat(md!=null?[{c:[c(2)],fn:"MODE",v:[md],t:"Mode in <code>"+c(2)+"</code>",h:"=MODE("+rg+")",noxp:1}]:[])
+   .concat([{c:[c(3)],fn:"STDEV",v:[ST.sd(vals)],t:"SD in <code>"+c(3)+"</code>",h:"=STDEV("+rg+")",noxp:1},{c:[c(4)],fn:"COUNT",v:[n],t:"n in <code>"+c(4)+"</code>",h:"=COUNT("+rg+")",noxp:1},
+     {c:[c(5)],fn:"SQRT",v:[ST.sem(vals)],t:"SEM in <code>"+c(5)+"</code>",h:"="+c(3)+"/SQRT("+c(4)+")",noxp:1},{c:[c(6)],fn:"MAX",v:[Math.max(...vals)-Math.min(...vals)],t:"Range in <code>"+c(6)+"</code>",h:"=MAX("+rg+")-MIN("+rg+")",noxp:1}]);
+  [...solved].filter(k=>k.startsWith("Bulletin")).forEach(k=>solved.delete(k));
+  si=2;sel={c:1,r:r0-1};edit=null;tabs();mis();render()};
+window.__xlEval=evalSheet;window.__xlSheets=SHEETS;
+tabs();mis();render();
+})();
+
+/* ================= BULLETIN LAB ================= */
+(function(){
+"use strict";
+const {$,$$,el,sv,ST,fmt,markDone,addComps,go,O,B}=window.__core;
+const PDFJS="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+let T=null,groups=[],gi=0,title="",ci=0,fi=0;addComps(2);
+const stat=(t,c)=>{const s=$("#bStat");s.className="status "+(c||"");s.innerHTML=t};
+const NUMRE=/^\(?[-+]?(\d{1,3}(,\d{3})+|\d+)(\.\d+)?\)?[*#†]?$/,NULLRE=/^(-|–|—|NA|N\.A\.|n\.a\.|nil|N\/A)$/i;
+const toNum=s=>{if(NULLRE.test(s))return null;const v=parseFloat(s.replace(/[(),*#†]/g,""));return Number.isFinite(v)?v:null};
+const SAMPLE={headers:["EW 38","EW 39","EW 40","EW 41","EW 42","EW 43","Cum. 2026"],rows:[
+ ["Campylobacter enteritis",14,19,12,17,15,21,698],["Chikungunya fever",0,1,0,0,2,0,21],["Dengue fever",88,95,104,97,112,126,3890],["Dengue haemorrhagic fever",0,1,0,0,1,0,9],
+ ["Hand, foot and mouth disease",412,455,498,521,476,433,19210],["Hepatitis A",1,0,2,1,0,1,47],["Hepatitis B (acute)",1,0,0,1,0,0,22],["Hepatitis E",1,1,0,2,1,0,40],
+ ["Legionellosis",0,1,0,0,1,0,18],["Malaria",1,0,1,0,0,1,30],["Measles",0,0,1,0,0,0,9],["Melioidosis",0,1,0,1,0,0,26],["Murine typhus",0,0,0,1,0,0,7],
+ ["Paratyphoid",0,0,1,0,0,0,12],["Pertussis",2,1,3,1,2,1,74],["Pneumococcal disease (invasive)",3,2,4,3,5,4,148],["Salmonellosis (non-enteric fevers)",31,28,35,26,33,29,1340],
+ ["Tuberculosis",27,31,25,29,30,28,1180],["Typhoid",0,1,0,0,1,0,19],["Zika virus infection",0,0,0,1,0,0,6]]};
+
+/* ---------- load libs on demand ---------- */
+const loadJs=src=>new Promise((res,rej)=>{if([...document.scripts].some(s=>s.src===src))return res();const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error("Could not load "+src));document.head.appendChild(s)});
+async function pdfLib(){if(!window.pdfjsLib){await loadJs(PDFJS+"pdf.min.js")}window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+"pdf.worker.min.js";return window.pdfjsLib}
+async function xlsxLib(){if(!window.XLSX)await loadJs("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");return window.XLSX}
+
+/* ---------- PDF → candidate tables ---------- */
+async function readPdf(buf){const lib=await pdfLib();const pdf=await lib.getDocument({data:buf}).promise;const allRows=[];
+  for(let p=1;p<=pdf.numPages;p++){const pg=await pdf.getPage(p),tc=await pg.getTextContent();
+    const it=tc.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str.trim(),x:i.transform[4],y:i.transform[5],w:i.width||0})).sort((a,b)=>b.y-a.y||a.x-b.x);
+    const rows=[];it.forEach(i=>{const r=rows.find(r=>Math.abs(r.y-i.y)<=3);if(r)r.items.push(i);else rows.push({y:i.y,items:[i],page:p})});
+    rows.forEach(r=>{r.items.sort((a,b)=>a.x-b.x);const tok=[];r.items.forEach(i=>i.s.split(/\s+/).forEach(t=>t&&tok.push(t)));r.tok=tok;r.cells=r.items.map(i=>i.s)});
+    rows.sort((a,b)=>b.y-a.y);allRows.push(...rows)}
+  const cand=[];allRows.forEach((r,idx)=>{let k=0;const lab=[];while(k<r.tok.length&&!(NUMRE.test(r.tok[k])||NULLRE.test(r.tok[k])))lab.push(r.tok[k++]);const nums=[];while(k<r.tok.length&&(NUMRE.test(r.tok[k])||NULLRE.test(r.tok[k])))nums.push(toNum(r.tok[k++]));
+    const name=lab.join(" ").replace(/\s+/g," ").trim();if(name.length>=3&&/[A-Za-z]{2}/.test(name)&&nums.length>=1&&nums.some(v=>v!=null))cand.push({name,vals:nums,n:nums.length,idx,page:r.page})});
+  const by={};cand.forEach(c=>(by[c.n]=by[c.n]||[]).push(c));
+  groups=Object.keys(by).map(n=>{const rs=by[n];const first=rs[0];let headers=null;
+    for(let j=first.idx-1;j>=Math.max(0,first.idx-4);j--){const r=allRows[j];if(r.page!==first.page)break;if(r.cells.length>=+n){headers=r.cells.slice(-n);break}}
+    return{n:+n,pages:[...new Set(rs.map(r=>r.page))],table:{headers:headers||Array.from({length:+n},(_,i)=>"Col "+(i+1)),rows:rs.map(r=>({name:r.name,vals:r.vals,on:!/total|grand/i.test(r.name)}))}}})
+   .filter(g=>g.table.rows.length>=3).sort((a,b)=>(b.table.rows.length*(b.n>=2?1:.3))-(a.table.rows.length*(a.n>=2?1:.3)));
+  return groups}
+
+/* ---------- UI: upload ---------- */
+const drop=$("#drop"),inp=$("#pdfIn");
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over")}));
+drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)handle(f)});inp.onchange=()=>{if(inp.files[0])handle(inp.files[0])};
+async function handle(f){if(!/\.pdf$/i.test(f.name)&&f.type!=="application/pdf"){stat("Please choose a PDF file.","bad");return}
+  title=f.name.replace(/\.pdf$/i,"").replace(/Weekly Infectious Disease Bulletin/i,"Bulletin").trim();stat("Reading "+f.name+" …");
+  try{const g=await readPdf(await f.arrayBuffer());if(!g.length){stat("No number tables found. The PDF may be scanned. Use <b>Paste data instead</b>.","bad");return}
+    stat("✔ Found "+g.length+" table"+(g.length>1?"s":"")+". Check the table below.","ok");gi=0;showReview()}
+  catch(err){stat("Could not read this PDF ("+(err&&err.message||err)+"). Check your internet connection, or use <b>Paste data instead</b>.","bad")}}
+$("#useSample").onclick=()=>{groups=[{n:7,pages:[1],table:JSON.parse(JSON.stringify({headers:SAMPLE.headers,rows:SAMPLE.rows.map(r=>({name:r[0],vals:r.slice(1),on:true}))}))}];gi=0;title="Sample bulletin (illustrative)";stat("✔ Sample data loaded – <b>illustrative numbers, not real CDA data</b>.","ok");showReview()};
+$("#showPaste").onclick=()=>{const b=$("#pasteBox");b.style.display=b.style.display==="none"?"":"none"};
+$("#pasteGo").onclick=()=>{const lines=$("#pasteIn").value.split(/\r?\n/).map(l=>l.split(/\t|,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(s=>s.trim().replace(/^"|"$/g,""))).filter(l=>l.length>=2&&l[0]);
+  if(lines.length<2){stat("Paste at least a header row and 2 data rows.","bad");return}
+  const hasHead=lines[0].slice(1).some(s=>toNum(s)==null);const head=hasHead?lines.shift():["Disease",...lines[0].slice(1).map((_,i)=>"Col "+(i+1))];const n=head.length-1;
+  groups=[{n,pages:[],table:{headers:head.slice(1),rows:lines.map(l=>({name:l[0],vals:Array.from({length:n},(_,i)=>toNum(l[i+1]||"")),on:true}))}}];gi=0;title="Pasted data";stat("✔ "+lines.length+" rows loaded.","ok");showReview()};
+
+/* ---------- review table ---------- */
+const isCum=h=>/cum|total|ytd/i.test(h);
+function showReview(){$("#bReview").style.display="";$("#bRep").classList.remove("show");
+  const gs=$("#bGrp");gs.innerHTML=groups.map((g,i)=>"<option value='"+i+"'>"+g.table.rows.length+" rows × "+g.n+" cols"+(g.pages.length?" · p."+g.pages.join(","):"")+"</option>").join("");gs.value=gi;gs.onchange=()=>{gi=+gs.value;fillSel();drawTable()};
+  T=groups[gi].table;fillSel();drawTable();$("#bReview").scrollIntoView({behavior:"smooth",block:"start"})}
+function fillSel(){T=groups[gi].table;const cs=$("#bCol");cs.innerHTML=T.headers.map((h,i)=>"<option value='"+i+"'>"+h+"</option>").join("");
+  ci=T.headers.findIndex(h=>!isCum(h));if(ci<0)ci=0;const wk=T.headers.map((h,i)=>i).filter(i=>!isCum(T.headers[i]));if(wk.length>1)ci=wk[wk.length-1];cs.value=ci;cs.onchange=()=>{ci=+cs.value;drawTable();fillDis()};fillDis()}
+function fillDis(){const ds=$("#bDis"),on=T.rows.map((r,i)=>i).filter(i=>T.rows[i].on);ds.innerHTML=on.map(i=>"<option value='"+i+"'>"+T.rows[i].name+"</option>").join("");
+  let best=on[0];on.forEach(i=>{if((T.rows[i].vals[ci]??-1)>(T.rows[best].vals[ci]??-1))best=i});const dg=on.find(i=>/dengue fever/i.test(T.rows[i].name));fi=dg!=null?dg:best;ds.value=fi;ds.onchange=()=>fi=+ds.value}
+function drawTable(){const w=$("#bTab");let h="<table><thead><tr><th>✓</th><th>DISEASE</th>"+T.headers.map((x,i)=>"<th class='"+(i===ci?"colsel":"")+"'><input data-h='"+i+"' value='"+x.replace(/'/g,"&#39;")+"'></th>").join("")+"</tr></thead><tbody>";
+  T.rows.forEach((r,ri)=>{h+="<tr class='"+(r.on?"":"off")+"'><td><input type='checkbox' data-on='"+ri+"' "+(r.on?"checked":"")+"></td><td contenteditable data-n='"+ri+"'>"+r.name+"</td>"+r.vals.map((v,i)=>"<td contenteditable data-r='"+ri+"' data-i='"+i+"' class='"+(i===ci?"colsel":"")+"'>"+(v==null?"–":v)+"</td>").join("")+"</tr>"});
+  w.innerHTML=h+"</tbody></table>";
+  $$("[data-h]",w).forEach(x=>x.onchange=()=>{T.headers[+x.dataset.h]=x.value;const k=$("#bCol").value;fillSel();$("#bCol").value=k;ci=+k});
+  $$("[data-on]",w).forEach(x=>x.onchange=()=>{T.rows[+x.dataset.on].on=x.checked;x.closest("tr").classList.toggle("off",!x.checked);fillDis()});
+  $$("[data-n]",w).forEach(x=>x.onblur=()=>{T.rows[+x.dataset.n].name=x.textContent.trim();fillDis()});
+  $$("td[data-r]",w).forEach(x=>x.onblur=()=>{const v=toNum(x.textContent.trim().replace(/\s/g,""));T.rows[+x.dataset.r].vals[+x.dataset.i]=v;x.textContent=v==null?"–":v})}
+
+/* ---------- report ---------- */
+let R=null;
+$("#bRun").onclick=()=>{fi=+$("#bDis").value;ci=+$("#bCol").value;const rows=T.rows.filter(r=>r.on&&r.vals[ci]!=null);if(rows.length<3){stat("Need at least 3 diseases with numbers in this column.","bad");return}
+  const vals=rows.map(r=>r.vals[ci]),names=rows.map(r=>r.name),n=vals.length,mean=ST.mean(vals),med=ST.median(vals),sd=ST.sd(vals),sem=sd/Math.sqrt(n),modes=ST.modes(vals);
+  const fr=T.rows[fi],wk=T.headers.map((h,i)=>i).filter(i=>!isCum(T.headers[i])&&fr.vals[i]!=null),series=wk.map(i=>({h:T.headers[i],v:fr.vals[i]}));
+  R={vals,names,n,mean,med,sd,sem,modes,col:T.headers[ci],total:vals.reduce((a,b)=>a+b,0),min:Math.min(...vals),max:Math.max(...vals),focus:fr.name,series,q1:ST.q(vals,.25),q3:ST.q(vals,.75)};
+  $("#rTitle").textContent=title+" · "+R.col;
+  $("#rT").innerHTML=[["Diseases (n)",n],["Total cases",fmt(R.total,0)],["Mean",fmt(mean,2),"o"],["Median",fmt(med,2),"o"],["Mode",modes.length?modes.map(v=>fmt(v,0)).join(", "):"none","w"],["Standard deviation",fmt(sd,2)],["SEM",fmt(sem,2)],["Min",fmt(R.min,0)],["Max",fmt(R.max,0)],["Range",fmt(R.max-R.min,0)],["95% CI of mean",fmt(mean-1.96*sem,1)+" – "+fmt(mean+1.96*sem,1),"w"]]
+    .map(t=>"<div class='"+(t[2]||"")+"'><b>"+t[1]+"</b><span>"+t[0]+"</span></div>").join("");
+  drawTop();drawDist();drawTrend();interp();$("#bRep").classList.add("show");$("#rFocusN").textContent=R.focus;$("#bRep").scrollIntoView({behavior:"smooth",block:"start"});markDone(null,"bulletin")};
+function drawTop(){const s=$("#rTop");s.innerHTML="";const top=R.names.map((n,i)=>({n,v:R.vals[i]})).sort((a,b)=>b.v-a.v).slice(0,10),mx=Math.max(...top.map(t=>t.v))||1,X=v=>300+540*v/mx;
+  top.forEach((t,i)=>{const y=10+i*31;sv("text",{x:290,y:y+15,"text-anchor":"end",style:"fill:"+(t.n===R.focus?"#ffa13d":"#d7f6ff")},s).textContent=t.n.length>34?t.n.slice(0,33)+"…":t.n;
+    const r=sv("rect",{x:300,y,width:0,height:22,fill:i===0?O:B,"fill-opacity":i===0?.9:.65,style:"transition:width .8s"},s);setTimeout(()=>r.setAttribute("width",Math.max(2,X(t.v)-300)),40+i*40);
+    sv("text",{x:X(t.v)+6,y:y+16,style:"fill:#fff;font-weight:800"},s).textContent=fmt(t.v,0)});
+  const xm=X(R.mean);if(R.mean<=mx){sv("line",{x1:xm,x2:xm,y1:4,y2:322,stroke:"#fff","stroke-dasharray":"5 4"},s);sv("text",{x:xm+4,y:326,style:"fill:#fff"},s).textContent="MEAN "+fmt(R.mean,1)}}
+function drawDist(){const s=$("#rDist");s.innerHTML="";const lg=$("#rLog").checked,tf=v=>lg?Math.log10(v+1):v,mx=tf(R.max)||1,X=v=>40+820*tf(v)/mx;
+  const ticks=lg?[0,1,10,100,1000,10000].filter(v=>v<=R.max*1.01):Array.from({length:6},(_,i)=>R.max*i/5);
+  ticks.forEach(v=>{sv("line",{x1:X(v),x2:X(v),y1:20,y2:150,stroke:"rgba(0,229,255,.1)"},s);sv("text",{x:X(v),y:168,"text-anchor":"middle"},s).textContent=fmt(v,0)});
+  if(!lg&&R.mean-R.sd<R.max)sv("rect",{x:X(Math.max(0,R.mean-R.sd)),y:24,width:Math.max(2,X(Math.min(R.max,R.mean+R.sd))-X(Math.max(0,R.mean-R.sd))),height:120,fill:B,"fill-opacity":.08,stroke:B,"stroke-dasharray":"4 4"},s);
+  sv("rect",{x:X(R.q1),y:58,width:Math.max(2,X(R.q3)-X(R.q1)),height:52,fill:"none",stroke:"#fff","stroke-opacity":.6},s);
+  R.vals.forEach((v,i)=>sv("circle",{cx:X(v),cy:84+((i*17)%40-20),r:5,fill:R.names[i]===R.focus?"#fff":B,"fill-opacity":.85},s));
+  sv("line",{x1:X(R.med),x2:X(R.med),y1:40,y2:128,stroke:B,"stroke-width":3},s);sv("text",{x:X(R.med),y:36,"text-anchor":"middle",style:"fill:#00e5ff"},s).textContent="MEDIAN "+fmt(R.med,1);
+  sv("line",{x1:X(R.mean),x2:X(R.mean),y1:40,y2:142,stroke:O,"stroke-width":3},s);sv("text",{x:X(R.mean),y:184,"text-anchor":"middle",style:"fill:#ffa13d"},s).textContent="MEAN "+fmt(R.mean,1);
+  sv("text",{x:860,y:14,"text-anchor":"end"},s).textContent=(lg?"LOG SCALE · ":"")+"BOX = MIDDLE 50% · "+(lg?"":"SHADED = MEAN ± 1 SD")}
+$("#rLog").onchange=()=>R&&drawDist();
+function drawTrend(){const s=$("#rTrend");s.innerHTML="";const d=R.series;if(d.length<2){sv("text",{x:450,y:110,"text-anchor":"middle",style:"fill:#7fa3b5;font-size:13px"},s).textContent="Only one weekly value for this disease – no trend to show.";$("#rFT").innerHTML="";return}
+  const v=d.map(x=>x.v),m=ST.mean(v),sd=ST.sd(v),mx=Math.max(...v,m+sd)*1.15||1,X=i=>70+780*i/(d.length-1),Y=y=>190-170*y/mx;
+  sv("rect",{x:60,y:Y(m+sd),width:800,height:Math.max(1,Y(Math.max(0,m-sd))-Y(m+sd)),fill:B,"fill-opacity":.08},s);sv("line",{x1:60,x2:860,y1:Y(m),y2:Y(m),stroke:O,"stroke-dasharray":"6 4","stroke-width":2},s);
+  sv("text",{x:862,y:Y(m)-4,"text-anchor":"end",style:"fill:#ffa13d"},s).textContent="WEEKLY MEAN "+fmt(m,1);
+  let p="";d.forEach((x,i)=>p+=(i?"L":"M")+X(i)+" "+Y(x.v));sv("path",{d:p,fill:"none",stroke:B,"stroke-width":3,style:"filter:drop-shadow(0 0 5px #00e5ff)"},s);
+  d.forEach((x,i)=>{sv("circle",{cx:X(i),cy:Y(x.v),r:6,fill:i===d.length-1?O:B},s);sv("text",{x:X(i),y:Y(x.v)-12,"text-anchor":"middle",style:"fill:#fff;font-weight:800"},s).textContent=fmt(x.v,0);sv("text",{x:X(i),y:214,"text-anchor":"middle"},s).textContent=x.h});
+  const last=v[v.length-1],prev=v[v.length-2];$("#rFT").innerHTML="<div class='o'><b>"+fmt(m,2)+"</b><span>Weekly mean</span></div><div><b>"+fmt(ST.median(v),1)+"</b><span>Weekly median</span></div><div><b>"+fmt(sd,2)+"</b><span>Weekly SD</span></div><div><b>"+fmt(sd/Math.sqrt(v.length),2)+"</b><span>SEM</span></div><div class='w'><b>"+(last-prev>=0?"+":"")+fmt(last-prev,0)+"</b><span>Change vs previous week</span></div>"}
+function interp(){const L=[],top=R.names.map((n,i)=>({n,v:R.vals[i]})).sort((a,b)=>b.v-a.v),share=top[0].v/R.total*100;
+  L.push("Across <b>"+R.n+"</b> diseases in <b>"+R.col+"</b> there were <b>"+fmt(R.total,0)+"</b> cases. Mean = <b>"+fmt(R.mean,1)+"</b>, median = <b>"+fmt(R.med,1)+"</b>.");
+  if(R.mean>R.med*1.5)L.push("The mean is much larger than the median → the data are <b>right-skewed</b>. A few diseases dominate: <b>"+top[0].n+"</b> alone is "+fmt(share,0)+"% of all cases. The <b>median</b> better describes a 'typical' disease.");
+  else L.push("Mean and median are fairly close → no extreme skew in this column.");
+  if(R.modes.length)L.push("Mode = <b>"+R.modes.map(v=>fmt(v,0)).join(", ")+"</b>"+(R.modes[0]===0?" – many diseases had <b>zero</b> cases this week; most notifiable diseases are rare.":" – the most common count."));else L.push("No value repeats, so there is <b>no mode</b>.");
+  L.push("SD = <b>"+fmt(R.sd,1)+"</b>"+(R.sd>R.mean?" – bigger than the mean, so counts are <b>very spread out</b> (from "+fmt(R.min,0)+" to "+fmt(R.max,0)+").":" – counts are moderately spread."));
+  L.push("SEM = SD ÷ √"+R.n+" = <b>"+fmt(R.sem,2)+"</b>; 95% CI of the mean ≈ <b>"+fmt(R.mean-1.96*R.sem,1)+" to "+fmt(R.mean+1.96*R.sem,1)+"</b>. A wide interval means the mean is an uncertain summary here.");
+  const v=R.series.map(x=>x.v);if(v.length>=3){const m=ST.mean(v),sd=ST.sd(v),last=v[v.length-1];L.push("<b>"+R.focus+"</b>: latest week = <b>"+fmt(last,0)+"</b> vs weekly mean "+fmt(m,1)+" ± "+fmt(sd,1)+" SD → "+(last>m+sd?"<b class='hl'>unusually high</b> – worth watching.":last<m-sd?"<b class='hb'>lower than usual</b>.":"within its usual range.")+" "+(v[v.length-1]>v[0]?"Overall trend: rising.":v[v.length-1]<v[0]?"Overall trend: falling.":"Overall: stable."))}
+  R.interp=L;$("#rInt").innerHTML=L.map(x=>"<li>"+x+"</li>").join("")}
+
+/* ---------- Excel export ---------- */
+$("#rXlsx").onclick=async()=>{const st=$("#rStat");st.className="status";st.textContent="Building Excel file…";
+  try{const X=await xlsxLib();const wb=X.utils.book_new();
+    const all=[["Disease",...T.headers,"Included"]].concat(T.rows.map(r=>[r.name,...r.vals.map(v=>v==null?"":v),r.on?"Yes":"No"]));const ws1=X.utils.aoa_to_sheet(all);ws1["!cols"]=[{wch:36}].concat(T.headers.map(()=>({wch:12})));X.utils.book_append_sheet(wb,ws1,"Bulletin data");
+    const n=R.n,e=n+1,rg="B2:B"+e,a=[["Disease",R.col]].concat(R.names.map((nm,i)=>[nm,R.vals[i]]));const ws=X.utils.aoa_to_sheet(a);const r0=n+3;
+    const F=[["Mean","AVERAGE("+rg+")",R.mean],["Median","MEDIAN("+rg+")",R.med],["Mode","MODE("+rg+")",R.modes.length?R.modes[0]:null],["Standard deviation","STDEV("+rg+")",R.sd],["n","COUNT("+rg+")",n],
+      ["SEM","B"+(r0+3)+"/SQRT(B"+(r0+4)+")",R.sem],["Minimum","MIN("+rg+")",R.min],["Maximum","MAX("+rg+")",R.max],["Range","B"+(r0+7)+"-B"+(r0+6),R.max-R.min],["95% CI lower","B"+r0+"-1.96*B"+(r0+5),R.mean-1.96*R.sem],["95% CI upper","B"+r0+"+1.96*B"+(r0+5),R.mean+1.96*R.sem]];
+    X.utils.sheet_add_aoa(ws,[["STATISTIC","VALUE (live Excel formula)","FORMULA USED"]],{origin:"A"+(r0-1)});
+    F.forEach((f,i)=>{const row=r0+i;ws["A"+row]={t:"s",v:f[0]};ws["B"+row]=f[2]==null?{t:"e",v:42,f:f[1],w:"#N/A"}:{t:"n",v:+f[2].toFixed(6),f:f[1]};ws["C"+row]={t:"s",v:"="+f[1]}});
+    ws["!ref"]="A1:C"+(r0+F.length);ws["!cols"]=[{wch:36},{wch:24},{wch:30}];X.utils.book_append_sheet(wb,ws,"Summary statistics");
+    if(R.series.length){const s=[["Week",R.focus]].concat(R.series.map(x=>[x.h,x.v]));const w3=X.utils.aoa_to_sheet(s),m=R.series.length+1,r=m+2,rg2="B2:B"+m,v=R.series.map(x=>x.v);
+      [["Weekly mean","AVERAGE("+rg2+")",ST.mean(v)],["Weekly median","MEDIAN("+rg2+")",ST.median(v)],["Weekly SD","STDEV("+rg2+")",v.length>1?ST.sd(v):0],["SEM","B"+(r+2)+"/SQRT(COUNT("+rg2+"))",v.length>1?ST.sem(v):0]]
+        .forEach((f,i)=>{w3["A"+(r+i)]={t:"s",v:f[0]};w3["B"+(r+i)]={t:"n",v:+f[2].toFixed(6),f:f[1]}});w3["!ref"]="A1:B"+(r+3);w3["!cols"]=[{wch:24},{wch:16}];X.utils.book_append_sheet(wb,w3,"Focus disease")}
+    const top=R.names.map((nm,i)=>[nm,R.vals[i]]).sort((a,b)=>b[1]-a[1]).slice(0,10);X.utils.book_append_sheet(wb,X.utils.aoa_to_sheet([["Top 10 diseases",R.col]].concat(top)),"Top 10");
+    const it=[["Interpretation – "+title+" ("+R.col+")"],[""]].concat(R.interp.map(t=>[t.replace(/<[^>]+>/g,"")]));const w5=X.utils.aoa_to_sheet(it);w5["!cols"]=[{wch:140}];X.utils.book_append_sheet(wb,w5,"Interpretation");
+    X.writeFile(wb,("S249_Bulletin_Report_"+title+"_"+R.col).replace(/[^\w\-]+/g,"_").slice(0,80)+".xlsx");st.className="status ok";st.textContent="✔ Excel report downloaded. Formulas in 'Summary statistics' recalculate in Excel.";markDone(null,"bxlsx")}
+  catch(err){st.className="status bad";st.textContent="Could not build the Excel file ("+(err&&err.message||err)+"). Check your internet connection."}};
+$("#rToLab").onclick=()=>{if(!R)return;window.__xlLoadBulletin(R.names,R.vals,R.col);go(5)};
+window.__bulletinTest={readPdf,get R(){return R}};
+})();
+
+/* ================= PRACTICE + REVIEW QUIZ ================= */
+(function(){
+"use strict";
+const {$,$$,el,shuffle,markDone,addComps,updateXP}=window.__core;
+const LVN=["LOW","MEDIUM","HIGH"],LVC=["#00e5ff","#ffa13d","#ff3d5a"];
+const PQ=[
+ {lv:0,tp:"Mean",sc:"Five patients wait <b>4, 8, 6, 10</b> and <b>7</b> minutes at a clinic.",ask:"What is the mean waiting time?",f:[{l:"Mean",a:7,tol:.01,u:"minutes"}],
+  h:["Mean = add all values, then divide by how many values there are.","4 + 8 + 6 + 10 + 7 = 35. How many values?"],w:["Sum = 4 + 8 + 6 + 10 + 7 = 35","n = 5","Mean = 35 ÷ 5 = <span class='eq'>7 minutes</span>"]},
+ {lv:0,tp:"Median (odd n)",sc:"Daily new flu cases at a polyclinic: <b>12, 5, 9, 15, 7</b>.",ask:"What is the median?",f:[{l:"Median",a:9,tol:.01,u:"cases"}],
+  h:["Sort the values first.","Sorted: 5, 7, 9, 12, 15. Which one is in the middle?"],w:["Sort: 5, 7, 9, 12, 15","n = 5 (odd) → the 3rd value is the middle","Median = <span class='eq'>9</span>"]},
+ {lv:0,tp:"Mode",sc:"Number of children per household in a survey: <b>3, 7, 7, 2, 9, 7, 4</b>.",ask:"What is the mode?",f:[{l:"Mode",a:7,tol:.01,u:""}],
+  h:["The mode is the value that appears most often.","Count how many times each value appears."],w:["3 ×1 · 7 ×3 · 2 ×1 · 9 ×1 · 4 ×1","7 appears most often","Mode = <span class='eq'>7</span>"]},
+ {lv:0,tp:"Range",sc:"Heights (cm): 139, 150, 170, 145, 169, 138, 145, 180, 145, 145.",ask:"What is the range?",f:[{l:"Range",a:42,tol:.01,u:"cm"}],
+  h:["Range = largest − smallest.","Largest = 180. Smallest = ?"],w:["Largest = 180, smallest = 138","Range = 180 − 138 = <span class='eq'>42 cm</span>","Excel: =MAX(B1:B10)-MIN(B1:B10)"]},
+ {lv:0,tp:"Median (even n)",sc:"Weekly dengue cases over 6 weeks: <b>88, 95, 104, 97, 112, 126</b>.",ask:"What is the median?",f:[{l:"Median",a:100.5,tol:.01,u:"cases"}],
+  h:["Sort first. With an even number of values there are TWO middle values.","Sorted: 88, 95, 97, 104, 112, 126. Average the 3rd and 4th values."],w:["Sort: 88, 95, 97, 104, 112, 126","Middle two = 97 and 104","Median = (97 + 104) ÷ 2 = <span class='eq'>100.5</span>"]},
+ {lv:1,tp:"Mean & median",sc:"Heights (cm): 139, 150, 170, 145, 169, 138, 145, 180, 145, 145.",ask:"Find the mean and the median.",f:[{l:"Mean",a:152.6,tol:.05,u:"cm"},{l:"Median",a:145,tol:.01,u:"cm"}],
+  h:["Mean: total ÷ 10. Median: sort, then average the 5th and 6th values.","Total = 1,526. Sorted: 138, 139, 145, 145, 145, 145, 150, 169, 170, 180."],w:["Mean = 1,526 ÷ 10 = <span class='eq'>152.6 cm</span>","5th and 6th sorted values = 145 and 145","Median = <span class='eq'>145 cm</span>","Mean &gt; median → a few tall students pull the mean up."]},
+ {lv:1,tp:"Standard deviation",sc:"Waiting times (min): <b>12, 15, 11, 14, 13</b>.",ask:"Calculate the sample standard deviation (2 d.p.).",f:[{l:"SD",a:1.58,tol:.01,u:"minutes"}],
+  h:["Steps: mean → deviations → square → add → ÷ (n − 1) → square root.","Mean = 13. Deviations: −1, 2, −2, 1, 0. Squares: 1, 4, 4, 1, 0."],w:["Mean = 65 ÷ 5 = 13","Squared deviations: 1 + 4 + 4 + 1 + 0 = 10","Variance = 10 ÷ (5 − 1) = 2.5","SD = √2.5 = <span class='eq'>1.58 minutes</span>"]},
+ {lv:1,tp:"Standard error",sc:"A survey of <b>36</b> adults finds a mean systolic BP of 124 mmHg with SD <b>12</b> mmHg.",ask:"What is the standard error of the mean?",f:[{l:"SEM",a:2,tol:.01,u:"mmHg"}],
+  h:["SEM = SD ÷ √n.","√36 = 6."],w:["SEM = 12 ÷ √36","= 12 ÷ 6 = <span class='eq'>2 mmHg</span>"]},
+ {lv:1,tp:"Probability",sc:"You roll one fair six-sided die.",ask:"Give each probability as a decimal (3 d.p.).",f:[{l:"P(rolling a 4)",a:1/6,tol:.002,u:"",p:1},{l:"P(rolling an even number)",a:.5,tol:.002,u:"",p:1}],
+  h:["Probability = favourable outcomes ÷ all possible outcomes.","There are 6 outcomes. Only one is a 4. Even numbers: 2, 4, 6."],w:["P(4) = 1 ÷ 6 = <span class='eq'>0.167</span>","P(even) = 3 ÷ 6 = <span class='eq'>0.5</span>"]},
+ {lv:1,tp:"p-value & α",sc:"A study sets α = <b>0.01</b> and finds p = <b>0.03</b>.",ask:"What is the correct decision?",o:["Fail to reject H₀ – p is larger than 0.01","Reject H₀ – p is smaller than 0.05","Reject H₀ – p is always significant below 0.05","Accept H₁"],
+  h:["Compare p with the α THIS study chose, not with 0.05.","Is 0.03 ≤ 0.01?"],w:["α = 0.01","p = 0.03 &gt; 0.01","→ <span class='eq'>fail to reject H₀</span> – not significant at this stricter level"]},
+ {lv:2,tp:"SEM from data",sc:"Glucose, new method (mg/dL): 45.2, 53.5, 48.9, 52.3, 48.9. SD = <b>3.2677</b>.",ask:"Calculate the SEM (2 d.p.).",f:[{l:"SEM",a:1.46,tol:.01,u:"mg/dL"}],
+  h:["SEM = SD ÷ √n. How many readings?","√5 ≈ 2.236."],w:["n = 5, √5 = 2.236","SEM = 3.2677 ÷ 2.236 = <span class='eq'>1.46 mg/dL</span>","Excel: =B12/SQRT(5)"]},
+ {lv:2,tp:"95% confidence interval",sc:"25 seniors: mean grip strength <b>120 N</b>, SD <b>15 N</b>.",ask:"Find the 95% confidence interval of the mean (2 d.p.).",f:[{l:"Lower limit",a:114.12,tol:.02,u:"N"},{l:"Upper limit",a:125.88,tol:.02,u:"N"}],
+  h:["95% CI = mean ± 1.96 × SEM. First find the SEM.","SEM = 15 ÷ √25 = 3. Then 1.96 × 3 = ?"],w:["SEM = 15 ÷ 5 = 3","Margin = 1.96 × 3 = 5.88","Lower = 120 − 5.88 = <span class='eq'>114.12 N</span>","Upper = 120 + 5.88 = <span class='eq'>125.88 N</span>"]},
+ {lv:2,tp:"Outlier effect",sc:"Hospital stays (days): 10, 12, 11, 13, 14. A data-entry error changes 14 to <b>64</b>.",ask:"Find the NEW mean and NEW median.",f:[{l:"New mean",a:22,tol:.01,u:"days"},{l:"New median",a:12,tol:.01,u:"days"}],
+  h:["Recalculate with 10, 12, 11, 13, 64.","Sum = 110. Sorted: 10, 11, 12, 13, 64."],w:["New mean = 110 ÷ 5 = <span class='eq'>22 days</span> (was 12)","New median = middle of 10, 11, 12, 13, 64 = <span class='eq'>12 days</span> (unchanged)","The median resists outliers; the mean does not."]},
+ {lv:2,tp:"Sample size",sc:"Blood cholesterol has SD = <b>20</b> mg/dL. You want the SEM to be only <b>2</b> mg/dL.",ask:"How many people do you need?",f:[{l:"n",a:100,tol:.5,u:"people"}],
+  h:["SEM = SD ÷ √n, so √n = SD ÷ SEM.","√n = 20 ÷ 2 = 10. Then n = ?"],w:["√n = 20 ÷ 2 = 10","n = 10² = <span class='eq'>100 people</span>","To halve the SEM you need 4× the sample."]},
+ {lv:2,tp:"Precision",sc:"Two glucose methods have the same mean (49.76). SD: new = <b>3.27</b>, conventional = <b>10.08</b>.",ask:"Which method is more precise, and why?",o:["New method – smaller SD, readings cluster closer to the mean","Conventional – larger SD means more information","Both equal – the means are the same","Cannot tell without the median"],
+  h:["Precision is about how spread out repeated readings are.","Smaller SD = values closer to the mean."],w:["Same mean → compare spread","SD new (3.27) &lt; SD conventional (10.08)","→ <span class='eq'>new method is more precise</span>"]}];
+const PS=PQ.map(()=>({st:"",tries:0,hint:0,first:false,vals:[],pick:null}));let pq=0;addComps(PQ.length);
+const nav=$("#pqNav");PQ.forEach((q,i)=>{const b=el("button","pqd","<span>"+(i+1)+"</span>");b.style.setProperty("--lc",LVC[q.lv]);b.title=LVN[q.lv]+" · "+q.tp;b.onclick=()=>show(i);nav.appendChild(b)});
+const parse=(v,f)=>{v=String(v).trim().replace(/,/g,"");if(!v)return NaN;if(/^[\d.]+\s*\/\s*[\d.]+$/.test(v)){const [a,b]=v.split("/").map(Number);return a/b}let n=parseFloat(v.replace("%",""));if(f.p&&(/%/.test(v)||n>1))n/=100;return n};
+function upd(){const b=$$(".pqd",nav);PS.forEach((s,i)=>b[i].className="pqd"+(i===pq?" cur":"")+(s.st==="solved"?" solved":s.st==="rev"?" rev":s.tries?" tried":""));$("#pqS").textContent=PS.filter(s=>s.st==="solved").length;$("#pqF").textContent=PS.filter(s=>s.first).length+" FIRST TRY";if(PS.every(s=>s.st))end()}
+function show(i){pq=i;const q=PQ[i],s=PS[i],c=$("#pqCard");c.innerHTML="";
+  c.appendChild(el("div","pqh","<span class='qn'>Q"+(i+1)+"</span><span class='tag' style='border-color:"+LVC[q.lv]+";color:"+LVC[q.lv]+"'>"+LVN[q.lv]+"</span><span class='tag b'>"+q.tp.toUpperCase()+"</span>"));
+  c.appendChild(el("p","pqsc",q.sc));c.appendChild(el("div","pqask","▸ "+q.ask));
+  const fb=el("div","pqfb"),hw=el("div","");let ins=[],opts;
+  if(q.f){ins=q.f.map((f,j)=>{const r=el("div","pqf","<label>"+f.l+"</label>");const x=el("input","inp");x.inputMode="decimal";x.placeholder="your answer";x.value=s.vals[j]||"";const u=el("span","u",f.u),v=el("span","vv");r.append(x,u,v);c.appendChild(r);x.oninput=()=>s.vals[j]=x.value;x.onkeydown=e=>{if(e.key==="Enter")chk.click()};return{x,v,f}})}
+  else{opts=el("div","opts2");q._ord=q._ord||shuffle(q.o.map((t,k)=>({t,k})));q._ord.forEach(o=>{const b=el("button","opt",o.t);if(s.pick===o.k)b.classList.add(o.k===0?"ok":"bad");if(s.st==="solved"&&o.k===0)b.classList.add("ok");b.onclick=()=>{if(s.st==="solved")return;s.pick=o.k;$$(".opt",opts).forEach(x=>x.classList.remove("sel"));b.classList.add("sel");$$(".opt",opts).forEach(x=>x.style.borderColor="");b.style.borderColor="var(--o)"};opts.appendChild(b)});c.appendChild(opts)}
+  c.append(fb,hw);const bar=el("div","pqbar"),l=el("div","row"),r=el("div","row"),chk=el("button","btn","Check ▸"),hb=el("button","btn ghost",""),pv=el("button","btn ghost sm","◂ Prev"),nx=el("button","btn b sm","Next ▸");
+  l.append(chk,hb);r.append(pv,nx);bar.append(l,r);c.appendChild(bar);pv.disabled=i===0;nx.disabled=i===PQ.length-1;pv.onclick=()=>show(i-1);nx.onclick=()=>show(i+1);
+  function hints(){hw.innerHTML="";for(let k=0;k<s.hint;k++)hw.appendChild(el("div","pqhint",k<2?"<div class='ht'>HINT "+(k+1)+"</div>"+q.h[k]:"<div class='ht'>WORKED SOLUTION</div><ol>"+q.w.map(x=>"<li>"+x+"</li>").join("")+"</ol>"));
+    hb.textContent=s.hint===0?"💡 Hint 1":s.hint===1?"💡 Hint 2":s.hint===2?"👁 Worked solution":"Solution shown";hb.disabled=s.hint>=3}
+  hb.onclick=()=>{if(s.hint===2&&s.st!=="solved"&&!confirm("Show the worked solution? This question will be marked REVEALED."))return;s.hint++;if(s.hint===3&&s.st!=="solved")s.st="rev";hints();upd()};
+  chk.onclick=()=>{let ok=true,msg=[];
+    if(q.f)ins.forEach(o=>{const n=parse(o.x.value,o.f),g=Number.isFinite(n)&&Math.abs(n-o.f.a)<=o.f.tol;o.x.className="inp "+(g?"ok":"bad");o.v.textContent=g?"✔":"✘";o.v.style.color=g?"var(--ok)":"var(--bad)";if(!g){ok=false;msg.push(Number.isFinite(n)?"“"+o.f.l+"” is not quite right.":"Enter a number for “"+o.f.l+"”.")}});
+    else{if(s.pick==null){fb.className="pqfb bad show";fb.innerHTML="Select an option first.";return}ok=s.pick===0;$$(".opt",opts).forEach((b,k)=>{const o=q._ord[k];b.classList.toggle("ok",ok&&o.k===0);b.classList.toggle("bad",!ok&&o.k===s.pick)});if(!ok)msg.push("That option is not correct.")}
+    s.tries++;if(ok){if(s.st!=="rev"&&s.st!=="solved"){s.first=s.tries===1&&s.hint===0;s.st="solved";markDone(null,"pq"+i)}fb.className="pqfb show";fb.innerHTML="<b class='hb'>✔ CORRECT"+(s.first?" – FIRST TRY!":"")+"</b> <a href='#' class='sw'>See the worked solution</a>";$(".sw",fb).onclick=e=>{e.preventDefault();s.hint=3;hints()}}
+    else{fb.className="pqfb bad show";fb.innerHTML="<b style='color:var(--bad)'>✘ NOT YET.</b> "+msg.join(" ")+(s.hint<3?" Try again or open a hint.":"")}upd()};
+  if(s.st==="solved"&&q.f)ins.forEach(o=>{o.x.className="inp ok";o.v.textContent="✔";o.v.style.color="var(--ok)"});
+  hints();upd()}
+function end(){const e=$("#pqEnd");e.style.display="";const sol=PS.filter(s=>s.st==="solved").length,ft=PS.filter(s=>s.first).length;
+  e.innerHTML="<div style='text-align:center'><div class='kick' style='font-size:.62rem;letter-spacing:5px;color:var(--b)'>PRACTICE COMPLETE</div><div class='big' style='font-size:3rem'>"+sol+" / 15</div><div style='color:var(--b);letter-spacing:4px;font-weight:800;margin:6px 0 14px'>"+ft+" FIRST TRY</div></div><table class='cmp'><tbody>"+PQ.map((q,i)=>"<tr><td>Q"+(i+1)+" · "+LVN[q.lv]+"</td><td>"+q.tp+"</td><td style='color:"+(PS[i].st==="solved"?"var(--ok)":"var(--o2)")+"'>"+(PS[i].st==="solved"?(PS[i].first?"✔ First try":"✔ Solved"):"👁 Revealed – try again later")+"</td></tr>").join("")+"</tbody></table><div class='row' style='justify-content:center;margin-top:14px'><button class='btn' id='pqRe'>Reset &amp; retry</button></div>";
+  $("#pqRe").onclick=()=>{PS.forEach(s=>Object.assign(s,{st:"",tries:0,hint:0,first:false,vals:[],pick:null}));e.style.display="none";show(0)}}
+show(0);
+
+/* ---- review quiz ---- */
+const Q=[
+ {lv:0,q:"What is biostatistics?",o:["Statistics applied to biological and medical data","The study of living organisms","A type of laboratory test","Statistics used only for finance"],g:"Break the word down: 'bio' + 'statistics'.",w:"Biostatistics = the science of statistics applied to the analysis of biological or medical data."},
+ {lv:0,q:"What is the median of 3, 9, 4, 7, 5?",o:["5","4","7","5.6"],g:"Sort the numbers first, then find the middle one.",w:"Sorted: 3, 4, <b>5</b>, 7, 9 → the middle (3rd) value is 5. (5.6 is the mean.)"},
+ {lv:0,q:"Which of these is QUALITATIVE data?",o:["Patients' comments about their clinic visit","Number of dengue cases per week","Body temperature in °C","Waiting time in minutes"],g:"Qualitative = words and categories. Quantitative = numbers.",w:"Comments are words analysed by interpretation – qualitative. The others are numbers – quantitative."},
+ {lv:0,q:"Which is TRUE of a normal distribution?",o:["It is symmetric and the mean equals the median","The mean is always larger than the median","It has a long tail to the right","Most values are at the extremes"],g:"Picture the bell curve – what does each side look like?",w:"The bell curve is symmetric about the centre: mean = median (= mode), 50% of values each side."},
+ {lv:1,q:"Data: 2, 3, 3, 5, 7. What is the mean?",o:["4","3","5","3.5"],g:"Add all values and divide by how many there are.",w:"(2 + 3 + 3 + 5 + 7) ÷ 5 = 20 ÷ 5 = <b>4</b>. (3 is the mode and the median.)"},
+ {lv:1,q:"A test method gives a SMALL standard deviation in repeated readings. What does this mean?",o:["Readings cluster closely around the mean – high precision","The mean is wrong","Readings are widely spread","The sample size is small"],g:"SD measures how far values sit from the mean.",w:"Small SD → values close to the mean → more precise measurements."},
+ {lv:1,q:"Which pair of events is INDEPENDENT?",o:["Rolling a 6 on one die and a 6 on another","Hours of study and exam grade","Illegal parking and getting a ticket","Smoking and lung cancer"],g:"Does one event change the chance of the other?",w:"Two dice don't influence each other – independent. The others are dependent: one changes the chance of the other."},
+ {lv:1,q:"α = 0.05 and p = 0.21. What do you conclude?",o:["Fail to reject H₀ – not significant","Reject H₀ – significant","Reject both hypotheses","The study must be repeated"],g:"Is p ≤ α?",w:"0.21 &gt; 0.05 → weak evidence against H₀ → <b>fail to reject H₀</b>."},
+ {lv:2,q:"The sample size rises from 25 to 100, and the SD stays the same. What happens to the SEM?",o:["It halves","It doubles","It quarters","It does not change"],g:"SEM = SD ÷ √n. Compare √25 and √100.",w:"√25 = 5 → √100 = 10. Dividing by twice as much → SEM is <b>halved</b>."},
+ {lv:2,q:"Ten values are in B1:B10. Which Excel formula gives the SEM?",o:["=STDEV(B1:B10)/SQRT(10)","=STDEV(B1:B10)/10","=AVERAGE(B1:B10)/SQRT(10)","=SQRT(STDEV(B1:B10))"],g:"SEM = SD ÷ √n. Which formula divides the SD by the square root of n?",w:"STDEV gives the SD; SQRT(10) gives √n → <b>=STDEV(B1:B10)/SQRT(10)</b>."},
+ {lv:2,q:"In one bulletin week, HFMD has 480 cases while most other diseases have 0–30. Which best describes a 'typical' disease count?",o:["The median – the mean is pulled up by HFMD","The mean – it uses every value","The maximum","The range"],g:"Is this data symmetric or skewed? Which measure resists extreme values?",w:"One very high count makes the data right-skewed: mean &gt; median. The <b>median</b> resists the outlier."},
+ {lv:2,q:"A sample mean is 50 with SEM = 2. What is the 95% confidence interval?",o:["46.08 to 53.92","48 to 52","44 to 56","49.02 to 50.98"],g:"95% CI = mean ± 1.96 × SEM.",w:"1.96 × 2 = 3.92 → 50 − 3.92 = <b>46.08</b>, 50 + 3.92 = <b>53.92</b>."}];
+let cur=0;const S=Q.map(()=>({a:null,ok:false})),ord=Q.map(q=>shuffle(q.o.map((t,i)=>({t,i}))));addComps(1);const qn=$("#qNav");
+Q.forEach((q,i)=>{const b=el("button","qnb",String(i+1));b.style.borderColor=LVC[q.lv];b.onclick=()=>qs(i);qn.appendChild(b)});
+function qu(){$$(".qnb",qn).forEach((b,i)=>{b.className="qnb"+(i===cur?" cur":"")+(S[i].a!=null?(S[i].ok?" ok":" no"):"")});$("#qS").textContent=S.filter(s=>s.ok).length;if(S.every(s=>s.a!=null))qe()}
+function qs(i){cur=i;const q=Q[i],s=S[i],c=$("#qCard");c.innerHTML="<div class='pqh'><span class='qn'>Q"+(i+1)+"</span><span class='tag' style='border-color:"+LVC[q.lv]+";color:"+LVC[q.lv]+"'>"+LVN[q.lv]+"</span></div><p class='pqsc'>"+q.q+"</p>";
+  const gb=el("button","btn ghost sm","💡 How to approach"),gd=el("div","guide","<b>HOW TO APPROACH</b>"+q.g);gb.onclick=()=>gd.classList.toggle("show");c.append(gb,gd);
+  const opts=el("div","opts");opts.style.marginTop="12px";c.appendChild(opts);const fb=el("div","fb2");c.appendChild(fb);
+  ord[i].forEach(o=>{const b=el("button","opt",o.t);if(s.a!=null){b.disabled=true;if(o.i===0)b.classList.add("ok");else if(o.i===s.a)b.classList.add("bad")}b.onclick=()=>{if(s.a!=null)return;s.a=o.i;s.ok=o.i===0;qs(i)};opts.appendChild(b)});
+  if(s.a!=null){fb.className="fb2 show"+(s.ok?"":" bad");fb.innerHTML=(s.ok?"<b class='hb'>CORRECT.</b> ":"<b style='color:var(--bad)'>NOT QUITE.</b> ")+"<b class='hl'>Worked solution:</b> "+q.w}
+  const bar=el("div","pqbar"),p=el("button","btn ghost sm","◂ Prev"),n=el("button","btn b sm","Next ▸");p.disabled=i===0;n.disabled=i===Q.length-1;p.onclick=()=>qs(i-1);n.onclick=()=>qs(i+1);bar.append(el("span",""),el("div","row"));bar.lastChild.append(p,n);c.appendChild(bar);qu()}
+let ended=false;function qe(){const e=$("#qEnd"),k=S.filter(s=>s.ok).length;e.style.display="";if(!ended){ended=true;markDone(null,"quiz")}
+  e.innerHTML="<div style='text-align:center'><div class='kick' style='font-size:.62rem;letter-spacing:5px;color:var(--b)'>REVIEW COMPLETE</div><div class='big' style='font-size:3rem'>"+k+" / 12</div><div style='color:var(--b);letter-spacing:4px;font-weight:800;margin:6px 0 14px'>RANK: "+(k>=11?"BIOSTATISTICIAN":k>=9?"ANALYST":k>=6?"TRAINEE":"CADET")+"</div></div>"+
+   (k<12?"<table class='cmp'><tbody>"+Q.map((q,i)=>S[i].ok?"":"<tr><td>Q"+(i+1)+" · "+LVN[q.lv]+"</td><td>"+q.q+"<br><span class='hl'>"+q.o[0]+"</span> – "+q.w+"</td></tr>").join("")+"</tbody></table>":"<p style='text-align:center' class='hb'>Flawless.</p>")+
+   "<div class='row' style='justify-content:center;margin-top:14px'><button class='btn' id='qRe'>Retry quiz</button></div>";$("#qRe").onclick=()=>{S.forEach(s=>{s.a=null;s.ok=false});e.style.display="none";qs(0)}}
+qs(0);
+updateXP();
+const hs=parseInt((location.hash||"").slice(1),10);if(!isNaN(hs)&&hs>0&&hs<$$("main > .panel").length)window.__core.go(hs);
+})();
+
+</script>
+</body>
+</html>
