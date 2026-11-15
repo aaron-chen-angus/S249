@@ -800,6 +800,16 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .mods{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
 .streak div{display:flex;flex-direction:column;align-items:center;line-height:1.1}
 .xs-t td .spx{display:block;overflow:hidden;white-space:nowrap;pointer-events:none}
+.whyl{display:none;margin-top:10px;grid-template-columns:repeat(3,1fr);gap:10px}
+.whyl.show{display:grid}
+@media(max-width:760px){.whyl{grid-template-columns:1fr}}
+.whyl>div{border:1px solid rgba(0,229,255,.25);background:rgba(4,10,18,.6);padding:10px 12px}
+.whyl h4{font-size:.62rem;letter-spacing:3px;color:var(--o2);margin-bottom:6px}
+.whyl ul{list-style:none}
+.whyl li{font-family:system-ui,sans-serif;letter-spacing:0;font-size:.76rem;padding:6px 0;border-bottom:1px solid rgba(0,229,255,.08)}
+.whyl li:last-child{border-bottom:0}
+.whyl li b{display:block;color:var(--b);font-weight:700}
+.whyl li span{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1836,7 +1846,7 @@ const addComps=n=>{totalComps+=n;updateXP()};
 /* ---------- CHALLENGES ---------- */
 const C={
  sortCoffee:{type:"sort",title:"CHALLENGE · WHAT TYPE OF DATA?",bins:["Qualitative","Discrete","Continuous"],
-  items:[["“I drink coffee every day”",0],["“I drink 4 coffees a day”",1],["“I drink 80 g of coffee a day”",2],["Blood type A",0],["Number of falls last year",1],["Body temperature 37.8 °C",2],["Weight change −2.3 kg",2],["Students in a class",1],["Taste of a drink",0]],
+  items:[["“I drink coffee every day”",0,"Describes a habit in words – no number is measured or counted."],["“I drink 4 coffees a day”",1,"You COUNT cups: 4 is a whole number – you can't drink 4.37 coffees."],["“I drink 80 g of coffee a day”",2,"You MEASURE weight on a scale: it could be 80.5 g or 79.83 g – any value in a range."],["Blood type A",0,"A category (A, B, AB, O) – a label, not a number."],["Number of falls last year",1,"Counted events: 0, 1, 2, 3 … no half falls."],["Body temperature 37.8 °C",2,"Measured with a thermometer – can take any value, e.g. 37.81 °C."],["Weight change −2.3 kg",2,"Measured on a scale – any value, including decimals and negatives."],["Students in a class",1,"Counted people – always a whole number."],["Taste of a drink",0,"Observed and described (sweet, bitter) – not measured."]],
   why:"Qualitative = descriptions. Discrete = counting (whole numbers). Continuous = measuring (any value in a range)."},
  mSpread:{type:"mcq",title:"CHALLENGE · SPREAD",q:"Datasets A, B and C all have a mean of 15.5. Which one has the LEAST variation?",o:["B – smallest standard deviation","C – largest standard deviation","A – values are evenly spaced","They are identical because the means match"],
   why:"Same mean ≠ same data. The SD shows how tightly values cluster: B has the smallest SD."},
@@ -1861,7 +1871,9 @@ function sorter(cfg){const box=el("div","comp");box.appendChild(el("span","ct",c
   [pool,...zones].forEach(z=>{z.onclick=()=>{if(sel&&!solved)put(sel,z)};z.ondragover=e=>{e.preventDefault();z.classList.add("over")};z.ondragleave=()=>z.classList.remove("over");z.ondrop=e=>{e.preventDefault();z.classList.remove("over");if(dragEl&&!solved)put(dragEl,z)}});
   chk.onclick=()=>{if(solved)return;let r=0,u=0;chips.forEach(c=>{const zi=zones.indexOf(c.parentNode);c.classList.remove("ok","bad","sel");if(zi<0){u++;return}if(zi===c._b){c.classList.add("ok");r++}else c.classList.add("bad")});
     if(u){fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>PLACE EVERY CHIP</b> first.";return}
-    if(r===chips.length){solved=true;chips.forEach(c=>{c.classList.add("lock");c.draggable=false});chk.disabled=true;fb.className="fb2 show";fb.innerHTML="<b class='hb'>ALL CORRECT.</b> "+cfg.why;markDone(box)}
+    if(r===chips.length){solved=true;chips.forEach(c=>{c.classList.add("lock");c.draggable=false});chk.disabled=true;fb.className="fb2 show";fb.innerHTML="<b class='hb'>ALL CORRECT.</b> "+cfg.why;markDone(box);
+      if(cfg.items.some(x=>x[2])){const wb=el("button","btn ghost sm","💡 Why? Reveal the explanations"),wl=el("div","whyl");wl.innerHTML=cfg.bins.map((n,bi)=>"<div><h4>"+n+"</h4><ul>"+cfg.items.filter(x=>x[1]===bi).map(x=>"<li><b>"+x[0]+"</b><span>"+x[2]+"</span></li>").join("")+"</ul></div>").join("");
+        wb.onclick=()=>{const o=wl.classList.toggle("show");wb.textContent=o?"▴ Hide explanations":"💡 Why? Reveal the explanations"};wb.style.marginTop="10px";box.append(wb,wl)}}
     else{fb.className="fb2 bad show";fb.innerHTML="<b style='color:var(--bad)'>"+r+" / "+chips.length+" correct.</b> Move the ✘ chips and check again."}};
   rst.onclick=()=>{if(solved)return;chips.forEach(c=>{pool.appendChild(c);c.classList.remove("ok","bad","sel")});fb.className="fb2"};return box}
 $$(".comp-m").forEach(m=>{const c=C[m.dataset.c];if(!c)return;totalComps++;m.replaceWith(c.type==="mcq"?mcq(c):sorter(c))});
