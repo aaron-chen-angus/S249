@@ -810,6 +810,28 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .whyl li:last-child{border-bottom:0}
 .whyl li b{display:block;color:var(--b);font-weight:700}
 .whyl li span{color:var(--ink)}
+
+/* walkthroughs + F-test */
+.xw{padding-bottom:14px}
+.xw>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.xw>summary::-webkit-details-marker{display:none}
+.xw-k{font-size:.56rem;letter-spacing:3px;color:#03060b;background:var(--o);padding:4px 9px;font-weight:800;box-shadow:var(--glow-o)}
+.xw>summary b{font-size:.74rem;letter-spacing:2px;color:#fff}
+.xw-t{margin-left:auto;color:var(--o2);transition:.2s}
+.xw:not([open]) .xw-t{transform:rotate(-90deg)}
+.xw .stepcap code{font-size:.84em}
+.ftflow{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin-top:14px}
+@media(max-width:700px){.ftflow{grid-template-columns:1fr}}
+.ftflow .fq{border:2px solid var(--o);padding:12px;text-align:center;font-size:.66rem;letter-spacing:2px;color:var(--o2);box-shadow:var(--glow-o)}
+.ftflow .fq b{color:#fff;font-size:.8rem}
+.ftflow .fa{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ftflow .fa>div{border:1px solid;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.ftflow .fy{border-color:var(--b)!important;background:rgba(0,229,255,.06)}
+.ftflow .fn{border-color:var(--o)!important;background:rgba(255,106,0,.07)}
+.ftflow .fa b{font-size:.8rem;color:#fff}
+.ftflow .fa span{font-size:.6rem;letter-spacing:2px;color:var(--mute)}
+.ftflow .fa em{font-style:normal;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.84rem;color:#fff}
+.ftflow .fa code{margin-top:4px;white-space:normal}
 </style>
 </head>
 <body>
@@ -992,6 +1014,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 <!-- 06 ONE-SAMPLE -->
 <section class="panel" id="p6" data-name="ONE-SAMPLE">
   <div class="ph"><div class="kick">HANDS-ON · ONE-SAMPLE T-TEST</div><h2>One Group vs a <span>Reference</span></h2></div>
+  <div class="xwalk" data-t="O1"></div>
   <div class="prac" data-kind="one"></div>
   <div class="pager"><button class="btn ghost" data-go="5">◂ Excel Kit</button><button class="btn" data-go="7">Independent ▸</button></div>
 </section>
@@ -999,6 +1022,9 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 <!-- 07 INDEPENDENT -->
 <section class="panel" id="p7" data-name="INDEPENDENT">
   <div class="ph"><div class="kick">HANDS-ON · INDEPENDENT T-TEST</div><h2>Two Separate <span>Groups</span></h2></div>
+  <div class="sec"><em>F</em> EQUAL OR UNEQUAL VARIANCES? · RUN THE F-TEST FIRST</div>
+  <div id="ftest"></div>
+  <div class="xwalk" data-t="I1"></div>
   <div class="prac" data-kind="ind"></div>
   <div class="pager"><button class="btn ghost" data-go="6">◂ One-Sample</button><button class="btn" data-go="8">Paired ▸</button></div>
 </section>
@@ -1006,6 +1032,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 <!-- 08 PAIRED -->
 <section class="panel" id="p8" data-name="PAIRED">
   <div class="ph"><div class="kick">HANDS-ON · PAIRED T-TEST</div><h2>Same People, <span>Twice</span></h2></div>
+  <div class="xwalk" data-t="P1"></div>
   <div class="prac" data-kind="paired"></div>
   <div class="pager"><button class="btn ghost" data-go="7">◂ Independent</button><button class="btn" data-go="9">Review Quiz ▸</button></div>
 </section>
@@ -1047,7 +1074,12 @@ function pairedT(a,b){const d=a.map((v,i)=>v-b[i]),n=d.length,md=mean(d),s=sd(d)
 function pooledT(a,b){const n1=a.length,n2=b.length,v1=vari(a),v2=vari(b),df=n1+n2-2,sp=((n1-1)*v1+(n2-1)*v2)/df,t=(mean(a)-mean(b))/Math.sqrt(sp*(1/n1+1/n2));return{t,df,sp,p1:tRT(Math.abs(t),df),p2:2*tRT(Math.abs(t),df)}}
 function welchT(a,b){const n1=a.length,n2=b.length,v1=vari(a)/n1,v2=vari(b)/n2,t=(mean(a)-mean(b))/Math.sqrt(v1+v2),df=(v1+v2)**2/(v1*v1/(n1-1)+v2*v2/(n2-1));return{t,df,p1:tRT(Math.abs(t),df),p2:2*tRT(Math.abs(t),df)}}
 function oneT(a,mu){const n=a.length,m=mean(a),s=sd(a),se=s/Math.sqrt(n),t=(m-mu)/se,df=n-1;return{t,df,m,s,se,p1:tRT(Math.abs(t),df),p2:2*tRT(Math.abs(t),df)}}
-window.TS={lgamma,betai,tRT,tCDF,tPDF,tINV,mean,vari,sd,correl,pairedT,pooledT,welchT,oneT};
+/* F distribution */
+function fCDF(x,d1,d2){if(x<=0)return 0;return betai(d1/2,d2/2,d1*x/(d1*x+d2))}
+function fRT(x,d1,d2){if(x<=0)return 1;return betai(d2/2,d1/2,d2/(d2+d1*x))}
+function fINV(p,d1,d2){if(p<=0||p>=1)return NaN;let lo=0,hi=1;while(fCDF(hi,d1,d2)<p&&hi<1e8)hi*=2;for(let i=0;i<200;i++){const m=(lo+hi)/2;if(fCDF(m,d1,d2)<p)lo=m;else hi=m;if(hi-lo<1e-13*Math.max(1,m))break}return(lo+hi)/2}
+function fTest(a,b,al){al=al==null?.05:al;const v1=vari(a),v2=vari(b),d1=a.length-1,d2=b.length-1,F=v1/v2;const p1=F<1?fCDF(F,d1,d2):fRT(F,d1,d2);const fc=F<1?fINV(al,d1,d2):fINV(1-al,d1,d2);return{F,d1,d2,v1,v2,p1,p2:Math.min(1,2*p1),fc}}
+window.TS={fCDF,fRT,fINV,fTest,lgamma,betai,tRT,tCDF,tPDF,tINV,mean,vari,sd,correl,pairedT,pooledT,welchT,oneT};
 })();
 
 /* ================= FORMULA ENGINE (Excel-compatible subset) ================= */
@@ -1192,19 +1224,24 @@ const FN={
  TDIST:a=>{const x=N1(a[0]),d=N1(a[1]),t=N1(a[2]);if(isE(x))return x;if(isE(d))return d;if(isE(t))return t;const df=truncDf(d),tl=Math.trunc(t);if(df<1||x<0||(tl!==1&&tl!==2))return E("#NUM!");return tl===1?TS.tRT(x,df):Math.min(1,2*TS.tRT(x,df))},
  "T.INV":a=>{const p=N1(a[0]),d=N1(a[1]);if(isE(p))return p;if(isE(d))return d;const df=truncDf(d);if(p<=0||p>=1||df<1)return E("#NUM!");return TS.tINV(p,df)},
  "T.INV.2T":a=>{const p=N1(a[0]),d=N1(a[1]);if(isE(p))return p;if(isE(d))return d;const df=truncDf(d);if(p<=0||p>1||df<1)return E("#NUM!");return Math.abs(TS.tINV(p/2,df))},
+ "F.TEST":a=>{const x=arr(a[0]).filter(v=>typeof v==="number"),y=arr(a[1]).filter(v=>typeof v==="number");if(x.length<2||y.length<2)return E("#DIV/0!");const v1=TS.vari(x),v2=TS.vari(y);if(v1===0||v2===0)return E("#DIV/0!");return TS.fTest(x,y).p2},
+ "F.DIST":a=>{const x=N1(a[0]),d1=N1(a[1]),d2=N1(a[2]),c=scal(a[3]);if(isE(x))return x;if(x<0||d1<1||d2<1)return E("#NUM!");const cum=c===true||(typeof c==="number"&&c!==0);if(cum)return TS.fCDF(x,Math.trunc(d1),Math.trunc(d2));const h=1e-6;return(TS.fCDF(x+h,Math.trunc(d1),Math.trunc(d2))-TS.fCDF(Math.max(0,x-h),Math.trunc(d1),Math.trunc(d2)))/(x>h?2*h:x+h)},
+ "F.DIST.RT":a=>{const x=N1(a[0]),d1=N1(a[1]),d2=N1(a[2]);if(isE(x))return x;if(x<0||d1<1||d2<1)return E("#NUM!");return TS.fRT(x,Math.trunc(d1),Math.trunc(d2))},
+ "F.INV":a=>{const p=N1(a[0]),d1=N1(a[1]),d2=N1(a[2]);if(isE(p))return p;if(p<=0||p>=1||d1<1||d2<1)return E("#NUM!");return TS.fINV(p,Math.trunc(d1),Math.trunc(d2))},
+ "F.INV.RT":a=>{const p=N1(a[0]),d1=N1(a[1]),d2=N1(a[2]);if(isE(p))return p;if(p<=0||p>=1||d1<1||d2<1)return E("#NUM!");return TS.fINV(1-p,Math.trunc(d1),Math.trunc(d2))},
  PI:()=>Math.PI,LN:a=>{const x=N1(a[0]);return isE(x)?x:x<=0?E("#NUM!"):Math.log(x)},EXP:a=>{const x=N1(a[0]);return isE(x)?x:Math.exp(x)},
  LEN:a=>txt(scal(a[0])).length,UPPER:a=>txt(scal(a[0])).toUpperCase(),LOWER:a=>txt(scal(a[0])).toLowerCase()
 };
-FN["STDEV.S"]=FN.STDEV;FN["STDEV.P"]=FN.STDEVP;FN["VAR.S"]=FN.VAR;FN["VAR.P"]=FN.VARP;FN.TTEST=FN["T.TEST"];FN.TINV=FN["T.INV.2T"];FN.PEARSON=FN.CORREL;FN.AVERAGEA=FN.AVERAGE;
+FN["STDEV.S"]=FN.STDEV;FN["STDEV.P"]=FN.STDEVP;FN["VAR.S"]=FN.VAR;FN["VAR.P"]=FN.VARP;FN.TTEST=FN["T.TEST"];FN.TINV=FN["T.INV.2T"];FN.PEARSON=FN.CORREL;FN.FTEST=FN["F.TEST"];FN.FDIST=FN["F.DIST.RT"];FN.FINV=FN["F.INV.RT"];FN.AVERAGEA=FN.AVERAGE;
 
 const SIG={SUM:"SUM(number1, [number2], …)",AVERAGE:"AVERAGE(number1, [number2], …)",COUNT:"COUNT(value1, [value2], …)",COUNTA:"COUNTA(value1, [value2], …)",MIN:"MIN(number1, …)",MAX:"MAX(number1, …)",MEDIAN:"MEDIAN(number1, …)",
  STDEV:"STDEV(number1, [number2], …)","STDEV.S":"STDEV.S(number1, [number2], …)","STDEV.P":"STDEV.P(number1, …)",STDEVP:"STDEVP(number1, …)",VAR:"VAR(number1, …)","VAR.S":"VAR.S(number1, …)","VAR.P":"VAR.P(number1, …)",
  SQRT:"SQRT(number)",ABS:"ABS(number)",POWER:"POWER(number, power)",ROUND:"ROUND(number, num_digits)",ROUNDUP:"ROUNDUP(number, num_digits)",ROUNDDOWN:"ROUNDDOWN(number, num_digits)",
  IF:"IF(logical_test, [value_if_true], [value_if_false])",AND:"AND(logical1, …)",OR:"OR(logical1, …)",NOT:"NOT(logical)",CORREL:"CORREL(array1, array2)",PEARSON:"PEARSON(array1, array2)",DEVSQ:"DEVSQ(number1, …)",SUMSQ:"SUMSQ(number1, …)",
  "T.TEST":"T.TEST(array1, array2, tails, type)",TTEST:"TTEST(array1, array2, tails, type)","T.DIST":"T.DIST(x, deg_freedom, cumulative)","T.DIST.RT":"T.DIST.RT(x, deg_freedom)","T.DIST.2T":"T.DIST.2T(x, deg_freedom)",TDIST:"TDIST(x, deg_freedom, tails)",
- "T.INV":"T.INV(probability, deg_freedom)","T.INV.2T":"T.INV.2T(probability, deg_freedom)",TINV:"TINV(probability, deg_freedom)",PI:"PI()",LN:"LN(number)",EXP:"EXP(number)",LEN:"LEN(text)",UPPER:"UPPER(text)",LOWER:"LOWER(text)"};
+ "T.INV":"T.INV(probability, deg_freedom)","T.INV.2T":"T.INV.2T(probability, deg_freedom)",TINV:"TINV(probability, deg_freedom)",PI:"PI()","F.TEST":"F.TEST(array1, array2)",FTEST:"FTEST(array1, array2)","F.DIST":"F.DIST(x, deg_freedom1, deg_freedom2, cumulative)","F.DIST.RT":"F.DIST.RT(x, deg_freedom1, deg_freedom2)","F.INV":"F.INV(probability, deg_freedom1, deg_freedom2)","F.INV.RT":"F.INV.RT(probability, deg_freedom1, deg_freedom2)",LN:"LN(number)",EXP:"EXP(number)",LEN:"LEN(text)",UPPER:"UPPER(text)",LOWER:"LOWER(text)"};
 const TIP={"T.TEST":"tails: 1 = one-tailed, 2 = two-tailed · type: 1 = paired, 2 = two-sample equal variance, 3 = two-sample unequal variance","T.INV":"Left-tailed inverse. One-tail critical value: =T.INV(1-α, df)","T.INV.2T":"Two-tailed critical value: =T.INV.2T(α, df)",
- "T.DIST.2T":"Two-tailed p-value from a t value: =T.DIST.2T(ABS(t), df)","T.DIST.RT":"Right-tailed p-value: =T.DIST.RT(ABS(t), df)",STDEV:"Sample standard deviation (n − 1)","STDEV.S":"Sample standard deviation (n − 1)","STDEV.P":"Population SD (n) – not for samples"};
+ "T.DIST.2T":"Two-tailed p-value from a t value: =T.DIST.2T(ABS(t), df)","T.DIST.RT":"Right-tailed p-value: =T.DIST.RT(ABS(t), df)",STDEV:"Sample standard deviation (n − 1)","STDEV.S":"Sample standard deviation (n − 1)","STDEV.P":"Population SD (n) – not for samples","F.TEST":"Two-tailed p-value that the two variances are equal. p < 0.05 → unequal variances"};
 
 /* ---------- general number format (≈ Excel "General", 11-char column) ---------- */
 function expo(v){let [m,e]=v.toExponential(5).split("e");m=m.replace(/\.?0+$/,"");e=+e;return m+"E"+(e<0?"-":"+")+String(Math.abs(e)).padStart(2,"0")}
@@ -1265,7 +1302,7 @@ async function unzip(buf){const u=new Uint8Array(buf),dv=new DataView(buf);let e
 
 /* ---------- write ---------- */
 const xe=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-const NEWFN=["STDEV.S","STDEV.P","VAR.S","VAR.P","T.TEST","T.DIST","T.DIST.RT","T.DIST.2T","T.INV","T.INV.2T"];
+const NEWFN=["F.TEST","F.DIST","F.DIST.RT","F.INV","F.INV.RT","STDEV.S","STDEV.P","VAR.S","VAR.P","T.TEST","T.DIST","T.DIST.RT","T.DIST.2T","T.INV","T.INV.2T"];
 function xlfn(f){let tk;try{tk=XC.tokenize(f)}catch(e){return f}let o="",last=0;tk.forEach((t,i)=>{if(t.k==="name"&&tk[i+1]&&tk[i+1].k==="("&&NEWFN.includes(t.v)){o+=f.slice(last,t.s)+"_xlfn."+t.v;last=t.e}});return o+f.slice(last)}
 /* style keys → cellXfs index */
 const STY={"":0,ttl:1,hdr:2,ans:3,giv:4,lab:5,hint:6,num:7,sub:8};
@@ -1337,7 +1374,7 @@ const XC=window.XC,TS=window.TS;const {colL,A1}=XC;
 const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.innerHTML=x;return e};
 const RC=["#00e5ff","#ff8a3d","#7dff6a","#ff4fd8","#ffe14d","#8f7dff"];
 const TOOLS=["Anova: Single Factor","Anova: Two-Factor With Replication","Anova: Two-Factor Without Replication","Correlation","Covariance","Descriptive Statistics","Exponential Smoothing","F-Test Two-Sample for Variances","Fourier Analysis","Histogram","Moving Average","Random Number Generation","Rank and Percentile","Regression","Sampling","t-Test: Paired Two Sample for Means","t-Test: Two-Sample Assuming Equal Variances","t-Test: Two-Sample Assuming Unequal Variances","z-Test: Two Sample for Means"];
-const TT=TOOLS.slice(15,18);
+const TT=[TOOLS[7]].concat(TOOLS.slice(15,18));
 const FNAMES=Object.keys(XC.SIG).sort();
 const isMac=/Mac|iPhone|iPad/.test(navigator.platform||"");
 
@@ -1591,12 +1628,12 @@ function create(mount,opts){opts=opts||{};
       DLG.querySelector(".dl").addEventListener("click",e=>{const d=e.target.closest("[data-i]");if(!d)return;dlg.tool=+d.dataset.i;DLG.querySelectorAll(".dl div").forEach(x=>x.classList.toggle("on",x===d))});
       DLG.querySelector(".dl").addEventListener("dblclick",e=>{if(e.target.closest("[data-i]"))nextDlg()});
       const on=DLG.querySelector(".dl .on");if(on)on.scrollIntoView({block:"nearest"});return}
-    const t=TOOLS[dlg.tool],paired=dlg.tool===15;dlg.f=dlg.f||{v1:"",v2:"",hm:"",lab:false,al:"0.05",out:""};const f=dlg.f;
+    const t=TOOLS[dlg.tool];if(dlg.tool!==dlg.ft){dlg.f=null;dlg.ft=dlg.tool}dlg.f=dlg.f||{v1:"",v2:"",hm:"",lab:false,al:"0.05",out:""};const f=dlg.f;
     DLG.innerHTML="<div class='dh'><b>"+t+"</b><button class='x' data-d='cancel'>✕</button></div><div class='db two'><div>"+
      "<div class='dsec'>Input</div>"+
      "<div class='drow'><label>Variable <u>1</u> Range:</label><input data-k='v1' value='"+f.v1+"' class='rngi'><button class='pk' data-p='v1' title='Select range'>⤒</button></div>"+
      "<div class='drow'><label>Variable <u>2</u> Range:</label><input data-k='v2' value='"+f.v2+"' class='rngi'><button class='pk' data-p='v2' title='Select range'>⤒</button></div>"+
-     "<div class='drow'><label>Hypoth<u>e</u>sized Mean Difference:</label><input data-k='hm' value='"+f.hm+"' class='sm'></div>"+
+     (dlg.tool===7?"":"<div class='drow'><label>Hypoth<u>e</u>sized Mean Difference:</label><input data-k='hm' value='"+f.hm+"' class='sm'></div>")+
      "<div class='drow chk'><label><input type='checkbox' data-k='lab' "+(f.lab?"checked":"")+"> <u>L</u>abels</label></div>"+
      "<div class='drow'><label><u>A</u>lpha:</label><input data-k='al' value='"+f.al+"' class='sm'></div>"+
      "<div class='dsec'>Output options</div>"+
@@ -1611,7 +1648,7 @@ function create(mount,opts){opts=opts||{};
   DLG.addEventListener("mousedown",e=>{const b=e.target.closest("[data-p]");if(b){e.preventDefault();const i=DLG.querySelector("input[data-k='"+b.dataset.p+"']");if(dlg.pick&&dlg.pick.inp===i){endPick();return}i.focus()}});
   DLG.addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b)return;const d=b.dataset.d;
     if(d==="cancel")closeDlg();else if(d==="ok1")nextDlg();else if(d==="back"){dlg.step=1;endPick();drawDlg()}else if(d==="ok2")runTool()});
-  function nextDlg(){if(!TT.includes(TOOLS[dlg.tool])){derr("This tool isn't needed for Lessons 9–10. Choose one of the three t-Test tools.");return}dlg.step=2;drawDlg()}
+  function nextDlg(){if(!TT.includes(TOOLS[dlg.tool])){derr("This tool isn't needed for Lessons 9–10. Choose the F-Test or one of the three t-Test tools.");return}dlg.step=2;drawDlg()}
   function derr(t,warn){const e=DLG.querySelector(".derr")||DLG.appendChild(h("div","derr"));e.innerHTML=t;e.className="derr show"+(warn?" warn":"")}
   function rangeVals(txt,lab){const g=XC.parseRange(txt);if(!g)return{err:"Input range must be a contiguous reference."};if(g.r1!==g.r2&&g.c1!==g.c2)return{err:"Input range must be a single column or row."};
     const cells=[];for(let r=g.r1;r<=Math.min(g.r2,sh.rows-1);r++)for(let c=g.c1;c<=Math.min(g.c2,sh.cols-1);c++)cells.push(vals[A1(r,c)]);let label=null;if(lab){label=cells.shift();label=label==null?"":XC.show(label)}
@@ -1622,7 +1659,9 @@ function create(mount,opts){opts=opts||{};
     const al=parseFloat(f.al);if(!(al>0&&al<1))return derr(prefix+"Alpha must be greater than zero and less than 1.");const hm=f.hm===""?0:parseFloat(f.hm);if(!isFinite(hm))return derr(prefix+"Hypothesized Mean Difference must be numeric.");
     const o=XC.parseRange(f.out||"");if(!o)return derr(prefix+"Output range must be a contiguous reference.");
     let rows;const L1=f.lab&&A.label?A.label:"Variable 1",L2=f.lab&&B.label?B.label:"Variable 2";
-    if(tool===15){if(A.len!==B.len||A.v.length!==B.v.length)return derr(prefix+"Input ranges must contain the same number of data points.");if(A.v.length<2)return derr(prefix+"Input range must contain at least two data points.");
+    if(tool===7){if(A.v.length<2||B.v.length<2)return derr(prefix+"Input range must contain at least two data points.");const r=TS.fTest(A.v,B.v,al);
+      rows=[["Mean",TS.mean(A.v),TS.mean(B.v)],["Variance",r.v1,r.v2],["Observations",A.v.length,B.v.length],["df",r.d1,r.d2],["F",r.F],["P(F<=f) one-tail",r.p1],["F Critical one-tail",r.fc]]}
+    else if(tool===15){if(A.len!==B.len||A.v.length!==B.v.length)return derr(prefix+"Input ranges must contain the same number of data points.");if(A.v.length<2)return derr(prefix+"Input range must contain at least two data points.");
       const d=A.v.map((x,i)=>x-B.v[i]),n=d.length,md=TS.mean(d),s=TS.sd(d),t=(md-hm)/(s/Math.sqrt(n)),df=n-1;
       rows=[["Mean",TS.mean(A.v),TS.mean(B.v)],["Variance",TS.vari(A.v),TS.vari(B.v)],["Observations",n,n],["Pearson Correlation",TS.correl(A.v,B.v)],["Hypothesized Mean Difference",hm],["df",df],["t Stat",t],["P(T<=t) one-tail",TS.tRT(Math.abs(t),df)],["t Critical one-tail",TS.tINV(1-al,df)],["P(T<=t) two-tail",2*TS.tRT(Math.abs(t),df)],["t Critical two-tail",TS.tINV(1-al/2,df)]]}
     else{if(A.v.length<2||B.v.length<2)return derr(prefix+"Input range must contain at least two data points.");const n1=A.v.length,n2=B.v.length,m1=TS.mean(A.v),m2=TS.mean(B.v),v1=TS.vari(A.v),v2=TS.vari(B.v);
@@ -1715,14 +1754,16 @@ function expect(t){const a=t.a,b=t.b,al=t.alpha,E={};
   E.tc=t.tails===1?TS.tINV(1-al,E.df):TS.tINV(1-al/2,E.df);E.tc1=TS.tINV(1-al,E.df);E.tc2=TS.tINV(1-al/2,E.df);E.rej=E.p<al;E.dec=E.rej?DEC_LIST[0]:DEC_LIST[1];
   E.type=t.kind==="one"?"One-sample":t.kind==="paired"?"Paired":t.eq?TYPE_LIST[1]:TYPE_LIST[2];return E}
 TASKS.forEach(t=>t.E=expect(t));
+TASKS.filter(t=>t.kind==="ind").forEach(t=>{const big=TS.vari(t.a)>=TS.vari(t.b);const r=big?TS.fTest(t.a,t.b):TS.fTest(t.b,t.a);t.F=Object.assign(r,{big});const fp=r.p1<0.001?r.p1.toExponential(2):r.p1.toFixed(3);
+  t.eqWhy+=" F-test: F = "+r.F.toFixed(2)+", P one-tail = "+fp+(r.p1<0.05?" &lt; 0.05 → variances differ → <b>unequal</b>.":" &gt; 0.05 → <b>equal</b> variances.")});
 
 /* ---------- template layout ---------- */
 function layout(t){const n1=t.n1,n2=t.n2,ra="B3:B"+(n1+2),rb="C3:C"+(n2+2),rd="D3:D"+(n1+2);const L=[];
   const it=(k,label,f,kind,hint,extra)=>L.push(Object.assign({k,label,f,kind:kind||"num",hint},extra||{}));
   if(t.kind==="one"){it("n","n (sample size)","=COUNT("+ra+")","num","=COUNT( )",{need:1,rng:ra});it("mean","Mean","=AVERAGE("+ra+")","num","=AVERAGE( )",{need:1,rng:ra});it("sd","SD","=STDEV("+ra+")","num","=STDEV( )",{need:1,rng:ra});
-    it("sem","SEM = SD ÷ √n","=G7/SQRT(G5)","num","=SD/SQRT(n)",{need:1});it("df","df = n − 1","=G5-1","num","=n-1");it("t","t Stat = (Mean − μ₀) ÷ SEM","=(G6-G3)/G8","num","=(Mean-μ₀)/SEM");
-    it("tails","Tails (1 or 2)",null,"tails","pick ▾");it("tc","t Critical",t.tails===1?"=T.INV(1-G2,G9)":"=T.INV.2T(G2,G9)","num",t.tails===1?"=T.INV(1-α, df)":"=T.INV.2T(α, df)");
-    it("p","p-value",t.tails===1?"=T.DIST.RT(ABS(G10),G9)":"=T.DIST.2T(ABS(G10),G9)","num",t.tails===1?"=T.DIST.RT(ABS(t), df)":"=T.DIST.2T(ABS(t), df)");it("dec","Decision",'=IF(G13<G2,"Reject H0","Do not reject H0")',"dec","pick ▾");return{L,r0:5}}
+    it("sem","SEM = SD ÷ √n","=G7/SQRT(G5)","num","=SD/SQRT(n)",{need:1});it("df","df = n − 1","=G5-1","num","=n-1");it("t","t Stat = (Mean − μ₀) ÷ SEM","=(G6-G3)/G8","num","=(G6-G3)/G8");
+    it("tails","Tails (1 or 2)",null,"tails","pick ▾");it("tc","t Critical (cut-off)",t.tails===1?"=T.INV(1-G2,G9)":"=T.INV.2T(G2,G9)","num",t.tails===1?"=T.INV(1-G2,G9)":"=T.INV.2T(G2,G9)");
+    it("p","p-value (from t Stat in G10)",t.tails===1?"=T.DIST.RT(ABS(G10),G9)":"=T.DIST.2T(ABS(G10),G9)","num",t.tails===1?"=T.DIST.RT(ABS(G10),G9)":"=T.DIST.2T(ABS(G10),G9)");it("dec","Decision",'=IF(G13<G2,"Reject H0","Do not reject H0")',"dec","pick ▾");return{L,r0:5}}
   if(t.kind==="ind"){const ty=t.eq?2:3;it("n1","n · "+t.la,"=COUNT("+ra+")","num","=COUNT( )",{need:1,rng:ra});it("m1","Mean · "+t.la,"=AVERAGE("+ra+")","num","=AVERAGE( )",{need:1,rng:ra});it("s1","SD · "+t.la,"=STDEV("+ra+")","num","=STDEV( )",{need:1,rng:ra});
     it("n2","n · "+t.lb,"=COUNT("+rb+")","num","=COUNT( )",{need:1,rng:rb});it("m2","Mean · "+t.lb,"=AVERAGE("+rb+")","num","=AVERAGE( )",{need:1,rng:rb});it("s2","SD · "+t.lb,"=STDEV("+rb+")","num","=STDEV( )",{need:1,rng:rb});
     it("type","Test type",null,"type","pick ▾");it("tails","Tails (1 or 2)",null,"tails","pick ▾");it("df","df",t.eq?"=G4+G7-2":"=ROUND((G6^2/G4+G9^2/G7)^2/((G6^2/G4)^2/(G4-1)+(G9^2/G7)^2/(G7-1)),0)","num",t.eq?"=n1+n2-2":"ToolPak → df");
@@ -1747,11 +1788,14 @@ function buildSheet(t,mode){/* mode: "tpl" | "sol" */const cells={},style={},val
   cells.F2="α (significance level)";style.F2="lab";cells.G2="0.05";style.G2="giv";
   if(t.kind==="one"){cells.F3="Reference value μ₀";style.F3="lab";cells.G3=String(t.ref);style.G3="giv"}
   t.L.forEach(x=>{const r=x.ref.slice(1);cells["F"+r]=x.label;style["F"+r]="lab";style[x.ref]="ans";if(x.kind==="tails")val[x.ref]=["1","2"];if(x.kind==="type")val[x.ref]=TYPE_LIST;if(x.kind==="dec")val[x.ref]=DEC_LIST;if(t.guided&&x.hint){cells["H"+r]="'"+x.hint;style["H"+r]="hint"}});
-  if(t.kind!=="one"){cells.J1="ToolPak output ▸ put it here (Output Range J3)";style.J1="sub"}
+  if(t.kind==="paired"){cells.J1="ToolPak output ▸ put it here (Output Range J3)";style.J1="sub"}
+  if(t.kind==="ind"){cells.J1="ToolPak ▸ t-Test → Output Range J3 · F-Test → J20";style.J1="sub"}
   if(mode==="sol"){t.L.forEach(x=>{cells[x.ref]=x.f||x.sol});if(t.kind==="paired")for(let i=0;i<n1;i++)cells["D"+(i+3)]="=B"+(i+3)+"-C"+(i+3);
-    if(t.kind!=="one"){const tp=toolpak(t);tp.forEach((row,i)=>row.forEach((v,j)=>{if(v!==""&&v!=null)cells[XC.colL(9+j)+(3+i)]=typeof v==="number"?String(v):v}))}}
-  const rows=Math.max(N+4,26),widths=[64,118,t.kind==="one"?40:118,t.kind==="paired"?150:40,20,250,118,170,20,220,112,112,70];
+    if(t.kind!=="one"){const tp=toolpak(t);tp.forEach((row,i)=>row.forEach((v,j)=>{if(v!==""&&v!=null)cells[XC.colL(9+j)+(3+i)]=typeof v==="number"?String(v):v}))}
+    if(t.kind==="ind"){ftool(t).forEach((row,i)=>row.forEach((v,j)=>{if(v!==""&&v!=null)cells[XC.colL(9+j)+(20+i)]=typeof v==="number"?String(v):v}))}}
+  const rows=Math.max(N+4,t.kind==="ind"?34:26),widths=[64,118,t.kind==="one"?40:118,t.kind==="paired"?150:40,20,250,118,170,20,220,112,112,70];
   return{name:"Practice",rows,cols:13,cells,style,val,widths,start:{r:t.ansR0-1,c:6},fmt:{},freeze:2,active:"G"+t.ansR0}}
+function ftool(t){const r=t.F,A=r.big?t.a:t.b,Bv=r.big?t.b:t.a,la=r.big?t.la:t.lb,lb=r.big?t.lb:t.la;return[["F-Test Two-Sample for Variances","",""],["","",""],["",la,lb],["Mean",TS.mean(A),TS.mean(Bv)],["Variance",r.v1,r.v2],["Observations",A.length,Bv.length],["df",r.d1,r.d2],["F",r.F,""],["P(F<=f) one-tail",r.p1,""],["F Critical one-tail",r.fc,""]]}
 function toolpak(t){const E=t.E,a=t.a,b=t.b;let rows;
   if(t.kind==="paired")rows=[["Mean",E.mA,E.mB],["Variance",TS.vari(a),TS.vari(b)],["Observations",E.n,E.n],["Pearson Correlation",TS.correl(a,b),""],["Hypothesized Mean Difference",0,""],["df",E.df,""],["t Stat",E.t,""],["P(T<=t) one-tail",E.p1,""],["t Critical one-tail",E.tc1,""],["P(T<=t) two-tail",E.p2,""],["t Critical two-tail",E.tc2,""]];
   else if(t.eq)rows=[["Mean",E.m1,E.m2],["Variance",TS.vari(a),TS.vari(b)],["Observations",E.n1,E.n2],["Pooled Variance",E.P.sp,""],["Hypothesized Mean Difference",0,""],["df",E.df,""],["t Stat",E.t,""],["P(T<=t) one-tail",E.p1,""],["t Critical one-tail",E.tc1,""],["P(T<=t) two-tail",E.p2,""],["t Critical two-tail",E.tc2,""]];
@@ -1761,7 +1805,7 @@ function toolpak(t){const E=t.E,a=t.a,b=t.b;let rows;
 /* ---------- checker ---------- */
 const fmtN=v=>typeof v==="number"?XC.general(v):String(v);
 function near(v,e){if(typeof v!=="number"||!isFinite(v))return null;const d=Math.abs(v-e),ae=Math.abs(e);if(d<=1e-9+2e-4*ae)return"exact";
-  if(ae>=0.01){if(d<=0.0051)return"round";if(ae>=100&&d<=0.051)return"round"}else{if(d<=0.03*ae)return"round";if(e<0.0005&&v>=0&&v<0.0005)return v===0?"zero":"round";if(Math.abs(v-+e.toFixed(3))<1e-12||Math.abs(v-+e.toFixed(2))<1e-12)return"round"}return null}
+  if(ae>=0.01){if(d<=0.0051)return"round";if(ae>=100&&d<=0.051)return"round"}else{if(d<=0.015*ae)return"round";if(e<0.0005&&v>=0&&v<0.0005)return v===0?"zero":"round";if(Math.abs(v-+e.toFixed(3))<1e-12||Math.abs(v-+e.toFixed(4))<1e-12||Math.abs(v-+e.toPrecision(2))<1e-12)return"round"}return null}
 const parseTails=v=>{const s=String(v==null?"":v).toLowerCase();if(/^\s*1(\.0*)?\s*$|one|1-tail|1 tail/.test(s))return 1;if(/^\s*2(\.0*)?\s*$|two|2-tail|2 tail/.test(s))return 2;return null};
 const parseType=v=>{const s=String(v==null?"":v).toLowerCase();if(!s.trim())return null;if(/pair|dependent/.test(s)&&!/independent/.test(s))return"paired";if(/one[- ]?sample|single/.test(s))return"one";if(/unequal|welch|not equal/.test(s))return"uneq";if(/equal/.test(s))return"eq";if(/independent|two[- ]?sample|unpaired/.test(s))return"ind";return"?"};
 const parseDec=v=>{const s=String(v==null?"":v).toLowerCase();if(!s.trim())return null;if(/(not|n't|fail|cannot|can't)\s*(to\s*)?reject|accept\s*h0|accept\s*null|retain|keep h0/.test(s))return"keep";if(/reject|accept\s*h1|accept\s*alternative|significant/.test(s))return"rej";return"?"};
@@ -1800,6 +1844,9 @@ function check(t,getC,tp){const E=t.E,out=[];const add=(it,st,msg,v,f)=>out.push
     if(!why&&it.k==="t"){if(t.kind==="one"&&near(Math.abs(nv),Math.abs(E.t)*Math.sqrt(1/E.n)))why="Divide by the SEM, not the SD.";else if(t.kind==="ind"&&near(Math.abs(nv),Math.abs(t.eq?E.W.t:E.P.t)))why=t.eq?"That's the UNEQUAL-variance t. This task uses equal variances. "+t.eqWhy:"That's the EQUAL-variance t. "+t.eqWhy;
       else if(t.kind==="paired"&&near(Math.abs(nv),Math.abs(E.P.t)))why="That's the INDEPENDENT t. The data are paired – use the differences.";else why=t.kind==="paired"?"t = d̄ ÷ (s_d ÷ √n).":t.kind==="one"?"t = (Mean − μ₀) ÷ SEM.":"Run Data Analysis → t-Test ("+(t.eq?"Equal":"Unequal")+" Variances) and read t Stat."}
     if(!why&&it.k==="tc"){const o=t.tails===1?E.tc2:E.tc1;if(near(Math.abs(nv),o))why=t.tails===1?"That's the TWO-tailed critical value. One-tailed: <code>=T.INV(1-0.05, df)</code>.":"That's the ONE-tailed critical value. Two-tailed: <code>=T.INV.2T(0.05, df)</code>.";else if(near(Math.abs(nv),TS.tINV(1-.05,Math.max(1,E.df-1)))||near(Math.abs(nv),TS.tINV(1-.025,Math.max(1,E.df-1))))why="Check the df you used.";else why=t.tails===1?"One-tailed: <code>=T.INV(1-α, df)</code>.":"Two-tailed: <code>=T.INV.2T(α, df)</code>."}
+    if(!why&&it.k==="p"){const tcRef=t.R.tc,tRef=t.R.t;if(f&&XC.refsOf(f.slice(1)).some(g=>!g.sheet&&XC.A1(g.r1,g.c1)===tcRef))why="Your formula uses <code>"+tcRef+"</code> – that's the <b>t Critical</b> (cut-off), which always gives p = α (0.05). The p-value must come from your <b>t Stat</b> in <code>"+tRef+"</code>.";
+      else if(t.kind!=="ind"&&[E.df+1,E.df-1].some(d=>near(nv,(t.tails===1?1:2)*TS.tRT(Math.abs(E.t),d))))why="Nearly – but check the <b>df</b>: use df = n − 1 (<code>"+t.R.df+"</code>), not n.";
+      else if(near(nv,t.alpha)||near(nv,t.alpha/2))why="p = "+fmtN(nv)+" is just α (or α/2) – you get this when you use the <b>t Critical</b> value. Use the <b>t Stat</b> (<code>"+tRef+"</code>) instead.";}
     if(!why&&it.k==="p"){const other=t.tails===1?E.p2:E.p1;
       if(near(nv,other))why=t.tails===1?"That's the TWO-tailed p. This H₁ has a direction → use tails = 1.":"That's the ONE-tailed p. This H₁ says “different” → tails = 2.";
       else{const C=[];if(t.kind!=="one"){[1,2].forEach(tl=>[1,2,3].forEach(ty=>{let r;try{if(ty===1){if(t.n1!==t.n2)return;r=TS.pairedT(t.a,t.b)}else r=ty===2?TS.pooledT(t.a,t.b):TS.welchT(t.a,t.b)}catch(e){return}C.push({tl,ty,p:tl===1?r.p1:r.p2})}))}
@@ -1819,11 +1866,18 @@ function check(t,getC,tp){const E=t.E,out=[];const add=(it,st,msg,v,f)=>out.push
     else{const g=tp.find(x=>x.title===want)||tp[0];if(g.title!==want)out.push(Object.assign(it,{st:"bad",msg:"You ran <b>"+g.title+"</b>. This task needs <b>"+want+"</b>."+(t.kind==="paired"?" "+(t.pairWhy||""):" "+t.eqWhy)}));
       else if(typeof g.t==="number"&&near(Math.abs(g.t),Math.abs(t.E.t)))out.push(Object.assign(it,{st:"ok",msg:"<b>"+g.title+"</b>"+(g.sheet?" on sheet “"+g.sheet+"”":"")+" · t Stat "+fmtN(g.t)+" ✔"}));
       else out.push(Object.assign(it,{st:"bad",msg:"Right tool, but t Stat = "+fmtN(g.t)+" doesn't match. Check the input ranges (whole column, tick <b>Labels</b> only if you included the heading)."}))}}
+  /* F-test (optional, not scored) */
+  if(tp&&t.kind==="ind"){const it={k:"ft",ref:"F-Test",label:"F-test · equal or unequal variances? (optional)"};const g=(tp.F||[])[0];
+    if(!g)out.push(Object.assign(it,{st:"todo",msg:"Optional first step: Data Analysis → <b>F-Test Two-Sample for Variances</b> (Output Range J20) to decide equal vs unequal."}));
+    else if(typeof g.F!=="number"||typeof g.p!=="number")out.push(Object.assign(it,{st:"warn",msg:"F-test output found but F / P values are missing."}));
+    else{const okF=Math.abs(g.F-t.F.F)<1e-3*t.F.F||Math.abs(g.F-1/t.F.F)<1e-3/t.F.F;const verdict=g.p<0.05?"unequal":"equal";const want=t.eq?"equal":"unequal";
+      out.push(Object.assign(it,{st:okF&&verdict===want?"ok":"warn",msg:okF?("F = "+fmtN(g.F)+" · P(F&lt;=f) one-tail = "+fmtN(g.p)+" → "+(g.p<0.05?"p &lt; 0.05 → variances differ → <b>Unequal Variances</b> t-test.":"p &gt; 0.05 → <b>Equal Variances</b> t-test.")+(g.F<1?" <i>(Tip: put the larger-variance group as Variable 1 so F ≥ 1.)</i>":"")):"F doesn't match this data – check the two input ranges (and tick Labels if you included the headings)."}))}}
   return out}
 /* scan any sheet-like {get(r,c)->value, rows, cols, name} for ToolPak tables */
-function scanTP(sheets){const found=[];sheets.forEach(s=>{for(let r=0;r<s.rows;r++)for(let c=0;c<s.cols;c++){const v=s.get(r,c);if(typeof v==="string"&&/^t-Test:/i.test(v.trim())){const o={title:v.trim(),sheet:s.name,r,c};
+function scanTP(sheets){const found=[];found.F=[];sheets.forEach(s=>{for(let r=0;r<s.rows;r++)for(let c=0;c<s.cols;c++){const v=s.get(r,c);if(typeof v==="string"&&/^F-Test/i.test(v.trim())){const o={title:v.trim(),sheet:s.name,r,c};
+      for(let k=r+1;k<Math.min(s.rows,r+14);k++){const L=s.get(k,c);if(typeof L!=="string")continue;const x=s.get(k,c+1);if(/^F$/.test(L.trim()))o.F=x;if(/^P\(F/i.test(L))o.p=x;if(/^F Critical/i.test(L))o.fc=x}found.F.push(o)}}});sheets.forEach(s=>{for(let r=0;r<s.rows;r++)for(let c=0;c<s.cols;c++){const v=s.get(r,c);if(typeof v==="string"&&/^t-Test:/i.test(v.trim())){const o={title:v.trim(),sheet:s.name,r,c};
       for(let k=r+1;k<Math.min(s.rows,r+18);k++){const L=s.get(k,c);if(typeof L!=="string")continue;const x=s.get(k,c+1);if(/^t Stat/i.test(L))o.t=x;if(/^df$/i.test(L.trim()))o.df=x;if(/one-tail/i.test(L)&&/^P/i.test(L))o.p1=x;if(/two-tail/i.test(L)&&/^P/i.test(L))o.p2=x}found.push(o)}}});return found}
-window.TK={TASKS,TYPE_LIST,DEC_LIST,buildSheet,toolpak,check,scanTP,near,parseTails,parseType,parseDec,TOOLNAME};
+window.TK={TASKS,TYPE_LIST,DEC_LIST,buildSheet,toolpak,ftool,check,scanTP,near,parseTails,parseType,parseDec,TOOLNAME};
 })();
 
 (function(){
@@ -2136,6 +2190,7 @@ function solution(t){const E=t.E,d=el("details","sol");d.innerHTML="<summary>◆
   d.addEventListener("toggle",()=>{if(!d.open||b.childNodes.length)return;const shs=TK.buildSheet(t,"sol"),v=XC.evalSheet(shs);
     let h="<table class='soltab'><tbody>";if(t.kind==="paired")h+="<tr><td>D3 ↓</td><td>Difference for each pair: <code>=B3-C3</code>, then double-click the fill handle</td><td></td></tr>";
     t.L.forEach(x=>{const val=v[x.ref];h+="<tr><td>"+x.ref+"</td><td>"+x.label+(x.f?" · <code>"+x.f.replace(/</g,"&lt;")+"</code>":"")+"</td><td>"+(typeof val==="number"?XC.general(val):val)+"</td></tr>"});h+="</tbody></table>";
+    if(t.kind==="ind"){h+="<div class='sec' style='margin:14px 0 6px'><em>F</em> STEP 0 · F-TEST TWO-SAMPLE FOR VARIANCES (OUTPUT J20)</div><table class='tpo'>"+TK.ftool(t).map((r,i)=>"<tr class='"+(i===0?"ti":"")+(/^F$|P\(F/.test(r[0])?" hl":"")+"'>"+r.map(x=>"<td>"+(typeof x==="number"?XC.general(x):x)+"</td>").join("")+"</tr>").join("")+"</table><div class='verdict2"+(t.F.p1<0.05?"":" ns")+"'>p "+(t.F.p1<0.05?"&lt;":"&gt;")+" 0.05 → <b>"+(t.F.p1<0.05?"unequal":"equal")+" variances</b> → "+(t.eq?TK.TOOLNAME.eq:TK.TOOLNAME.uneq)+"</div>"}
     if(t.kind!=="one"){h+="<div class='sec' style='margin:14px 0 6px'><em>TP</em> DATA ANALYSIS · "+(t.kind==="paired"?TK.TOOLNAME.paired:t.eq?TK.TOOLNAME.eq:TK.TOOLNAME.uneq).toUpperCase()+"</div><table class='tpo'>"+TK.toolpak(t).map((r,i)=>"<tr class='"+(i===0?"ti":"")+((r[0]==="t Stat"||(t.tails===1?/one-tail/:/two-tail/).test(r[0]))?" hl":"")+"'>"+r.map(x=>"<td>"+(typeof x==="number"?XC.general(x):x)+"</td>").join("")+"</tr>").join("")+"</table>"}
     b.innerHTML=h;const s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 900 200");s.setAttribute("class","tsvg");b.appendChild(s);
     const df=E.df,y0=170,sc=380,T=x=>450+x*75,tc=E.tc;for(let x=-5;x<=5;x++)sv("text",{x:T(x),y:192,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=x;
@@ -2155,6 +2210,105 @@ function solution(t){const E=t.E,d=el("details","sol");d.innerHTML="<summary>◆
     ["▤ DATA ANALYSIS → Paired t-test · ranges B2:B8 &amp; C2:C8 · tick Labels · Output F5","ToolPak",(v,c)=>v.F5===TK.TOOLNAME.paired&&typeof v.G14==="number"&&Math.abs(v.G14-TS.pairedT(A,Bv).t)<1e-9]];
   const w=$("#warmMis"),ok=new Set();addComps(1);M.forEach((m,i)=>{const d=el("div","mi","<span class='k'>"+(i+1)+"</span><p>"+m[0]+"</p><button class='btn ghost sm'>Hint</button><div class='hintx'>"+(m[1]==="drag ■"?"Select D3 → drag the small orange square down to D8.":m[1]==="ToolPak"?"Variable 1: $B$2:$B$8 · Variable 2: $C$2:$C$8 · ✔ Labels · Output Range: $F$5":"Type: <code>"+m[1]+"</code>")+"</div>");$("button",d).onclick=()=>$(".hintx",d).classList.toggle("show");w.appendChild(d)});
   g.on((sheet,v)=>{M.forEach((m,i)=>{if(ok.has(i))return;let r=false;try{r=m[2](v,sheet.cells)}catch(e){}if(r){ok.add(i);const d=w.children[i];d.classList.add("ok");$(".k",d).textContent="✔"}});if(ok.size===M.length)markDone(null,"warm")})})();
+})();
+
+/* ================= EXCEL WALKTHROUGHS (tabs 06–08) + F-TEST EXPLAINER ================= */
+(function(){
+"use strict";
+const {$,$$,el,sv,RM}=window.__core;const TK=window.TK,XC=window.XC,TS=window.TS;
+const GR="#217346",O="#ff6a00";
+const tx=(s,x,y,t,o)=>{o=o||{};const e=sv("text",Object.assign({x,y,fill:o.fill||"#222","font-size":o.fs||12,"font-weight":o.fw||400},o.a||{}),s);e.style.fontFamily="Segoe UI,Arial,sans-serif";e.style.letterSpacing="0";e.textContent=t;return e};
+function hot(s,x,y,w,h){const r=sv("rect",{x:x-3,y:y-3,width:w+6,height:h+6,fill:"rgba(255,106,0,.12)",stroke:O,"stroke-width":3,rx:3,style:"filter:drop-shadow(0 0 6px #ff6a00)"},s);if(!RM)sv("animate",{attributeName:"stroke-opacity",values:"1;.25;1",dur:"1.2s",repeatCount:"indefinite"},r);return r}
+const fit=(t,w)=>{t=String(t);const n=Math.floor((w-8)/6.4);return t.length>n?t.slice(0,Math.max(1,n-1))+"…":t};
+/* frame: title bar + ribbon tabs */
+function frame(s,tab){sv("rect",{x:0,y:0,width:900,height:430,fill:"#f3f3f3"},s);sv("rect",{x:0,y:0,width:900,height:28,fill:GR},s);tx(s,12,19,"Excel · S249 practice.xlsx",{fill:"#fff",fw:600});
+  ["File","Home","Insert","Formulas","Data","Review","View"].forEach((t,i)=>{const x=12+i*84;if(t===tab)sv("rect",{x:x-6,y:30,width:74,height:22,fill:"#fff",stroke:"#d0d0d0"},s);tx(s,x,46,t,{fw:t===tab?700:400,fill:t==="File"?GR:"#222"})})}
+/* sheet view */
+function sheet(s,o){/* o: {sh, vals, cols:[c...], rows:[r...], show:Set(refs), sel, ranges:[{r1,c1,r2,c2}], fx, gap} */
+  sv("rect",{x:0,y:54,width:900,height:26,fill:"#fff",stroke:"#d0d0d0"},s);sv("rect",{x:6,y:58,width:70,height:18,fill:"#fff",stroke:"#bbb"},s);tx(s,14,71,o.sel||"",{fw:700});tx(s,86,72,"fx",{fill:"#888",a:{"font-style":"italic"}});tx(s,110,72,o.fx||"",{fw:600,fill:o.fx&&o.fx[0]==="="?"#0b4f8a":"#222"});
+  const W={0:52,1:96,2:96,3:104,5:250,6:104,7:150,9:220,10:104,11:104};const xs=[];let x=34;o.cols.forEach(c=>{if(c==="gap"){xs.push([c,x,18]);x+=18;return}xs.push([c,x,W[c]||90]);x+=W[c]||90});
+  const y0=84,rh=19;sv("rect",{x:0,y:y0,width:900,height:rh,fill:"#e9e9e9"},s);xs.forEach(([c,x,w])=>{if(c!=="gap")tx(s,x+w/2,y0+14,XC.colL(c),{fill:"#555",fs:11,a:{"text-anchor":"middle"}});else tx(s,x+9,y0+14,"…",{fill:"#999",a:{"text-anchor":"middle"}})});
+  const sty=o.sh.style||{};const cellX=c=>xs.find(z=>z[0]===c);
+  o.rows.forEach((r,i)=>{const y=y0+rh*(i+1);sv("rect",{x:0,y,width:34,height:rh,fill:"#e9e9e9",stroke:"#d6d6d6"},s);tx(s,17,y+14,r==="gap"?"⋮":String(r+1),{fill:"#555",fs:11,a:{"text-anchor":"middle"}});
+    xs.forEach(([c,x,w])=>{const ref=c==="gap"||r==="gap"?null:XC.A1(r,c);const st=ref?sty[ref]:"";const fill=st==="ans"?"#ffe8d1":st==="giv"?"#d9f7ff":st==="hdr"?"#0b1a2b":"#fff";sv("rect",{x,y,width:w,height:rh,fill,stroke:"#dcdcdc"},s);
+      if(!ref)return;const raw=o.sh.cells[ref];if(raw==null)return;if(st==="ans"&&!o.show.has(ref))return;const v=o.vals[ref];const t=XC.show(v);const num=typeof v==="number";
+      let aw=w;if(!num){const k=xs.findIndex(z=>z[0]===c);for(let j=k+1;j<xs.length;j++){const cc=xs[j][0];if(cc==="gap")break;const rr=XC.A1(r,cc);if(o.sh.cells[rr]!=null||(o.sh.style||{})[rr]==="ans")break;aw+=xs[j][2]}}
+      tx(s,num?x+w-5:x+5,y+14,fit(t,aw),{fs:st==="hdr"?10:11.5,fw:st==="ttl"||st==="hdr"||st==="lab"?700:400,fill:st==="hdr"?"#fff":st==="ttl"?"#e65c00":st==="lab"?"#0b6e80":st==="hint"?"#999":"#222",a:{"text-anchor":num?"end":"start"}})})});
+  const rowY=r=>{const i=o.rows.indexOf(r);return i<0?null:y0+rh*(i+1)};
+  (o.ranges||[]).forEach(g=>{const a=cellX(g.c1),b=cellX(g.c2);if(!a||!b)return;let ys=o.rows.filter(r=>r!=="gap"&&r>=g.r1&&r<=g.r2).map(rowY);if(!ys.length)return;const yA=Math.min(...ys),yB=Math.max(...ys)+rh;sv("rect",{x:a[1],y:yA,width:b[1]+b[2]-a[1],height:yB-yA,fill:"rgba(0,170,255,.16)",stroke:"#0a84ff","stroke-width":2,"stroke-dasharray":"5 3"},s)});
+  if(o.sel){const g=XC.parseRange(o.sel);const a=cellX(g.c1),b=cellX(g.c2);const ys=o.rows.filter(r=>r!=="gap"&&r>=g.r1&&r<=g.r2).map(rowY);if(a&&b&&ys.length){const yA=Math.min(...ys);hot(s,a[1],yA,b[1]+b[2]-a[1],Math.max(...ys)+rh-yA)}}
+  if(o.fx)hot(s,104,58,Math.min(780,o.fx.length*7.2+14),18)}
+function ribbon(s){frame(s,"Data");sv("rect",{x:0,y:54,width:900,height:70,fill:"#fff",stroke:"#d0d0d0"},s);["Get Data","Refresh All","Sort","Filter","What-If","Forecast"].forEach((m,i)=>tx(s,20+i*110,96,m,{fs:11,fill:"#555"}));
+  sv("rect",{x:776,y:62,width:110,height:54,fill:"#e9f3ec",stroke:GR},s);tx(s,790,86,"📊 Data",{fw:700});tx(s,790,104,"Analysis",{fw:700});hot(s,776,62,110,54);hot(s,12+4*84-6,30,74,22);
+  for(let r=0;r<12;r++)sv("line",{x1:0,y1:150+r*22,x2:900,y2:150+r*22,stroke:"#e0e0e0"},s)}
+const TOOLS=["Correlation","Covariance","Descriptive Statistics","Exponential Smoothing","F-Test Two-Sample for Variances","Fourier Analysis","Histogram","Moving Average","Random Number Generation","Rank and Percentile","Regression","Sampling","t-Test: Paired Two Sample for Means","t-Test: Two-Sample Assuming Equal Variances","t-Test: Two-Sample Assuming Unequal Variances","z-Test: Two Sample for Means"];
+function list(s,pick){frame(s,"Data");sv("rect",{x:220,y:64,width:460,height:350,fill:"#fff",stroke:"#888"},s);sv("rect",{x:220,y:64,width:460,height:26,fill:"#eaeaea"},s);tx(s,232,82,"Data Analysis",{fw:700});tx(s,232,108,"Analysis Tools",{});
+  sv("rect",{x:232,y:116,width:330,height:286,fill:"#fff",stroke:"#888"},s);TOOLS.forEach((m,i)=>{const y=120+i*17.6;if(m===pick)sv("rect",{x:233,y:y,width:328,height:17,fill:"#2d8cff"},s);tx(s,240,y+13,m,{fs:11.5,fill:m===pick?"#fff":"#222"})});
+  sv("rect",{x:578,y:116,width:88,height:24,fill:"#f4f4f4",stroke:"#888"},s);tx(s,610,132,"OK",{fw:700});const i=TOOLS.indexOf(pick);hot(s,233,120+i*17.6,328,17);hot(s,578,116,88,24)}
+function dlg(s,o){frame(s,"Data");sv("rect",{x:150,y:60,width:600,height:350,fill:"#fff",stroke:"#888"},s);sv("rect",{x:150,y:60,width:600,height:26,fill:"#eaeaea"},s);tx(s,162,78,o.title,{fw:700});tx(s,164,108,"Input",{fw:700});
+  let y=134;const rows=[["Variable 1 Range:",o.v1],["Variable 2 Range:",o.v2]];if(o.hm!==undefined)rows.push(["Hypothesized Mean Difference:",o.hm]);
+  rows.forEach(([l,v])=>{tx(s,164,y,l,{});sv("rect",{x:380,y:y-15,width:180,height:22,fill:"#fff",stroke:"#888"},s);tx(s,386,y,v,{fw:600});if(v)hot(s,380,y-15,180,22);y+=34});
+  sv("rect",{x:164,y:y-12,width:14,height:14,fill:"#fff",stroke:"#555"},s);tx(s,165,y,"✔",{fw:900,fill:GR});tx(s,186,y,"Labels",{});hot(s,162,y-14,70,18);y+=34;
+  tx(s,164,y,"Alpha:",{});sv("rect",{x:220,y:y-15,width:60,height:22,fill:"#fff",stroke:"#888"},s);tx(s,228,y,"0.05",{fw:600});y+=40;
+  tx(s,164,y,"Output options",{fw:700});y+=26;sv("circle",{cx:172,cy:y-4,r:6,fill:"#fff",stroke:"#555"},s);sv("circle",{cx:172,cy:y-4,r:3,fill:GR},s);tx(s,186,y,"Output Range:",{});sv("rect",{x:290,y:y-15,width:110,height:22,fill:"#fff",stroke:"#888"},s);tx(s,296,y,o.out,{fw:600});hot(s,290,y-15,110,22);
+  sv("rect",{x:640,y:96,width:90,height:24,fill:"#f4f4f4",stroke:"#888"},s);tx(s,674,112,"OK",{fw:700});hot(s,640,96,90,24)}
+/* ---------- demo builders ---------- */
+const all=sh=>new Set(Object.keys(sh.cells));
+function demo(t){const sh=TK.buildSheet(t,"sol"),vals=XC.evalSheet(sh),R=t.R,n1=t.n1,n2=t.n2,ra=XC.parseRange("B3:B"+(n1+2)),rb=XC.parseRange("C3:C"+(n2+2));
+  const st=[];const shown=new Set();const val=ref=>XC.show(vals[ref]);
+  const rowsA=(()=>{const r=[];for(let i=0;i<Math.max(17,t.ansR0+t.L.length);i++)r.push(i);return r})();
+  const colsA=t.kind==="one"?[0,1,5,6,7]:t.kind==="ind"?[0,1,2,5,6,7]:[0,1,2,3,5,6,7];
+  const step=(cap,o)=>{const snap=new Set(shown);st.push({cap,draw:s=>{frame(s,"Home");sheet(s,Object.assign({sh,vals,cols:colsA,rows:rowsA,show:snap},o))}})};
+  const fstep=(ref,cap,extra)=>{shown.add(ref);const f=sh.cells[ref];const g=XC.refsOf(f&&f[0]==="="?f.slice(1):"").filter(x=>!x.sheet).map(x=>({r1:x.r1,c1:x.c1,r2:Math.min(x.r2,rowsA.length-1),c2:x.c2}));step(cap+" → <b class='hb'>"+val(ref)+"</b>",Object.assign({sel:ref,fx:f,ranges:g},extra||{}))};
+  const outView=(r0,n,hl,cap)=>{const rows=r0<=2?[0,1]:[0,1,"gap"];for(let i=r0;i<r0+n;i++)rows.push(i);st.push({cap,draw:s=>{frame(s,"Data");const all2=new Set(Object.keys(sh.cells));sheet(s,{sh,vals,cols:[0,1,2,"gap",9,10,11],rows,show:all2});
+    hl.forEach(r=>{const i=rows.indexOf(r);if(i>=0){const y=84+19*(i+1);hot(s,34+52+96+96+18,y,220+104,19)}})}})};
+  if(t.kind==="one"){
+    fstep(R.n,"<b>n</b> · click <code>G5</code>, type <code>=COUNT(B3:B27)</code>, press Enter");fstep(R.mean,"<b>Mean</b> · <code>=AVERAGE(B3:B27)</code>");fstep(R.sd,"<b>SD</b> · <code>=STDEV(B3:B27)</code>");fstep(R.sem,"<b>SEM</b> = SD ÷ √n · <code>=G7/SQRT(G5)</code>");
+    fstep(R.df,"<b>df</b> = n − 1 · <code>=G5-1</code>");fstep(R.t,"<b>t Stat</b> = (Mean − μ₀) ÷ SEM · <code>=(G6-G3)/G8</code>");
+    shown.add(R.tails);step("<b>Tails</b> · “different” → pick <b>2</b> from the ▾ list",{sel:R.tails,fx:"2"});
+    fstep(R.tc,"<b>t Critical</b> (two-tailed) · <code>=T.INV.2T(G2,G9)</code>");fstep(R.p,"<b>p-value</b> from the <b>t Stat</b> (G10) – not G12! · <code>=T.DIST.2T(ABS(G10),G9)</code>");
+    shown.add(R.dec);step("<b>Decision</b> · p = "+val(R.p)+" &lt; 0.05 and |t| "+(+Math.abs(t.E.t).toFixed(3))+" &gt; t crit "+(+t.E.tc.toFixed(3))+" → <b class='hl'>Reject H0</b>",{sel:R.dec,fx:"Reject H0"});
+    st.push({cap:"<b>Why no ToolPak?</b> The Analysis ToolPak has no one-sample t-test – the formulas above <i>are</i> the method.",draw:s=>{frame(s,"Home");sheet(s,{sh,vals,cols:colsA,rows:rowsA,show:all(sh)})}})}
+  if(t.kind==="ind"){const big=t.F.big,V1=big?"$B$2:$B$"+(n1+2):"$C$2:$C$"+(n2+2),V2=big?"$C$2:$C$"+(n2+2):"$B$2:$B$"+(n1+2),F=t.F;
+    st.push({cap:"<b>F-test first</b> · <b>Data</b> tab → <b>Data Analysis</b>",draw:s=>ribbon(s)});
+    st.push({cap:"Choose <b>F-Test Two-Sample for Variances</b> → OK",draw:s=>list(s,"F-Test Two-Sample for Variances")});
+    st.push({cap:"Variable 1 = group with the <b>larger variance</b> ("+(big?t.la:t.lb)+") · include headings → tick <b>Labels</b> · Output Range <b>$J$20</b>",draw:s=>dlg(s,{title:"F-Test Two-Sample for Variances",v1:V1,v2:V2,out:"$J$20"})});
+    outView(19,10,[26,27,28],"Read <b>F</b> = "+F.F.toFixed(3)+" and <b>P(F&lt;=f) one-tail</b> = "+(F.p1<.001?F.p1.toExponential(2):F.p1.toFixed(3))+" → "+(F.p1<0.05?"p &lt; 0.05 → variances differ → use <b class='hl'>UNEQUAL</b> variances":"p &gt; 0.05 (F &lt; F crit) → use <b class='hl'>EQUAL</b> variances"));
+    const tool=t.eq?TK.TOOLNAME.eq:TK.TOOLNAME.uneq;
+    st.push({cap:"<b>Data Analysis</b> again → <b>"+tool+"</b> → OK",draw:s=>list(s,tool)});
+    st.push({cap:"Variable 1 <b>$B$2:$B$"+(n1+2)+"</b> · Variable 2 <b>$C$2:$C$"+(n2+2)+"</b> · Hypothesized Mean Difference <b>0</b> · ✔ Labels · Output Range <b>$J$3</b>",draw:s=>dlg(s,{title:tool,v1:"$B$2:$B$"+(n1+2),v2:"$C$2:$C$"+(n2+2),hm:"0",out:"$J$3"})});
+    outView(2,14,t.eq?[10,11,t.tails===1?12:14,t.tails===1?13:15]:[9,10,t.tails===1?11:13,t.tails===1?12:14],"Read <b>df</b>, <b>t Stat</b> = "+(+t.E.t.toFixed(3))+" and the <b>"+(t.tails===1?"one-tail":"two-tail")+"</b> P = "+XC.show(t.E.p)+" (H₁ is "+(t.tails===1?"one":"two")+"-tailed)");
+    t.L.forEach(x=>shown.add(x.ref));step("Fill the orange cells: <code>=COUNT</code> · <code>=AVERAGE</code> · <code>=STDEV</code> · t Stat <code>"+sh.cells[R.t]+"</code> · p <code>"+sh.cells[R.p]+"</code>",{sel:R.p,fx:sh.cells[R.p],ranges:[ra,rb]});
+    step("<b>Decision</b> · p = "+XC.show(t.E.p)+" &lt; 0.05 → <b class='hl'>Reject H0</b>",{sel:R.dec,fx:"Reject H0"})}
+  if(t.kind==="paired"){shown.add("D3");step("<b>Differences</b> · in <code>D3</code> type <code>=B3-C3</code> → <b class='hb'>"+val("D3")+"</b>",{sel:"D3",fx:"=B3-C3",ranges:[XC.parseRange("B3:C3")]});
+    for(let i=4;i<=n1+2;i++)shown.add("D"+i);step("Select D3 → <b>double-click the fill handle ■</b> to fill down to D"+(n1+2),{sel:"D3:D"+(n1+2),fx:"=B3-C3"});
+    [R.n,R.mA,R.sA,R.mB,R.sB,R.md,R.sdd].forEach(r=>shown.add(r));step("Descriptives · <code>=COUNT</code> · <code>=AVERAGE</code> · <code>=STDEV</code> on B, C and D (d̄ and s_d)",{sel:R.n+":"+R.sdd,fx:sh.cells[R.sdd],ranges:[XC.parseRange("D3:D"+(n1+2))]});
+    st.push({cap:"<b>Data</b> tab → <b>Data Analysis</b>",draw:s=>ribbon(s)});st.push({cap:"Choose <b>t-Test: Paired Two Sample for Means</b> → OK",draw:s=>list(s,TK.TOOLNAME.paired)});
+    st.push({cap:"Variable 1 <b>$B$2:$B$"+(n1+2)+"</b> (Before) · Variable 2 <b>$C$2:$C$"+(n1+2)+"</b> (After) · ✔ Labels · Output Range <b>$J$3</b>",draw:s=>dlg(s,{title:TK.TOOLNAME.paired,v1:"$B$2:$B$"+(n1+2),v2:"$C$2:$C$"+(n1+2),hm:"",out:"$J$3"})});
+    outView(2,14,[11,t.tails===1?12:14,t.tails===1?13:15],"Read <b>t Stat</b> = "+(+t.E.t.toFixed(3))+" · H₁ “lowers” → <b>one-tail</b> P = "+XC.show(t.E.p1)+" · t crit one-tail = "+(+t.E.tc1.toFixed(3)));
+    [R.type,R.tails,R.df,R.t,R.tc,R.p].forEach(r=>shown.add(r));step("Check with formulas: t <code>=G9/(G10/SQRT(G4))</code> · p <code>"+sh.cells[R.p]+"</code> → "+XC.show(t.E.p)+" (same as ToolPak ✔)",{sel:R.p,fx:sh.cells[R.p]});
+    shown.add(R.dec);step("<b>Decision</b> · p = "+XC.show(t.E.p)+" &lt; 0.05 → <b class='hl'>Reject H0</b> – the drug lowers temperature",{sel:R.dec,fx:"Reject H0"})}
+  return st}
+function mount(host,t){const box=el("details","card xw");box.open=true;box.innerHTML="<summary><span class='xw-k'>EXCEL STEP-BY-STEP</span><b>Worked demo · "+t.title+" ("+t.src+")</b><span class='xw-t'>▾</span></summary>";host.appendChild(box);
+  const s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 900 430");s.setAttribute("class","mock");box.appendChild(s);
+  const cap=el("div","stepcap");box.appendChild(cap);const bar=el("div","stepper");const p=el("button","btn ghost sm","◂"),dots=el("div","dots"),n=el("button","btn sm","Next ▸"),pl=el("button","btn ghost sm","▶ Auto-play");bar.append(p,dots,n,pl);box.appendChild(bar);
+  const ST=demo(t);let i=0,tm=null;const draw=()=>{s.innerHTML="";ST[i].draw(s);cap.innerHTML="<b>STEP "+(i+1)+" / "+ST.length+"</b> · "+ST[i].cap;dots.innerHTML=ST.map((_,k)=>"<i class='"+(k===i?"on":"")+"'></i>").join("");p.disabled=i===0;n.textContent=i===ST.length-1?"Restart ⟲":"Next ▸"};
+  p.onclick=()=>{clearInterval(tm);i=Math.max(0,i-1);draw()};n.onclick=()=>{clearInterval(tm);i=i===ST.length-1?0:i+1;draw()};pl.onclick=()=>{clearInterval(tm);i=0;draw();tm=setInterval(()=>{if(i>=ST.length-1){clearInterval(tm);return}i++;draw()},RM?900:2600)};draw()}
+$$(".xwalk").forEach(h=>{const t=TK.TASKS.find(x=>x.id===h.dataset.t);if(t)mount(h,t)});
+
+/* ---------- F-test explainer (tab 07) ---------- */
+(function(){const host=$("#ftest");if(!host)return;const T=TK.TASKS.filter(t=>t.kind==="ind");
+  host.innerHTML="<div class='card o'><div class='grid g2' style='align-items:center'><div><h3>Step 0 · F-test</h3><p class='mute' style='font-family:system-ui;letter-spacing:0'>Before an independent t-test, check if the two groups have a similar <b class='hl'>spread</b> (variance).</p>"+
+   "<div class='fout' style='margin-top:10px'>F = <span>s₁²</span> ÷ <span>s₂²</span><div style='font:500 .72rem system-ui;color:#7fa3b5;margin-top:6px;letter-spacing:0'>larger variance on top → F ≥ 1</div></div></div><svg class='viz' id='ftViz' viewBox='0 0 420 200'></svg></div>"+
+   "<div class='ftflow'><div class='fq'>P(F&lt;=f) one-tail<br><b>vs 0.05</b></div><div class='fa'><div class='fy'><b>p ≥ 0.05</b><span>F &lt; F Critical</span><em>Variances similar</em><code>Equal Variances · type 2</code></div><div class='fn'><b>p &lt; 0.05</b><span>F &gt; F Critical</span><em>Variances differ</em><code>Unequal Variances · type 3</code></div></div></div>"+
+   "<div class='seg' id='ftSeg' style='margin-top:12px'>"+T.map((t,i)=>"<button class='"+(i===0?"on":"")+"' data-i='"+i+"'>"+t.title.toUpperCase()+"</button>").join("")+"</div><table class='tpo' id='ftTab' style='margin-top:10px'></table><div class='verdict2' id='ftV'></div>"+
+   "<p class='mute' style='margin-top:10px;font-family:system-ui;letter-spacing:0'>Formula shortcut: <code>=F.TEST(B3:B120,C3:C128)</code> gives the <b>two-tailed</b> p. Same rule: p &lt; 0.05 → unequal variances.</p></div>";
+  function draw(i){const t=T[i],F=t.F,rows=TK.ftool(t);$("#ftTab").innerHTML=rows.map((r,k)=>"<tr class='"+(k===0?"ti":"")+(/^F$|P\(F|F Critical/.test(r[0])?" hl":"")+"'>"+r.map(x=>"<td>"+(typeof x==="number"?XC.general(x):x)+"</td>").join("")+"</tr>").join("");
+    const unequal=F.p1<0.05,V=$("#ftV");V.className="verdict2"+(unequal?"":" ns");V.innerHTML="F = "+F.F.toFixed(3)+(unequal?" &gt; ":" &lt; ")+"F crit "+F.fc.toFixed(3)+" · p = "+(F.p1<.001?F.p1.toExponential(2):F.p1.toFixed(3))+(unequal?" &lt; ":" &gt; ")+"0.05 → <b>"+(unequal?"UNEQUAL":"EQUAL")+" VARIANCES</b> → Data Analysis: <b>"+(unequal?TK.TOOLNAME.uneq:TK.TOOLNAME.eq)+"</b>";
+    const s=$("#ftViz");s.innerHTML="";const g=[[t.la,t.a,"#ff6a00",60],[t.lb,t.b,"#00e5ff",140]];const all=t.a.concat(t.b),lo=Math.min(...all),hi=Math.max(...all),X=v=>20+380*(v-lo)/(hi-lo||1);
+    g.forEach(([lb,d,col,y])=>{const m=TS.mean(d),sd=TS.sd(d);sv("rect",{x:X(m-sd),y:y-22,width:Math.max(2,X(m+sd)-X(m-sd)),height:44,fill:col,opacity:.14,stroke:col,"stroke-opacity":.5},s);d.forEach((v,k)=>sv("circle",{cx:X(v),cy:y+((Math.sin(k*12.9898)*43758.5453)%1+1)%1*26-13,r:d.length>60?2:3,fill:col,opacity:.85},s));
+      sv("text",{x:22,y:y-28,fill:col,"font-size":10,"font-weight":800},s).textContent=lb.split(" (")[0].toUpperCase()+" · s² = "+(+TS.vari(d).toFixed(2))+" · n = "+d.length})}
+  $$("#ftSeg button").forEach(b=>b.onclick=()=>{$$("#ftSeg button").forEach(x=>x.classList.toggle("on",x===b));draw(+b.dataset.i)});draw(0)})();
 })();
 
 /* ================= REVIEW QUIZ ================= */
