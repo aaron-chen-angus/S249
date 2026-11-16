@@ -444,6 +444,169 @@ main svg text{font-family:'Orbitron',system-ui,sans-serif}
 .biasm{height:18px;background:rgba(0,229,255,.1);position:relative;margin:8px 0}
 .biasm i{position:absolute;top:-4px;bottom:-4px;width:3px;background:#fff}
 .biasm b{position:absolute;top:0;bottom:0;background:var(--o);opacity:.6;transition:.5s}
+
+/* ===== CA1 PREP ===== */
+#pCA .ca-top{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center}
+@media(max-width:860px){#pCA .ca-top{grid-template-columns:1fr}}
+.ca-meter{position:relative;width:132px;height:132px;margin:auto}
+.ca-ring{width:100%;height:100%;transform:rotate(-90deg)}
+.ca-ring circle{fill:none;stroke-width:9}
+.ca-ring .bg{stroke:rgba(0,229,255,.12)}
+.ca-ring .fg{stroke:var(--o);stroke-linecap:round;filter:drop-shadow(0 0 6px #ff6a00);stroke-dasharray:314.16;stroke-dashoffset:314.16;transition:stroke-dashoffset .7s}
+.ca-mv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ca-mv b{font-size:2.3rem;color:#fff;text-shadow:var(--glow-o);line-height:1}
+.ca-mv span{font-size:.5rem;letter-spacing:3px;color:var(--mute);margin-top:4px}
+.ca-secs{display:flex;flex-direction:column;gap:10px}
+.ca-sec{display:grid;grid-template-columns:140px 1fr 60px;gap:10px;align-items:center;font-size:.6rem;letter-spacing:2px;cursor:pointer}
+.ca-sec b{color:#fff}.ca-sec small{display:block;color:var(--mute);font-size:.5rem}
+.ca-bar{height:8px;border:1px solid rgba(0,229,255,.4);position:relative}
+.ca-bar i{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--o),var(--o2));box-shadow:var(--glow-o);transition:width .6s}
+.ca-sec em{font-style:normal;color:var(--o2);text-align:right;font-weight:800}
+.ca-help{display:flex;flex-direction:column;gap:6px;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.74rem;color:var(--mute);max-width:260px}
+.ca-help b{font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:3px;color:var(--b)}
+.ca-help i{font-style:normal;color:var(--o2);font-weight:800;margin-right:6px}
+.ca-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:14px 0}
+.ca-nav .lb{font-size:.56rem;letter-spacing:3px;color:var(--mute);margin:0 4px 0 10px}
+.ca-nav .lb:first-child{margin-left:0}
+.ca-dot{width:40px;height:40px;border:1px solid rgba(0,229,255,.35);background:rgba(4,10,18,.7);color:var(--ink);font:800 .8rem 'Orbitron',sans-serif;cursor:pointer;position:relative;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+.ca-dot.cur{border-color:var(--o);background:rgba(255,106,0,.2);color:#fff;box-shadow:var(--glow-o)}
+.ca-dot.ok{background:rgba(0,229,255,.2);border-color:var(--b)}
+.ca-dot.part{background:rgba(255,161,61,.15);border-color:var(--o2)}
+.ca-dot.no{border-color:var(--bad);color:#ffb3c0}
+.ca-dot small{position:absolute;bottom:1px;right:4px;font-size:.45rem;color:var(--mute)}
+.ca-pg{display:flex;justify-content:space-between;margin:-4px 0 18px}
+.ca-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.ca-h .qn{font-size:1.6rem;font-weight:900;color:#fff;text-shadow:var(--glow-b)}
+.ca-h .tag{font-size:.56rem}
+.ca-h .mk{margin-left:auto;font-size:.6rem;letter-spacing:2px;color:var(--o2);border:1px solid rgba(255,106,0,.5);padding:3px 9px}
+.ca-q{font-family:system-ui,sans-serif;letter-spacing:.1px;font-size:1.02rem;line-height:1.65;color:#fff;margin-bottom:12px}
+.ca-q b{color:var(--o2)}
+.ca-tf{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ca-tf button{padding:22px 10px;font:900 1.1rem 'Orbitron',sans-serif;letter-spacing:6px;background:rgba(4,10,18,.7);border:2px solid rgba(0,229,255,.35);color:var(--ink);cursor:pointer;transition:.2s}
+.ca-tf button:hover:not(:disabled){border-color:var(--b);box-shadow:var(--glow-b)}
+.ca-tf button.ok{border-color:var(--b);background:rgba(0,229,255,.18);color:#fff;box-shadow:var(--glow-b)}
+.ca-tf button.bad{border-color:var(--bad);color:var(--bad);opacity:.7}
+.ca-mc{display:flex;flex-direction:column;gap:8px}
+.ca-mc button{display:flex;gap:12px;align-items:flex-start;text-align:left;background:rgba(4,10,18,.7);border:1px solid rgba(0,229,255,.25);color:var(--ink);padding:11px 14px;cursor:pointer;font:500 .9rem system-ui,sans-serif;letter-spacing:0;transition:.15s}
+.ca-mc button em{font:900 .8rem 'Orbitron',sans-serif;font-style:normal;color:var(--o);min-width:20px}
+.ca-mc button:hover:not(:disabled){border-color:var(--b);background:rgba(0,229,255,.06)}
+.ca-mc button.ok{border-color:var(--b);background:rgba(0,229,255,.16);color:#fff;box-shadow:inset 4px 0 0 var(--b)}
+.ca-mc button.bad{border-color:var(--bad);color:#ffb3c0}
+.ca-mc button .wh{display:block;font-size:.76rem;color:#ffb3c0;margin-top:4px}
+.ca-mc button.ok .wh,.ca-mc button.dim .wh{color:#9fe9f7}
+.ca-mc button.dim{opacity:.75}
+.ca-fb{display:none;margin-top:14px;border-left:3px solid var(--b);background:rgba(0,229,255,.06);padding:12px 14px;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.86rem;line-height:1.6}
+.ca-fb.show{display:block}.ca-fb.bad{border-color:var(--bad);background:rgba(255,61,90,.07)}
+.ca-fb h5{font:800 .6rem 'Orbitron',sans-serif;letter-spacing:3px;color:var(--b);margin:8px 0 4px}
+.ca-fb h5:first-child{margin-top:0}
+.ca-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.ca-keys span{font:700 .6rem 'Orbitron',sans-serif;letter-spacing:1.5px;border:1px solid var(--o);color:var(--o2);padding:3px 8px;background:rgba(255,106,0,.08)}
+.ca-try{color:#ffb3c0}
+.ca-fig{margin:6px 0 14px;border:1px solid rgba(0,229,255,.3);background:rgba(3,6,11,.8);padding:10px}
+.ca-fig svg{width:100%;height:auto;display:block}
+.ca-fig svg text{font-family:'Orbitron',sans-serif}
+.ca-figbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.ca-cap{flex:1;min-width:220px;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.84rem;color:#fff;min-height:2.6em;border-left:3px solid var(--o);padding:4px 10px;background:rgba(255,106,0,.06)}
+.ca-cap b{color:var(--o2)}
+.ca-pnl{cursor:pointer;transition:opacity .3s}
+.ca-stem{font-family:system-ui,sans-serif;letter-spacing:0;font-size:.95rem;line-height:1.65;padding:12px 14px;border:1px solid rgba(255,106,0,.35);background:rgba(255,106,0,.05);margin-bottom:14px}
+.ca-stem b{color:var(--o2)}
+.ca-part{border:1px solid rgba(0,229,255,.25);background:rgba(4,10,18,.55);padding:14px;margin-top:14px}
+.ca-part>h4{display:flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:2px;color:#fff;margin-bottom:8px}
+.ca-part>h4 em{font-style:normal;width:28px;height:28px;display:grid;place-items:center;border:2px solid var(--o);color:var(--o);transform:rotate(45deg);flex:none}
+.ca-part>h4 em span{transform:rotate(-45deg)}
+.ca-part>h4 small{margin-left:auto;color:var(--o2);font-size:.56rem;letter-spacing:2px}
+.ca-part .pq{font-family:system-ui,sans-serif;letter-spacing:0;font-size:.92rem;color:#fff;margin-bottom:10px}
+.ca-steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ca-steps button{background:transparent;border:1px solid rgba(0,229,255,.3);color:var(--mute);font:700 .56rem 'Orbitron',sans-serif;letter-spacing:2px;padding:7px 12px;cursor:pointer}
+.ca-steps button.on{border-color:var(--o);color:#fff;background:rgba(255,106,0,.15)}
+.ca-scaf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:760px){.ca-scaf{grid-template-columns:1fr}}
+.ca-scaf .tq{border:1px solid rgba(0,229,255,.2);padding:10px}
+.ca-scaf h6{font:800 .56rem 'Orbitron',sans-serif;letter-spacing:3px;color:var(--b);margin-bottom:6px}
+.ca-scaf button{display:block;width:100%;text-align:left;background:transparent;border:1px solid rgba(0,229,255,.2);color:var(--ink);padding:7px 9px;margin-top:5px;cursor:pointer;font:500 .8rem system-ui,sans-serif;letter-spacing:0}
+.ca-scaf button.ok{border-color:var(--b);background:rgba(0,229,255,.15);color:#fff}
+.ca-scaf button.bad{border-color:var(--bad);color:#ffb3c0}
+.ca-scaf .w{font:500 .74rem system-ui,sans-serif;letter-spacing:0;color:#9fe9f7;margin-top:6px;min-height:1em}
+.ca-ta{width:100%;min-height:110px;background:#03060b;border:1px solid rgba(0,229,255,.4);color:#fff;font:500 .92rem/1.6 system-ui,sans-serif;letter-spacing:0;padding:10px 12px;outline:none;resize:vertical}
+.ca-ta:focus{border-color:var(--o);box-shadow:0 0 0 1px var(--o),0 0 14px rgba(255,106,0,.3)}
+.ca-wc{font-size:.56rem;letter-spacing:2px;color:var(--mute);text-align:right;margin-top:2px}
+.ca-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.ca-an{display:none;margin-top:12px;border:1px solid rgba(0,229,255,.3);background:rgba(3,6,11,.7)}
+.ca-an.show{display:block}
+.ca-an .hd{display:flex;align-items:center;gap:12px;padding:8px 12px;border-bottom:1px solid rgba(0,229,255,.2)}
+.ca-an .hd b{font-size:.58rem;letter-spacing:3px;color:var(--b)}
+.ca-an .hd .sc{margin-left:auto;font-weight:900;color:var(--o);text-shadow:var(--glow-o)}
+.ca-an ul{list-style:none;padding:6px 12px}
+.ca-an li{display:grid;grid-template-columns:24px 1fr;gap:6px;padding:7px 0;border-bottom:1px solid rgba(0,229,255,.08);font-family:system-ui,sans-serif;letter-spacing:0;font-size:.82rem}
+.ca-an li:last-child{border-bottom:0}
+.ca-an li i{font-style:normal;font-weight:900;text-align:center}
+.ca-an li.ok i{color:var(--b)}.ca-an li.no i{color:var(--bad)}.ca-an li.half i,.ca-an li.warn i{color:var(--o2)}
+.ca-an li small{display:block;color:var(--mute);font-size:.76rem}
+.ca-an li.no small,.ca-an li.half small{color:#ffd9b8}
+.ca-an li.warn{color:#ffd9b8}
+.ca-echo{padding:10px 12px;border-top:1px solid rgba(0,229,255,.15);font-family:system-ui,sans-serif;letter-spacing:0;font-size:.84rem;color:var(--ink)}
+.ca-echo mark{background:rgba(0,229,255,.25);color:#fff;padding:0 2px;border-bottom:2px solid var(--b)}
+.ca-echo mark.w{background:rgba(255,61,90,.2);border-color:var(--bad)}
+.ca-echo h6{font:800 .54rem 'Orbitron',sans-serif;letter-spacing:3px;color:var(--mute);margin-bottom:4px}
+.ca-model{display:none;margin-top:12px;border:1px solid rgba(255,106,0,.5);background:rgba(255,106,0,.05);padding:12px 14px;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.88rem;line-height:1.65}
+.ca-model.show{display:block}
+.ca-model h5{font:800 .6rem 'Orbitron',sans-serif;letter-spacing:3px;color:var(--o2);margin:10px 0 4px}
+.ca-model h5:first-child{margin-top:0}
+.ca-model .ans{color:#fff}
+.ca-model .ans u{text-decoration:none;color:var(--b);font-weight:700;border-bottom:2px solid var(--b)}
+.ca-model .mk1{display:inline-block;font:800 .54rem 'Orbitron',sans-serif;letter-spacing:1px;color:#03060b;background:var(--o2);padding:1px 6px;margin-left:4px;vertical-align:middle}
+.ca-model ul{margin:4px 0 0 18px}
+.ca-model li{margin:3px 0}
+.ca-model li::marker{color:var(--o)}
+.ca-calc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:860px){.ca-calc{grid-template-columns:1fr}}
+.ca-cs{border:1px solid rgba(0,229,255,.25);padding:10px;background:rgba(3,6,11,.6)}
+.ca-cs h6{font:800 .54rem 'Orbitron',sans-serif;letter-spacing:2px;color:var(--b);margin-bottom:6px}
+.ca-cs .eq{font-family:system-ui,sans-serif;letter-spacing:0;font-size:.78rem;color:var(--mute);margin-bottom:6px}
+.ca-cs input{width:100%;background:#000;border:1px solid rgba(0,229,255,.4);color:#fff;font:700 1rem ui-monospace,Menlo,monospace;padding:7px 9px;outline:none}
+.ca-cs input:focus{border-color:var(--o)}
+.ca-cs.ok{border-color:var(--b);box-shadow:inset 0 0 0 1px rgba(0,229,255,.4)}
+.ca-cs.ok input{border-color:var(--b);color:var(--b)}
+.ca-cs.no{border-color:var(--bad)}
+.ca-cs .r{font:500 .74rem system-ui,sans-serif;letter-spacing:0;margin-top:6px;min-height:1.2em;color:#ffd9b8}
+.ca-cs.ok .r{color:#9fe9f7}
+.ca-years{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:6px 0 10px}
+.ca-yr{border:1px solid rgba(0,229,255,.3);background:rgba(4,10,18,.7);padding:10px 6px;text-align:center;cursor:pointer;transition:.2s;color:var(--ink);font-family:inherit}
+.ca-yr b{display:block;font-size:.9rem;color:#fff}
+.ca-yr span{display:block;font-size:.58rem;letter-spacing:1.5px;color:var(--mute);margin-top:3px}
+.ca-yr.on{border-color:var(--o);background:rgba(255,106,0,.18);box-shadow:var(--glow-o)}
+.ca-yr.on span{color:var(--o2)}
+.ca-yr.gone{border-style:dashed;opacity:.8}
+.ca-yrm{font-family:system-ui,sans-serif;letter-spacing:0;font-size:.82rem;color:var(--mute);margin-bottom:10px}
+.ca-yrm b{color:var(--o2)}
+.ca-pop{display:flex;gap:2px;flex-wrap:wrap;margin:6px 0 12px}
+.ca-pop i{width:9px;height:9px;background:rgba(0,229,255,.55)}
+.ca-pop i.c15{background:var(--bad);box-shadow:0 0 6px var(--bad)}
+.ca-pop i.c{background:var(--o);box-shadow:0 0 6px var(--o)}
+.ca-pop-l{display:flex;gap:16px;flex-wrap:wrap;font-size:.54rem;letter-spacing:2px;color:var(--mute)}
+.ca-pop-l i{display:inline-block;width:9px;height:9px;margin-right:6px;vertical-align:middle}
+.ca-ct{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;letter-spacing:0;margin:6px 0 12px}
+.ca-ct th,.ca-ct td{border:1px solid rgba(0,229,255,.25);padding:10px;text-align:center;font-size:.86rem}
+.ca-ct th{background:#0b1a2b;color:var(--b);font-size:.72rem;letter-spacing:1px}
+.ca-ct td.v{font:800 1.15rem 'Orbitron',sans-serif;color:#fff;cursor:pointer;position:relative;transition:.2s}
+.ca-ct td.v sup{position:absolute;top:4px;left:6px;font-size:.6rem;color:var(--o2)}
+.ca-ct td.v.hl{background:rgba(255,106,0,.22);box-shadow:inset 0 0 0 2px var(--o)}
+.ca-ct td.v.hl2{background:rgba(0,229,255,.18);box-shadow:inset 0 0 0 2px var(--b)}
+.ca-ct td.rh{color:var(--o2);font-weight:700;text-align:left}
+.ca-xp{font:700 .95rem ui-monospace,Menlo,monospace;text-align:center;padding:10px;border:1px dashed rgba(255,106,0,.5);margin-bottom:10px;color:#fff}
+.ca-xp .o{color:var(--o2)}.ca-xp .b{color:var(--b)}
+.ca-ch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ca-ch button{flex:1;min-width:150px;padding:12px;background:rgba(4,10,18,.7);border:2px solid rgba(0,229,255,.3);color:var(--ink);font:800 .66rem 'Orbitron',sans-serif;letter-spacing:2px;cursor:pointer}
+.ca-ch button.ok{border-color:var(--b);background:rgba(0,229,255,.18);color:#fff}
+.ca-ch button.bad{border-color:var(--bad);color:var(--bad)}
+.ca-chr{font:500 .8rem system-ui,sans-serif;letter-spacing:0;color:#9fe9f7;margin:-4px 0 10px;min-height:1em}
+#caRep:empty{display:none}
+.ca-rt{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.8rem}
+.ca-rt td{padding:7px 8px;border-bottom:1px solid rgba(0,229,255,.1);vertical-align:top}
+.ca-rt td:first-child{font:800 .7rem 'Orbitron',sans-serif;color:var(--b);white-space:nowrap}
+.ca-rt td.m{text-align:right;font-weight:800;white-space:nowrap}
+.ca-rt a{color:var(--o2);cursor:pointer}
 </style>
 </head>
 <body>
@@ -804,7 +967,22 @@ main svg text{font-family:'Orbitron',system-ui,sans-serif}
   <div class="card o"><div class="row" style="justify-content:space-between"><div class="qnav" id="qNav"></div><div class="pqscore"><b id="qS">0</b><span>/ 12 CORRECT</span></div></div></div>
   <div class="card" id="qCard"></div>
   <div class="card o" id="qEnd" style="display:none"></div>
-  <div class="pager"><button class="btn ghost" data-go="7">◂ BlazePod</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
+  <div class="pager"><button class="btn ghost" data-go="7">◂ BlazePod</button><button class="btn" data-go="9">CA1 Prep ▸</button></div>
+</section>
+
+<!-- 09 CA1 PREP -->
+<section class="panel" id="pCA" data-name="CA1 PREP">
+  <div class="ph"><div class="kick">CA1 ASSIGNMENT · REVIEW &amp; PRACTICE</div><h2>CA1 <span>Prep</span></h2><p>14 questions · 25 marks. Answer first, get instant feedback, then see exactly what the marker looks for.</p></div>
+  <div class="card o ca-top">
+    <div class="ca-meter"><svg viewBox="0 0 120 120" class="ca-ring"><circle cx="60" cy="60" r="50" class="bg"/><circle cx="60" cy="60" r="50" class="fg" id="caRing"/></svg><div class="ca-mv"><b id="caM">0</b><span>/ 25 MARKS</span></div></div>
+    <div class="ca-secs" id="caSecs"></div>
+    <div class="ca-help"><b>HOW IT WORKS</b><span><i>A &amp; B</i> First try counts · retry to learn</span><span><i>C</i> Type your answer → keyword check → model answer</span><button class="btn ghost sm" id="caReset">⟲ Reset all</button></div>
+  </div>
+  <div class="ca-nav" id="caNav"></div>
+  <div class="card" id="caCard"></div>
+  <div class="ca-pg"><button class="btn ghost" id="caPrev">◂ Previous</button><button class="btn" id="caNext">Next ▸</button></div>
+  <div class="card o" id="caRep"></div>
+  <div class="pager"><button class="btn ghost" data-go="8">◂ Review Quiz</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
 </section>
 </main>
 <footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · POPULATION HEALTH STUDIES · REPUBLIC POLYTECHNIC</div></footer>
@@ -1162,6 +1340,260 @@ const Q=[
 
 updateXP();
 const hs=parseInt((location.hash||"").slice(1),10);go(isNaN(hs)||hs<0||hs>=panels.length?0:hs);
+})();
+</script>
+<script>
+/* ================= CA1 PREP ================= */
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s),$$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const NS="http://www.w3.org/2000/svg";
+const sv=(t,a,p)=>{const e=document.createElementNS(NS,t);let st="";for(const k in a){if(t==="text"&&(k==="fill"||k==="font-size"||k==="font-weight")){st+=k+":"+a[k]+(k==="font-size"?"px":"")+";"}else e.setAttribute(k,a[k])}if(st)e.setAttribute("style",st+(a.style||""));if(p)p.appendChild(e);return e};
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const O="#ff6a00",B="#00e5ff",Y="#ffe14d";
+const root=$("#pCA");if(!root)return;
+
+/* ---------------- QUESTIONS ---------------- */
+const Q=[
+ {n:1,sec:"A",type:"tf",mk:1,q:"Bias can distort the estimate of the association between the exposure and the outcome.",ans:true,
+  why:"Bias is a <b>systematic error</b> in how a study is designed or carried out. Because it pushes results in one direction, it can make the <b>association</b> between exposure and outcome look <b>stronger, weaker or even reversed</b> compared with the truth.",
+  keys:["systematic error","distort","over- / under-estimate","association"],tip:"Bias ≠ random error. Bigger samples reduce random error but do NOT remove bias."},
+ {n:2,sec:"A",type:"tf",mk:1,q:"Information bias refers to the systematic error resulting from inaccuracy in measurement of study variables, including outcomes, exposure and other risk factors.",ans:true,
+  why:"This is the textbook definition. Information (measurement / misclassification) bias happens when exposure, outcome or other variables are <b>measured or recorded inaccurately</b> – e.g. <b>recall bias</b> (cases remember past exposures better), <b>interviewer bias</b>, faulty instruments.",
+  keys:["measurement","misclassification","recall bias","interviewer bias"],tip:"Selection bias = WHO gets into the study. Information bias = HOW data are measured."},
+ {n:3,sec:"A",type:"tf",mk:1,q:"Confounding occurs when the experimental controls do not allow to reasonably eliminate alternative explanations for an observed relationship between independent and dependent variables.",ans:true,
+  why:"A <b>confounder</b> is a third variable linked to <b>both</b> the exposure and the outcome. If the study design (randomisation, matching, restriction, stratification) does not control it, it offers an <b>alternative explanation</b> for the relationship you observed.",
+  keys:["third variable","alternative explanation","linked to exposure AND outcome","control: randomise · match · restrict · stratify"],tip:"Classic example: coffee ↔ lung cancer, confounded by smoking."},
+ {n:4,sec:"B",type:"mc",mk:1,q:"When samples are chosen at <b>regular intervals</b> of a population, the method is called _____.",o:["simple randomisation","block randomisation","systematic randomisation","stratified randomisation"],ans:2,
+  wh:["Every member has an equal chance – e.g. lottery or random-number table. No fixed interval.","Assigns participants in small blocks so group sizes stay balanced – about allocation, not intervals.","","Splits the population into strata (e.g. age, sex) first, then samples randomly within each."],
+  why:"<b>Systematic</b> = pick every <b>k-th</b> person from a list after a random start (e.g. every 10th patient who registers).",keys:["regular interval","every k-th","random start"],tip:"‘Regular intervals’ in the question is the trigger word."},
+ {n:5,sec:"B",type:"mc",mk:1,q:"As the size of a random sample increases, _____.",o:["the mean decreases","the standard error of the mean decreases","the standard deviation increases","the accuracy of the parameter estimates increases"],ans:1,
+  wh:["The sample mean just gets closer to the population mean – it can go up or down.","","The SD estimates the spread in the population; it stays about the same as n grows.","A bigger sample improves PRECISION, but it cannot fix bias – so accuracy is not guaranteed. The certain, mathematical effect is on the SEM."],
+  why:"<b>SEM = SD ÷ √n</b>. As <b>n increases</b>, √n increases, so the <b>SEM decreases</b> – the sample mean becomes a more <b>precise</b> estimate.",keys:["SEM = SD ÷ √n","precision","larger n → smaller SEM"],tip:"Precision (small SEM) ≠ accuracy (no bias)."},
+ {n:6,sec:"B",type:"mc",mk:1,q:"Cross-sectional studies allow us to assess _____.",o:["prevalence","incidence","mortality","prevalence, incidence and mortality"],ans:0,
+  wh:["","Incidence counts NEW cases over time – it needs follow-up, which a one-time snapshot doesn't have.","Mortality also needs following people over time.","Only prevalence can be measured from one snapshot."],
+  why:"A cross-sectional study is a <b>snapshot at one point in time</b>: it counts everyone who <b>has</b> the condition now → <b>prevalence</b>.",keys:["snapshot","one point in time","existing cases → prevalence"],tip:"Think ‘cross-section’ = one slice of time."},
+ {n:7,sec:"B",type:"mc",mk:1,fig:"cohort",q:"What is the type of research study shown in the diagram below?",o:["Cross-sectional study","Case-control study","Cohort study","Case report"],ans:2,
+  wh:["A cross-sectional study has one panel – a single snapshot, no follow-up.","A case-control study STARTS with diseased and non-diseased people and looks BACK.","","A case report describes one patient – no groups."],
+  why:"The diagram starts with <b>healthy people</b>, groups them by <b>exposure</b>, then <b>follows them forward in time</b> until disease occurs – the hallmark of a <b>cohort study</b>.",keys:["start healthy","exposure first","follow forward","incidence → RR"],tip:"Arrow of time points FORWARD → cohort."},
+ {n:8,sec:"B",type:"mc",mk:1,fig:"cc",q:"What is the type of research study shown in the diagram below?",o:["Cross-sectional study","Case-control study","Cohort study","Case report"],ans:1,
+  wh:["Cross-sectional measures exposure and disease at the same moment – no looking back.","","A cohort selects by EXPOSURE and looks forward; here selection is by DISEASE and the arrow points back.","A case report is one patient."],
+  why:"People are <b>selected now based on disease status</b> (cases = ill, controls = not ill), and then their <b>past exposure is assessed retrospectively</b> → <b>case-control study</b>.",keys:["selected by disease status","retrospective","look back for exposure","odds ratio"],tip:"Arrow of time points BACKWARD → case-control."},
+ {n:9,sec:"B",type:"mc",mk:1,q:"Which of the following is considered a <b>“fixed”</b> population?",o:["People who live in Singapore","Babies who were born in 2017 in Singapore","Customers of a bank","Women who are working in Singapore"],ans:1,
+  wh:["Dynamic – people move in, move out, are born and die.","","Dynamic – customers open and close accounts.","Dynamic – women join and leave the workforce."],
+  why:"A <b>fixed</b> population is defined by a <b>one-time event</b>; membership is set and <b>no new members can join</b> (being born in 2017 can't happen later). The others are <b>dynamic</b> – people enter and leave.",keys:["one-time event","no new members","fixed vs dynamic"],tip:"Ask: can someone NEW join this group next year?"},
+ {n:10,sec:"B",type:"mc",mk:1,lab:1,q:"Which of the following statements about <b>prevalence</b> is CORRECT?",o:["Prevalence includes new cases only.","Prevalence includes old cases only.","Prevalence is preferred when studying health service utilisation.","Prevalence will increase if the incidence of disease increases."],ans:2,
+  wh:["That's incidence. Prevalence = new + existing cases.","Prevalence counts ALL existing cases – old and new.","","Not always: prevalence ≈ incidence × duration. If people recover faster or die sooner, prevalence may not rise."],
+  why:"Prevalence measures the <b>total burden</b> of disease at a time, so it tells planners how many <b>beds, clinics, staff and drugs</b> are needed → <b>health service utilisation</b>.",keys:["total burden","new + existing cases","planning health services","P ≈ I × D"],tip:"Incidence → causes / risk. Prevalence → burden / planning."},
+ {n:11,sec:"B",type:"mc",mk:1,q:"The p-value for a study was <b>0.035</b>. If the significance level is <b>0.05</b>, what conclusion can you draw?",o:["The null hypothesis should be accepted.","The alternative hypothesis should be accepted.","There is no significant difference between the 2 groups under study.","There is evidence to claim that the result is very accurate."],ans:1,
+  wh:["p is below α, so we REJECT H₀ – not accept it.","","p < 0.05 means there IS a statistically significant difference.","A p-value measures evidence against H₀ – it says nothing about accuracy."],
+  why:"<b>p = 0.035 &lt; α = 0.05</b> → <b>reject H₀</b> → accept the <b>alternative hypothesis (H₁)</b>: the result is statistically significant.",keys:["p < α","reject H₀","accept H₁","statistically significant"],tip:"Low p → H₀ must go."},
+ {n:12,sec:"C",type:"st",mk:4,title:"Infant infections",stem:"A study was conducted to examine the risk factors for infant infections. The investigators surveyed families living in <b>landed properties</b> and found that there was a <b>lower incidence</b> of infant infections as compared to other studies.",
+  parts:[{id:"12a",mk:2,q:"Provide a possible reason why the investigators observed a lower incidence of infant infections in this study. Justify your answer.",
+    scaf:{c:{h:"YOUR REASON",o:["Families in landed properties are likely from a higher socio-economic group","Landed properties have fewer mosquitoes","The investigators made calculation errors"],a:0,w:["✔ Who are these families? Higher income / socio-economic status.","✘ Not stated – and infections aren't only mosquito-borne.","✘ Nothing suggests an error – look at WHO was surveyed."]},
+          j:{h:"YOUR JUSTIFICATION",o:["So they may have better health awareness, hygiene habits and more access / resources for healthcare","So they have more children per family","So their infants are older"],a:0,w:["✔ Links SES to a mechanism that lowers infections.","✘ Not linked to fewer infections.","✘ All are infants – not a reason."]}},
+    pts:[{mk:1,lab:"Reason: higher socio-economic group",re:[/socio[\s-]*economic|\bses\b|higher?[\s-]income|high[\s-]income|wealth|rich|affluent|well[\s-]?off|well[\s-]?to[\s-]?do|richer|money|financ|upper[\s-]class|middle[\s-]class|higher class|privileged/],tip:"Say WHO these families are: <b>higher socio-economic group</b> (higher income)."},
+         {mk:1,lab:"Justification: awareness / hygiene / access to healthcare",re:[/aware|hygien|clean|sanit|access|health\s*care|medical|resource|educat|knowledge|nutrition|better diet|less crowd|crowding|vaccinat|doctor|clinic|afford/],tip:"Explain HOW that lowers infections: better <b>health awareness</b>, <b>hygiene habits</b>, more <b>access / resources for healthcare</b>."}],
+    just:1,model:"This is because families living in landed properties are more likely from a <u>higher socio-economic group</u><span class='mk1'>1 MARK</span>. Hence, they may have <u>better awareness of health issues / hygiene habits</u>, or <u>more access / resources for healthcare</u><span class='mk1'>1 MARK</span>.",
+    keys:["higher socio-economic group","health awareness","hygiene habits","access to healthcare"],miss:["Only saying “they are rich” without explaining WHY that lowers infections (loses the justification mark).","Blaming a calculation error or chance – the clue is in WHO was surveyed."]},
+   {id:"12b",mk:2,q:"State the type of bias that may be involved in this study. Justify your answer.",
+    scaf:{c:{h:"TYPE OF BIAS",o:["Selection bias","Information bias","Confounding"],a:0,w:["✔ The problem is WHO was chosen.","✘ Information bias is about inaccurate measurement – nothing was mis-measured here.","✘ Confounding is a third variable – the issue here is the sample itself."]},
+          j:{h:"JUSTIFICATION",o:["Only families in landed properties were selected; other housing types (e.g. HDB) were excluded, so the sample is not representative","Parents may not remember their infant's infections","Infections were measured with a faulty test"],a:0,w:["✔ Points to how participants were selected.","✘ That would be recall (information) bias.","✘ That would be measurement (information) bias."]}},
+    pts:[{mk:1,lab:"Names the bias: selection bias",re:[/selection\s*bias|sampling\s*bias/],tip:"Name it exactly: <b>selection bias</b>."},
+         {mk:1,lab:"Justification: only landed properties, other housing (e.g. HDB) excluded",re:[/landed|hdb|condo|flat|apartment|other (types? of )?(housing|residen|propert|homes?|dwelling)|not (be )?representative|unrepresentative|exclud|did not include|didn'?t include|not include|only (select|chose|choose|survey|includ|recruit|sampl)/],tip:"Say WHY: investigators <b>only selected landed properties</b> and <b>did not include</b> other residential types (e.g. <b>HDB</b>)."}],
+    warn:[{re:/information bias|recall bias|measurement bias|interviewer bias|observer bias/,msg:"Careful – information/recall bias is about HOW data are measured. Here the problem is WHO was selected."},{re:/confound/,msg:"Confounding is a different concept – the question asks about the type of BIAS from the sample chosen."},{re:/sampling bias/,msg:"‘Sampling bias’ is a form of selection bias – use the exact term <b>selection bias</b> to be safe."}],
+    just:1,model:"There is <u>selection bias</u> involved in this study<span class='mk1'>1 MARK</span>. This is because the investigators <u>only selected families living in landed properties</u> and did <u>not include families from other types of residential properties (e.g. HDB)</u><span class='mk1'>1 MARK</span>.",
+    keys:["selection bias","only landed properties","excluded HDB / other housing","not representative"],miss:["Writing “information bias” or “recall bias”.","Naming selection bias but not saying which group was left out."]}]},
+ {n:13,sec:"C",type:"ci",mk:3,title:"Cumulative incidence",stem:"<b>Ten thousand</b> healthy males (aged 50 and above) were monitored from 2014 to 2018 for prostate cancer.",q:"Calculate the <b>cumulative incidence from 2016 to 2018</b>."},
+ {n:14,sec:"C",type:"or",mk:7,title:"MMR & development disorders",stem:"A case-control study compared measles-mumps-rubella (MMR) vaccine history among <b>1,000 children with</b> pervasive development disorder (e.g. autism, Asperger's syndrome) and <b>1,200 children without</b> such disorders."}
+];
+const MAX=25;
+
+/* ---------------- STATE ---------------- */
+const S={};Q.forEach(q=>S[q.n]={tries:0,first:null,done:false,picked:[],marks:0,parts:{}});
+let cur=0;
+function partS(n,id){return S[n].parts[id]||(S[n].parts[id]={marks:0,text:"",checked:false,choice:null,scaf:{},inputs:{},model:false})}
+function qMarks(q){const s=S[q.n];if(q.type==="tf"||q.type==="mc")return s.first===true?q.mk:0;return Math.min(q.mk,Object.values(s.parts).reduce((a,p)=>a+(p.marks||0),0))}
+function qStatus(q){const s=S[q.n];if(q.type==="tf"||q.type==="mc"){if(!s.tries)return"";return s.first?"ok":"no"}const m=qMarks(q);const any=Object.values(s.parts).some(p=>p.checked);if(!any)return"";return m>=q.mk?"ok":m>0?"part":"no"}
+
+/* ---------------- METER / NAV ---------------- */
+const SEC={A:["SECTION A","TRUE / FALSE",3],B:["SECTION B","MULTIPLE CHOICE",8],C:["SECTION C","SHORT QUESTIONS",14]};
+function meter(){let tot=0;const by={A:0,B:0,C:0};Q.forEach(q=>{const m=qMarks(q);tot+=m;by[q.sec]+=m});$("#caM").textContent=tot;$("#caRing").style.strokeDashoffset=314.16*(1-tot/MAX);
+  const secs=$("#caSecs");if(!secs.children.length)secs.innerHTML=Object.keys(SEC).map(k=>"<div class='ca-sec' data-s='"+k+"'><div><b>"+SEC[k][0]+"</b><small>"+SEC[k][1]+"</small></div><div class='ca-bar'><i style='width:"+(100*by[k]/SEC[k][2])+"%'></i></div><em>"+by[k]+" / "+SEC[k][2]+"</em></div>").join("");
+  $$(".ca-sec",root).forEach(d=>{const k=d.dataset.s;$("i",d).style.width=(100*by[k]/SEC[k][2])+"%";$("em",d).textContent=by[k]+" / "+SEC[k][2];d.onclick=()=>show(Q.findIndex(q=>q.sec===k))});
+  const nav=$("#caNav");if(!nav.children.length){let ls="";Q.forEach((q,i)=>{if(q.sec!==ls){ls=q.sec;nav.appendChild(el("span","lb","SEC "+q.sec))}const b=el("button","ca-dot",q.n+"<small>"+q.mk+"m</small>");b.dataset.i=i;b.title="Question "+q.n+" · "+q.mk+" mark"+(q.mk>1?"s":"");b.onclick=()=>show(i);nav.appendChild(b)})}
+  $$(".ca-dot",nav).forEach(b=>{const i=+b.dataset.i;b.className="ca-dot "+qStatus(Q[i])+(i===cur?" cur":"")});
+  report()}
+function report(){const r=$("#caRep");const att=Q.filter(q=>qStatus(q)!=="");if(att.length<Q.length){r.innerHTML="";return}
+  let tot=0;Q.forEach(q=>tot+=qMarks(q));const rank=tot>=23?"CA1 READY":tot>=18?"ALMOST THERE":tot>=12?"KEEP PRACTISING":"REVISE THE BASICS";
+  r.innerHTML="<div style='text-align:center'><div class='kick' style='font-size:.62rem;letter-spacing:5px;color:var(--b)'>CA1 PREP REPORT</div><div class='big' style='font-size:3rem'>"+tot+" / 25</div><div style='color:var(--b);letter-spacing:4px;font-weight:800;margin:6px 0 14px'>"+rank+"</div></div>"+
+   "<table class='ca-rt'><tbody>"+Q.map((q,i)=>{const m=qMarks(q);return"<tr><td>Q"+q.n+"</td><td>"+(q.title||q.q.replace(/<[^>]+>/g,"").slice(0,90))+(m<q.mk?"<br><a data-i='"+i+"'>↻ Review this question</a>":"")+"</td><td class='m' style='color:"+(m>=q.mk?"var(--b)":m?"var(--o2)":"var(--bad)")+"'>"+m+" / "+q.mk+"</td></tr>"}).join("")+"</tbody></table>"+
+   "<p class='mute' style='margin-top:10px;font-family:system-ui;letter-spacing:0'>Section C marks are an <b>estimate</b> from keyword checks. Always compare your wording with the model answer.</p>";
+  $$("a[data-i]",r).forEach(a=>a.onclick=()=>show(+a.dataset.i))}
+
+/* ---------------- RENDER ---------------- */
+function show(i){cur=Math.max(0,Math.min(Q.length-1,i));const q=Q[cur],c=$("#caCard");c.innerHTML="";
+  c.appendChild(el("div","ca-h","<span class='qn'>Q"+q.n+"</span><span class='tag'>SECTION "+q.sec+" · "+SEC[q.sec][1]+"</span><span class='mk'>"+q.mk+" MARK"+(q.mk>1?"S":"")+"</span>"));
+  if(q.type==="tf")tf(q,c);else if(q.type==="mc")mc(q,c);else if(q.type==="st")st(q,c);else if(q.type==="ci")ci(q,c);else if(q.type==="or")orq(q,c);
+  $("#caPrev").disabled=cur===0;$("#caNext").disabled=cur===Q.length-1;meter()}
+$("#caPrev").onclick=()=>{show(cur-1);root.scrollIntoView({block:"start"})};$("#caNext").onclick=()=>{show(cur+1);root.scrollIntoView({block:"start"})};
+$("#caReset").onclick=function(){if(!this.dataset.arm){this.dataset.arm=1;this.textContent="⟲ Confirm reset?";setTimeout(()=>{delete this.dataset.arm;this.textContent="⟲ Reset all"},2500);return}delete this.dataset.arm;this.textContent="⟲ Reset all";Q.forEach(q=>S[q.n]={tries:0,first:null,done:false,picked:[],marks:0,parts:{}});show(0)};
+
+function fbBox(q,ok,extra){const f=el("div","ca-fb show"+(ok?"":" bad"));f.innerHTML="<h5>"+(ok?"✔ CORRECT – RATIONALE":"✘ NOT QUITE")+"</h5>"+(extra||"")+(ok?q.why+"<h5>KEY WORDS</h5><div class='ca-keys'>"+q.keys.map(k=>"<span>"+k+"</span>").join("")+"</div><h5>EXAM TIP</h5>"+q.tip:"");return f}
+function record(q,ok){const s=S[q.n];s.tries++;if(s.first===null)s.first=ok;if(ok)s.done=true}
+/* T/F */
+function tf(q,c){c.appendChild(el("p","ca-q",q.q));const s=S[q.n],w=el("div","ca-tf");c.appendChild(w);const fb=el("div");c.appendChild(fb);
+  [true,false].forEach(v=>{const b=el("button","",v?"TRUE":"FALSE");if(s.picked.includes(v)){b.classList.add(v===q.ans?"ok":"bad");b.disabled=true}if(s.done)b.disabled=true;
+    b.onclick=()=>{if(s.done)return;s.picked.push(v);record(q,v===q.ans);show(cur)};w.appendChild(b)});
+  if(s.done)fb.appendChild(fbBox(q,true,s.first?"":"<p class='ca-try'>Got it on a later try – first try counts for marks.</p>"));else if(s.tries)fb.appendChild(fbBox(q,false,"<p>Think again: "+q.tip+"</p>"))}
+/* MCQ */
+function mc(q,c){c.appendChild(el("p","ca-q",q.q));if(q.fig)c.appendChild(q.fig==="cohort"?figCohort():figCC());const s=S[q.n],w=el("div","ca-mc");c.appendChild(w);
+  q.o.forEach((o,i)=>{const L="ABCD"[i];const b=el("button","","<em>"+L+"</em><span>"+(q.lab?o.replace(/^[A-D]\.\s*/,""):o)+(s.picked.includes(i)&&i!==q.ans?"<span class='wh'>"+q.wh[i]+"</span>":"")+(s.done&&i!==q.ans&&!s.picked.includes(i)?"<span class='wh'>"+q.wh[i]+"</span>":"")+"</span>");
+    if(s.picked.includes(i))b.classList.add(i===q.ans?"ok":"bad");if(s.done&&i!==q.ans&&!s.picked.includes(i))b.classList.add("dim");if(s.done||s.picked.includes(i))b.disabled=true;
+    b.onclick=()=>{if(s.done)return;s.picked.push(i);record(q,i===q.ans);show(cur)};w.appendChild(b)});
+  if(s.done)c.appendChild(fbBox(q,true,s.first?"":"<p class='ca-try'>Correct on a later try – the first try counts for marks. Read why the others are wrong ↑</p>"));
+  else if(s.tries)c.appendChild(fbBox(q,false,"<p>Read why that option is wrong above, then try again.</p>"))}
+
+/* ---------------- KEYWORD ANALYSER ---------------- */
+const esc=t=>t.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function analyse(txt,p){const t=txt.toLowerCase(),words=(txt.trim().match(/\S+/g)||[]).length;const res=[];let marks=0;const hits=[];
+  p.pts.forEach(pt=>{let ok=false;pt.re.forEach(r=>{const g=new RegExp(r.source,"gi");let m;while((m=g.exec(txt))){ok=true;hits.push([m.index,m.index+m[0].length,0]);if(!m[0].length)break}});if(ok)marks+=pt.mk;res.push({st:ok?"ok":"no",lab:pt.lab,tip:ok?"":pt.tip,mk:pt.mk})});
+  const warns=[];(p.warn||[]).forEach(w=>{const g=new RegExp(w.re.source,"gi");let m,f=false;while((m=g.exec(txt))){f=true;hits.push([m.index,m.index+m[0].length,1])}if(f)warns.push(w.msg)});
+  const gen=[];if(words<8)gen.push("Too short – write full sentences: <b>claim</b> + <b>reason</b>.");if(p.just&&!/because|since|\bas\b|due to|therefore|thus|hence|this means|so that|\bso\b|which (means|leads)|lead(s)? to|result/i.test(txt))gen.push("Justify! Link your idea with <b>“This is because…”</b> or <b>“Hence…”</b>.");
+  hits.sort((a,b)=>a[0]-b[0]);let h="",last=0;hits.forEach(([s,e,w])=>{if(s<last)return;h+=esc(txt.slice(last,s))+"<mark"+(w?" class='w'":"")+">"+esc(txt.slice(s,e))+"</mark>";last=e});h+=esc(txt.slice(last));
+  return{res,marks:Math.min(marks,p.mk),warns,gen,echo:h,words}}
+function analysisBox(a,mk,label){const d=el("div","ca-an show");d.innerHTML="<div class='hd'><b>"+(label||"KEYWORD CHECK")+"</b><span class='sc'>≈ "+a.marks+" / "+mk+"</span></div><ul>"+
+   a.res.map(r=>"<li class='"+r.st+"'><i>"+(r.st==="ok"?"✔":r.st==="half"?"◐":"✘")+"</i><div>"+r.lab+" <span class='mute'>["+r.mk+" mark]</span>"+(r.tip?"<small>"+r.tip+"</small>":"")+"</div></li>").join("")+
+   a.warns.map(w=>"<li class='warn'><i>!</i><div>"+w+"</div></li>").join("")+a.gen.map(w=>"<li class='warn'><i>!</i><div>"+w+"</div></li>").join("")+"</ul>"+
+   "<div class='ca-echo'><h6>YOUR ANSWER · KEY WORDS HIGHLIGHTED</h6>"+(a.echo||"<i class='mute'>(empty)</i>")+"</div>";return d}
+function modelBox(p,open){const m=el("div","ca-model"+(open?" show":""));m.innerHTML="<h5>◆ SUGGESTED ANSWER (MARK SCHEME)</h5><div class='ans'>"+p.model+"</div><h5>KEY WORDS TO INCLUDE</h5><div class='ca-keys'>"+p.keys.map(k=>"<span>"+k+"</span>").join("")+"</div>"+(p.miss?"<h5>COMMON MISTAKES</h5><ul>"+p.miss.map(x=>"<li>"+x+"</li>").join("")+"</ul>":"");return m}
+/* text part with Build / Write tabs */
+function textPart(q,p,host,extraTop){const ps=partS(q.n,p.id);const box=el("div","ca-part");box.innerHTML="<h4><em><span>"+p.id.slice(-1)+"</span></em>PART "+p.id.toUpperCase()+"<small>"+p.mk+" MARKS</small></h4><p class='pq'>"+p.q+"</p>";host.appendChild(box);
+  if(extraTop)extraTop(box,ps);
+  const tabs=el("div","ca-steps","<button data-t='b'>① BUILD IT (HINTS)</button><button data-t='w'>② WRITE YOUR ANSWER</button>");box.appendChild(tabs);const pb=el("div"),pw=el("div");box.append(pb,pw);
+  if(p.scaf){const w=el("div","ca-scaf");[["c",p.scaf.c],["j",p.scaf.j]].forEach(([k,sc])=>{const t=el("div","tq","<h6>"+sc.h+"</h6>");const r=el("div","w");
+      sc.o.forEach((o,i)=>{const b=el("button","",o);const pk=ps.scaf[k]||[];if(pk.includes(i))b.classList.add(i===sc.a?"ok":"bad");b.onclick=()=>{(ps.scaf[k]=ps.scaf[k]||[]).push(i);b.classList.add(i===sc.a?"ok":"bad");r.innerHTML=sc.w[i];if((ps.scaf.c||[]).includes(p.scaf.c.a)&&(ps.scaf.j||[]).includes(p.scaf.j.a))nx.style.display=""};t.appendChild(b)});
+      const pk=ps.scaf[k]||[];if(pk.length)r.innerHTML=sc.w[pk[pk.length-1]];t.appendChild(r);w.appendChild(t)});pb.appendChild(w);
+    const nx=el("div","ca-row","<span class='hb' style='font-family:system-ui;letter-spacing:0'>✔ Both parts found. Now write it as full sentences →</span><button class='btn sm'>Write it ▸</button>");nx.style.display=(ps.scaf.c||[]).includes(p.scaf.c.a)&&(ps.scaf.j||[]).includes(p.scaf.j.a)?"":"none";nx.querySelector("button").onclick=()=>setT("w");pb.appendChild(nx)}
+  const ta=el("textarea","ca-ta");ta.placeholder="Type your answer in full sentences… (claim + “This is because…”)";ta.value=ps.text;const wc=el("div","ca-wc");const upd=()=>wc.textContent=((ta.value.trim().match(/\S+/g)||[]).length)+" WORDS";upd();
+  ta.oninput=()=>{ps.text=ta.value;upd()};pw.append(ta,wc);const row=el("div","ca-row");const ck=el("button","btn","Check my answer ▸"),sm=el("button","btn ghost sm","◆ Show suggested answer");row.append(ck,sm);pw.appendChild(row);
+  const out=el("div");pw.appendChild(out);const mdl=modelBox(p,ps.model);pw.appendChild(mdl);
+  const run=()=>{const a=analyse(ta.value,p);let extra=0;if(p.choice){extra=ps.choice===p.choice.a?1:0}ps.marks=Math.min(p.mk,a.marks+extra);ps.checked=true;out.innerHTML="";
+    if(p.choice){a.res.unshift({st:ps.choice==null?"no":ps.choice===p.choice.a?"ok":"no",lab:p.choice.lab,mk:1,tip:ps.choice===p.choice.a?"":p.choice.tip});a.marks=ps.marks}
+    out.appendChild(analysisBox(a,p.mk));if(!ps.model){sm.textContent="◆ Compare with suggested answer";}meter()};
+  ck.onclick=()=>{if(!ta.value.trim()&&!p.choice){ta.focus();ta.placeholder="Write something first – even one sentence!";return}run()};
+  sm.onclick=()=>{ps.model=!ps.model;mdl.classList.toggle("show",ps.model);sm.textContent=ps.model?"▴ Hide suggested answer":"◆ Show suggested answer"};if(ps.model)sm.textContent="▴ Hide suggested answer";
+  function setT(t){ps.tab=t;$$("button",tabs).forEach(b=>b.classList.toggle("on",b.dataset.t===t));pb.style.display=t==="b"?"":"none";pw.style.display=t==="w"?"":"none";if(t==="w")setTimeout(()=>ta.focus({preventScroll:true}),0)}
+  $$("button",tabs).forEach(b=>b.onclick=()=>setT(b.dataset.t));setT(ps.tab||(p.scaf?"b":"w"));if(!p.scaf)tabs.style.display="none";
+  if(ps.checked)run();return box}
+/* Section C · Q12 */
+function st(q,c){c.appendChild(el("div","ca-stem",q.stem));q.parts.forEach(p=>textPart(q,p,c))}
+
+/* ---------------- Q13 · CUMULATIVE INCIDENCE ---------------- */
+function ci(q,c){c.appendChild(el("div","ca-stem",q.stem));const ps=partS(13,"13");ps.yrs=ps.yrs||[];ps.inputs=ps.inputs||{};
+  const box=el("div","ca-part");box.innerHTML="<h4><em><span>13</span></em>CALCULATE<small>3 MARKS</small></h4><p class='pq'>"+q.q+"</p>";c.appendChild(box);
+  const Yd=[["2014","START",0],["2015","2 NEW CASES",2],["2016","2 NEW CASES",2],["2017","3 NEW CASES",3],["2018","2 NEW CASES",2]];
+  box.appendChild(el("div","ca-yrm","① Tap the years that belong to <b>“from 2016 to 2018”</b> to count the new cases."));const yw=el("div","ca-years");box.appendChild(yw);const yr=el("div","ca-yrm");box.appendChild(yr);
+  const pop=el("div","ca-pop");box.appendChild(el("div","ca-yrm","Population of 10,000 men <span class='mute'>(each square = 50 men · zoomed)</span>"));box.appendChild(pop);box.appendChild(el("div","ca-pop-l","<span><i style='background:rgba(0,229,255,.55)'></i>AT RISK</span><span><i style='background:#ff3d5a'></i>CANCER IN 2015 → NOT AT RISK</span><span><i style='background:#ff6a00'></i>NEW CASES COUNTED</span>"));
+  function draw(){yw.innerHTML="";Yd.forEach((y,i)=>{const b=el("button","ca-yr"+(ps.yrs.includes(i)?" on":"")+(i===1?" gone":""),"<b>"+y[0]+"</b><span>"+y[1]+"</span>");b.onclick=()=>{const k=ps.yrs.indexOf(i);if(k>=0)ps.yrs.splice(k,1);else ps.yrs.push(i);draw()};yw.appendChild(b)});
+    const n=ps.yrs.reduce((a,i)=>a+Yd[i][2],0),good=ps.yrs.length===3&&[2,3,4].every(i=>ps.yrs.includes(i));
+    yr.innerHTML=ps.yrs.length?("Cases counted: <b>"+ps.yrs.sort().map(i=>Yd[i][2]).join(" + ")+" = "+n+"</b> "+(good?"<span class='hb'>✔ 2016 + 2017 + 2018</span>":ps.yrs.includes(1)?"<span style='color:#ffb3c0'>✘ 2015 is BEFORE the period</span>":ps.yrs.includes(0)?"<span style='color:#ffb3c0'>✘ 2014 is the start – no cases, and outside the period</span>":"<span style='color:#ffd9b8'>Include every year from 2016 to 2018</span>")):"&nbsp;";
+    let h="";for(let i=0;i<200;i++)h+="<i class='"+(i<2?"c15":good&&i>=2&&i<9?"c":"")+"'></i>";pop.innerHTML=h}
+  draw();
+  box.appendChild(el("div","ca-yrm","② Work it out step by step:"));const g=el("div","ca-calc");box.appendChild(g);
+  const steps=[{k:"cases",h:"NEW CASES 2016–2018",eq:"Count the onsets in the period",chk:v=>Math.abs(v-7)<1e-9,fb:v=>v===9?"You included 2015 – it's before the period.":v===11?"Only count 2016, 2017 and 2018.":v===5?"Don't forget 2016 (2 cases).":"Add 2016 + 2017 + 2018.",ok:"2 + 3 + 2 = 7 onsets."},
+    {k:"pop",h:"POPULATION AT RISK (START 2016)",eq:"Men without cancer at the start",chk:v=>Math.abs(v-9998)<1e-9,fb:v=>v===10000?"2 men got cancer in 2015 – they can't become NEW cases, so they're no longer at risk.":v===9991||v===9993?"Only remove cases that happened BEFORE 2016.":"Start with 10,000 and remove anyone who already has the disease.",ok:"10,000 − 2 = 9,998 <span class='mute'>[1 mark]</span>"},
+    {k:"ci",h:"CUMULATIVE INCIDENCE",eq:"= onsets ÷ population initially at risk",chk:v=>Math.abs(v-7/9998)<0.00005,fb:v=>Math.abs(v-0.07)<0.002?"That's the percentage number – write 0.07% or 0.0007.":Math.abs(v-9/9998)<0.00002||Math.abs(v-9/10000)<0.00002?"Check the number of cases – 2015 shouldn't be included.":Math.abs(v-7/9991)<0.00001?"Use the population at the START of the period.":"Divide new cases by the population initially at risk.",ok:"7 ÷ 9,998 = 0.0007 (0.07%) <span class='mute'>[1 + 1 mark]</span>"}];
+  const parse=v=>{v=String(v).trim().replace(/,/g,"");if(!v)return NaN;let pc=/%$/.test(v);v=v.replace("%","");let n;if(/^[\d.]+\s*\/\s*[\d.]+$/.test(v)){const [a,b]=v.split("/").map(Number);n=a/b}else n=parseFloat(v);return pc?n/100:n};
+  const cells={};steps.forEach(s=>{const d=el("div","ca-cs","<h6>"+s.h+"</h6><div class='eq'>"+s.eq+"</div>");const inp=el("input");inp.inputMode="decimal";inp.placeholder=s.k==="ci"?"e.g. 0.0007 or 7/9998":"number";inp.value=ps.inputs[s.k]||"";const r=el("div","r");d.append(inp,r);g.appendChild(d);cells[s.k]={d,inp,r,s};
+    const go=()=>{ps.inputs[s.k]=inp.value;const v=parse(inp.value);d.classList.remove("ok","no");if(!inp.value.trim()){r.innerHTML="";score();return}if(s.chk(v)){d.classList.add("ok");r.innerHTML="✔ "+s.ok}else{d.classList.add("no");r.innerHTML="✘ "+s.fb(v)}score()};inp.onchange=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};inp.onblur=go;if(inp.value)setTimeout(go,0)});
+  const out=el("div");box.appendChild(out);const sm=el("button","btn ghost sm","◆ Show suggested answer");const row=el("div","ca-row");row.appendChild(sm);box.appendChild(row);
+  const mdl=modelBox({model:"Population at risk = 10,000 − 2 = <u>9,998</u><span class='mk1'>1 MARK</span><br>Cumulative incidence = <u>no. of disease onsets ÷ size of population initially at risk</u><span class='mk1'>1 MARK</span><br>= 7 ÷ 9,998 = <u>0.0007 (or 0.07%)</u><span class='mk1'>1 MARK</span>",keys:["population initially at risk","remove 2015 cases","new cases (onsets) in the period","0.0007 = 0.07%"],miss:["Using 10,000 as the denominator (forgetting the 2 cases in 2015).","Counting 2015's cases as part of 2016–2018.","Writing 0.07 without the % sign."]},ps.model);box.appendChild(mdl);
+  sm.onclick=()=>{ps.model=!ps.model;mdl.classList.toggle("show",ps.model);sm.textContent=ps.model?"▴ Hide suggested answer":"◆ Show suggested answer"};
+  function score(){const ok=k=>cells[k].d.classList.contains("ok");ps.marks=(ok("pop")?1:0)+(ok("cases")&&ok("ci")?1:0)+(ok("ci")?1:0);ps.checked=Object.values(ps.inputs).some(v=>v&&String(v).trim());meter()}}
+
+/* ---------------- Q14 · ODDS RATIO ---------------- */
+function orq(q,c){c.appendChild(el("div","ca-stem",q.stem));const ps=partS(14,"14a");ps.inputs=ps.inputs||{};
+  const box=el("div","ca-part");box.innerHTML="<h4><em><span>a</span></em>PART A · EXPOSURE ODDS RATIO<small>3 MARKS</small></h4><p class='pq'>Table 1 is a 2 × 2 contingency table. Calculate the <b>exposure odds ratio</b>. Show your workings clearly.</p>";c.appendChild(box);
+  const tb=el("table","ca-ct","<thead><tr><th>TABLE 1</th><th>WITH DISORDERS<br><small>(cases)</small></th><th>WITHOUT DISORDERS<br><small>(controls)</small></th></tr></thead><tbody><tr><td class='rh'>MMR vaccinated</td><td class='v' data-k='a'><sup>a</sup>990</td><td class='v' data-k='b'><sup>b</sup>1188</td></tr><tr><td class='rh'>No MMR vaccine</td><td class='v' data-k='c'><sup>c</sup>10</td><td class='v' data-k='d'><sup>d</sup>12</td></tr></tbody>");box.appendChild(tb);
+  const xp=el("div","ca-xp","Tap a step below to light up the cells it uses.");box.appendChild(xp);
+  const hl=(ks,cls)=>{$$("td.v",tb).forEach(t=>{t.classList.remove("hl","hl2")});ks.forEach(([k,c2])=>tb.querySelector("[data-k='"+k+"']").classList.add(c2||"hl"))};
+  const g=el("div","ca-calc");box.appendChild(g);
+  const steps=[{k:"o1",h:"ODDS OF VACCINATION · WITH DISORDERS",eq:"vaccinated ÷ not vaccinated (cases) = a ÷ c",cells:[["a"],["c","hl2"]],x:"<span class='o'>a</span> ÷ <span class='b'>c</span> = 990 ÷ 10",chk:v=>Math.abs(v-99)<0.01,fb:v=>Math.abs(v-0.0101)<0.001?"Upside down – odds of being VACCINATED = vaccinated ÷ not vaccinated.":Math.abs(v-0.99)<0.01?"That's a proportion (990 ÷ 1000). Odds = vaccinated ÷ NOT vaccinated.":"Use the ‘with disorders’ column: 990 ÷ 10.",ok:"990 ÷ 10 = 99 <span class='mute'>[1 mark]</span>"},
+    {k:"o2",h:"ODDS OF VACCINATION · WITHOUT DISORDERS",eq:"vaccinated ÷ not vaccinated (controls) = b ÷ d",cells:[["b"],["d","hl2"]],x:"<span class='o'>b</span> ÷ <span class='b'>d</span> = 1188 ÷ 12",chk:v=>Math.abs(v-99)<0.01,fb:v=>Math.abs(v-0.0101)<0.001?"Upside down – vaccinated ÷ not vaccinated.":Math.abs(v-0.99)<0.01?"That's a proportion (1188 ÷ 1200), not odds.":"Use the ‘without disorders’ column: 1188 ÷ 12.",ok:"1188 ÷ 12 = 99 <span class='mute'>[1 mark]</span>"},
+    {k:"or",h:"ODDS RATIO",eq:"odds (cases) ÷ odds (controls) = (a×d) ÷ (b×c)",cells:[["a"],["d"],["b","hl2"],["c","hl2"]],x:"(<span class='o'>a × d</span>) ÷ (<span class='b'>b × c</span>) = (990 × 12) ÷ (1188 × 10) = 11880 ÷ 11880",chk:v=>Math.abs(v-1)<0.005,fb:v=>"Divide the two odds: 99 ÷ 99.",ok:"99 ÷ 99 = 1 <span class='mute'>[1 mark]</span>"}];
+  const parse=v=>{v=String(v).trim().replace(/,/g,"");if(/^[\d.]+\s*\/\s*[\d.]+$/.test(v)){const [a,b]=v.split("/").map(Number);return a/b}return parseFloat(v)};const cells={};
+  steps.forEach(s=>{const d=el("div","ca-cs","<h6>"+s.h+"</h6><div class='eq'>"+s.eq+"</div>");const inp=el("input");inp.inputMode="decimal";inp.placeholder="e.g. 990/10";inp.value=ps.inputs[s.k]||"";const r=el("div","r");d.append(inp,r);g.appendChild(d);cells[s.k]=d;
+    d.addEventListener("click",()=>{hl(s.cells);xp.innerHTML=s.x});inp.addEventListener("focus",()=>{hl(s.cells);xp.innerHTML=s.x});
+    const go=()=>{ps.inputs[s.k]=inp.value;d.classList.remove("ok","no");if(!inp.value.trim()){r.innerHTML="";sc();return}const v=parse(inp.value);if(s.chk(v)){d.classList.add("ok");r.innerHTML="✔ "+s.ok}else{d.classList.add("no");r.innerHTML="✘ "+s.fb(v)}sc()};inp.onchange=go;inp.onblur=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};if(inp.value)setTimeout(go,0)});
+  function sc(){ps.marks=Object.keys(cells).filter(k=>cells[k].classList.contains("ok")).length;ps.checked=Object.values(ps.inputs).some(v=>v&&String(v).trim());meter()}
+  const row=el("div","ca-row");const sm=el("button","btn ghost sm","◆ Show suggested answer");row.appendChild(sm);box.appendChild(row);
+  const mdl=modelBox({model:"Odds of being vaccinated among children <u>with</u> disorders = 990 ÷ 10 = <u>99</u><span class='mk1'>1 MARK</span><br>Odds of being vaccinated among children <u>without</u> disorders = 1188 ÷ 12 = <u>99</u><span class='mk1'>1 MARK</span><br>Odds ratio = 99 ÷ 99 = <u>1</u><span class='mk1'>1 MARK</span><br><span class='mute'>Shortcut: (990 × 12) ÷ (1188 × 10) = 1 – max 2 marks with correct answer and workings, because the question asks you to show the exposure odds.</span>",keys:["odds = vaccinated ÷ not vaccinated","cases vs controls","OR = (a×d) ÷ (b×c)","OR = 1"],miss:["Using proportions (990/1000) instead of odds (990/10).","Only writing the cross-product without showing each group's odds (max 2 marks)."]},ps.model);box.appendChild(mdl);
+  sm.onclick=()=>{ps.model=!ps.model;mdl.classList.toggle("show",ps.model);sm.textContent=ps.model?"▴ Hide suggested answer":"◆ Show suggested answer"};
+  /* part b */
+  const pb={id:"14b",mk:2,q:"Can we find the Relative Risk (RR) from this study? Why?",choice:{lab:"Answer: No",a:1,tip:"The answer is <b>No</b> – a case-control study cannot give RR."},
+    pts:[{mk:1,lab:"Justification: case-control is retrospective, so risk / incidence is not available",re:[/retrospect|case[\s-]*control|look(s|ed|ing)? back|backward|selected (based )?on (the )?(disease|outcome)|disease status|already (have|had)/,/incidence|risk|new cases|population at risk|denominator|not available|cannot (be )?(calculat|obtain|measur|find)|can'?t (be )?(calculat|obtain|measur|find)|unable/],all:1,tip:"Say it is a <b>case-control (retrospective)</b> study, so the <b>risk (incidence) is not available</b>."}],
+    warn:[{re:/odds ratio (is|=|equals)? ?1|no association/,msg:"That answers part (c), not (b). Here explain WHY RR can't be calculated."}],just:1,
+    model:"<u>No</u><span class='mk1'>1 MARK</span>. A case-control study is a <u>retrospective</u> study in which the <u>risk (incidence) is not available</u>, so RR is not possible to obtain from this study<span class='mk1'>1 MARK</span>.",
+    keys:["No","case-control = retrospective","participants chosen by disease status","risk / incidence not available","use OR instead"],miss:["Answering “Yes – divide the proportions” (that treats it like a cohort study).","Saying “No” without giving the reason."]};
+  const pc={id:"14c",mk:2,q:"Based on your calculations in part (a), state whether MMR vaccination is associated with pervasive development disorders. Justify your answer.",choice:{lab:"Answer: no association",a:0,tip:"OR = 1 → <b>no association</b>."},
+    pts:[{mk:1,lab:"Justification: OR = 1 means no association between the factor and the disease",re:[/\bor\b\s*(=|is|of|equals|was)?\s*1\b|odds ratio\s*(=|is|of|equals|was)?\s*(1\b|one\b)|equal to (1|one)|=\s*1\b|same odds|odds (are )?(the )?same|99\s*(=|and|equals)\s*99/,/no association|not associated|no relationship|no link|not linked|not a risk factor|no difference|neither|unrelated|no effect/],all:1,tip:"State the number AND what it means: <b>OR = 1</b> → <b>no association</b> between MMR and PDD."}],
+    warn:[{re:/\bcaus/,msg:"Avoid ‘cause’ – an OR shows association, not causation."},{re:/significan/,msg:"Without a p-value or confidence interval, don't say ‘significant’ – say ‘no association’."},{re:/protect|risk factor(?! )/,msg:"OR = 1 is neither a risk factor (OR > 1) nor protective (OR < 1)."}],just:1,
+    model:"<u>OR = 1</u>: there is <u>no association</u> between the factor and the disease<span class='mk1'>1 MARK</span>. Thus we can conclude that MMR vaccination is <u>not associated</u> with pervasive development disorders<span class='mk1'>1 MARK</span>.",
+    keys:["OR = 1","no association","OR > 1 risk factor · OR < 1 protective","not associated with PDD"],miss:["Saying MMR causes or prevents the disorder.","Stating ‘not associated’ without quoting OR = 1."]};
+  const choiceUI=(p,opts,why)=>(boxp,ps2)=>{const w=el("div","ca-ch"),r=el("div","ca-chr");opts.forEach((o,i)=>{const b=el("button","",o);if(ps2.choice===i)b.classList.add(i===p.choice.a?"ok":"bad");b.onclick=()=>{ps2.choice=i;$$("button",w).forEach((x,k)=>{x.classList.remove("ok","bad");if(k===i)x.classList.add(i===p.choice.a?"ok":"bad")});r.innerHTML=why[i]};w.appendChild(b)});if(ps2.choice!=null)r.innerHTML=why[ps2.choice];boxp.append(el("div","ca-yrm","Step 1 · Choose:"),w,r,el("div","ca-yrm","Step 2 · Justify in your own words, then <b>Check</b>:"))};
+  textPart(q,pb,c,choiceUI(pb,["YES","NO"],["✘ Think: did the investigators follow children forward to see who developed the disorder?","✔ Correct – now explain WHY in one or two sentences."]));
+  textPart(q,pc,c,choiceUI(pc,["NO ASSOCIATION","POSITIVE (RISK FACTOR)","NEGATIVE (PROTECTIVE)"],["✔ OR = 1 → the odds are the same in both groups.","✘ That would need OR > 1.","✘ That would need OR < 1."]))}
+/* patch analyse for 'all' points (two keyword groups) */
+const _an=analyse;analyse=function(txt,p){const a=_an(txt,p);p.pts.forEach((pt,i)=>{if(!pt.all)return;const hits=pt.re.map(r=>r.test(txt.toLowerCase()));const n=hits.filter(Boolean).length;const r=a.res[i];
+    if(n===pt.re.length){r.st="ok";r.tip=""}else if(n>0){r.st="half";r.tip="Half-way there. "+pt.tip;a.marks-=pt.mk}else{r.st="no";r.tip=pt.tip}});a.marks=Math.max(0,Math.min(p.mk,a.res.reduce((s,r)=>s+(r.st==="ok"?r.mk:0),0)));return a};
+
+/* ---------------- FIGURES ---------------- */
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+function figCohort(){const w=el("div","ca-fig");const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 900 330");w.appendChild(s);
+  const T=["Healthy people","Exposure occurs","Exposed & unexposed","Disease occurs","Diseased & non-diseased"];
+  const CAP=["<b>1 · Start:</b> a group of <b>healthy</b> people – nobody has the disease yet.","<b>2 · Exposure occurs:</b> some people become <b>exposed</b> (orange).","<b>3 · Group by exposure:</b> exposed and unexposed are identified at the START.","<b>4 · Follow FORWARD in time:</b> disease occurs (yellow) in both groups.","<b>5 · Compare:</b> disease in exposed vs unexposed → <b>incidence</b> and <b>relative risk</b>. This forward design = <b>COHORT</b>."];
+  const X=i=>12+i*178,PW=160,top=58,PH=230;const r=rng(7);
+  const scat=(i,n)=>{const o=[];for(let k=0;k<n;k++){const cx=k%4,cy=k/4|0;o.push([X(i)+26+cx*36+(r()-.5)*14+(cy%2)*10,top+22+cy*30+(r()-.5)*12])}return o};
+  const pnl=[];T.forEach((t,i)=>{const g=sv("g",{class:"ca-pnl"},s);sv("rect",{x:X(i),y:top,width:PW,height:PH,rx:16,fill:"rgba(8,18,32,.85)",stroke:B,"stroke-width":2,style:"filter:drop-shadow(0 0 5px rgba(0,229,255,.6))"},g);
+    sv("rect",{x:X(i)+6,y:6,width:PW-12,height:42,fill:"#03060b",stroke:"rgba(0,229,255,.6)"},g);const words=t.split(" ");const l1=words.length>2?words.slice(0,2).join(" "):t,l2=words.length>2?words.slice(2).join(" "):"";
+    sv("text",{x:X(i)+PW/2,y:l2?24:32,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":700},g).textContent=l1;if(l2)sv("text",{x:X(i)+PW/2,y:40,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":700},g).textContent=l2;pnl.push(g)});
+  const dot=(g,x,y,c)=>sv("circle",{cx:x,cy:y,r:8,fill:c,style:"filter:drop-shadow(0 0 4px "+c+")"},g);
+  scat(0,26).forEach(([x,y])=>dot(pnl[0],x,y,B));scat(1,26).forEach(([x,y],k)=>dot(pnl[1],x,y,k%3===0?O:B));
+  const cl=(i,y0,y1,n,col,f)=>{for(let k=0;k<n;k++){const x=X(i)+22+(k%5)*28+((k/5|0)%2)*8,y=y0+(k/5|0)*22;dot(pnl[i],x,y,f?f(k):col)}};
+  cl(2,top+24,0,9,O);cl(2,top+120,0,17,B);cl(3,top+24,0,9,O,k=>k%3===1?Y:O);cl(3,top+120,0,17,B,k=>k%6===2?Y:B);
+  const row=(i,y,n,col)=>{for(let k=0;k<n;k++)dot(pnl[i],X(i)+22+k*24,y,col)};row(4,top+22,3,Y);row(4,top+46,5,O);row(4,top+70,1,O);row(4,top+120,3,Y);row(4,top+146,5,B);row(4,top+170,5,B);row(4,top+194,4,B);
+  sv("text",{x:X(4)+PW-8,y:top+92,"text-anchor":"end",fill:O,"font-size":9,"font-weight":800},pnl[4]).textContent="EXPOSED";sv("text",{x:X(4)+PW-8,y:top+218,"text-anchor":"end",fill:B,"font-size":9,"font-weight":800},pnl[4]).textContent="UNEXPOSED";
+  sv("defs",{},s).innerHTML="<marker id='caAr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0L10 5L0 10z' fill='#ff6a00'/></marker>";
+  sv("line",{x1:14,y1:310,x2:880,y2:310,stroke:O,"stroke-width":4,"marker-end":"url(#caAr)",style:"filter:drop-shadow(0 0 6px #ff6a00)"},s);sv("text",{x:450,y:326,"text-anchor":"middle",fill:O,"font-size":10,"font-weight":800},s).textContent="TIME → FOLLOW FORWARD";
+  const bar=el("div","ca-figbar");const play=el("button","btn sm","▶ Play the study"),cap=el("div","ca-cap","Tap a panel or press <b>Play</b> to walk through the diagram.");const lg=el("div","ca-pop-l","<span><i style='background:#00e5ff'></i>UNEXPOSED</span><span><i style='background:#ff6a00'></i>EXPOSED</span><span><i style='background:#ffe14d'></i>DISEASED</span>");bar.append(play,cap);w.append(bar,lg);
+  let tm=null;const focus=i=>{pnl.forEach((g,k)=>g.style.opacity=i==null||k===i?1:.25);cap.innerHTML=i==null?"Tap a panel or press <b>Play</b>.":CAP[i]};pnl.forEach((g,i)=>g.addEventListener("click",()=>{clearInterval(tm);focus(i)}));
+  play.onclick=()=>{clearInterval(tm);let i=0;focus(0);tm=setInterval(()=>{i++;if(i>4){clearInterval(tm);setTimeout(()=>{pnl.forEach(g=>g.style.opacity=1)},1800);return}focus(i)},RM?400:1800)};return w}
+function face(g,x,y,col,sad,dim){sv("circle",{cx:x,cy:y,r:17,fill:col,opacity:dim?.6:.9,stroke:"#03060b","stroke-width":1.5},g);sv("circle",{cx:x-6,cy:y-4,r:2.2,fill:"#03060b"},g);sv("circle",{cx:x+6,cy:y-4,r:2.2,fill:"#03060b"},g);sv("path",{d:sad?"M"+(x-7)+" "+(y+9)+"Q"+x+" "+(y+2)+" "+(x+7)+" "+(y+9):"M"+(x-7)+" "+(y+4)+"Q"+x+" "+(y+11)+" "+(x+7)+" "+(y+4),fill:"none",stroke:"#03060b","stroke-width":2},g)}
+function figCC(){const w=el("div","ca-fig");const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 900 420");w.appendChild(s);const G="#7dff6a";
+  sv("defs",{},s).innerHTML="<marker id='caAd' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0L10 5L0 10z' fill='#00e5ff'/></marker><marker id='caAl' viewBox='0 0 10 10' refX='2' refY='5' markerWidth='4' markerHeight='4' orient='auto-start-reverse'><path d='M0 0L10 5L0 10z' fill='#ff6a00'/></marker>";
+  sv("line",{x1:30,y1:40,x2:640,y2:40,stroke:G,"stroke-width":6,style:"filter:drop-shadow(0 0 6px #7dff6a)"},s);sv("text",{x:700,y:46,fill:G,"font-size":14,"font-weight":800},s).textContent="REAL TIME";
+  const st=[];for(let i=0;i<22;i++){const a=i*Math.PI/11,r=i%2?18:34;st.push((620+r*Math.cos(a)).toFixed(1)+","+(40+r*Math.sin(a)).toFixed(1))}const now=sv("g",{class:"ca-pnl"},s);sv("polygon",{points:st.join(" "),fill:O,style:"filter:drop-shadow(0 0 8px #ff6a00)"},now);sv("text",{x:620,y:45,"text-anchor":"middle",fill:"#03060b","font-size":12,"font-weight":900},now).textContent="NOW";
+  const lab=(x,t1,t2)=>{const g=sv("g",{class:"ca-pnl"},s);sv("text",{x,y:100,"text-anchor":"middle",fill:B,"font-size":14,"font-weight":800},g).textContent=t1;sv("text",{x,y:120,"text-anchor":"middle",fill:B,"font-size":14,"font-weight":800},g).textContent=t2;sv("line",{x1:x,y1:132,x2:x,y2:318,stroke:B,"stroke-width":3,"marker-end":"url(#caAd)"},g);return g};
+  const L1=lab(100,"EXPOSURE","OCCURRED"),L2=lab(350,"DISEASE","OCCURRED"),L3=lab(610,"STUDY TAKES","PLACE");
+  const grid=(x0,dim)=>{const g=sv("g",{class:"ca-pnl"},s);sv("text",{x:x0+38,y:160,"text-anchor":"middle",fill:B,"font-size":14,"font-weight":800},g).textContent="ILL";sv("text",{x:x0+18,y:182,"text-anchor":"middle",fill:B,"font-size":16,"font-weight":800},g).textContent="+";sv("text",{x:x0+58,y:182,"text-anchor":"middle",fill:B,"font-size":16,"font-weight":800},g).textContent="−";
+    if(!dim){sv("text",{x:x0-40,y:240,"text-anchor":"middle",fill:B,"font-size":14,"font-weight":800},g).textContent="EXP";sv("text",{x:x0-14,y:217,"text-anchor":"middle",fill:B,"font-size":16,"font-weight":800},g).textContent="+";sv("text",{x:x0-14,y:262,"text-anchor":"middle",fill:B,"font-size":16,"font-weight":800},g).textContent="−"}
+    face(g,x0+18,212,dim?"#7fd8e6":O,1,dim);face(g,x0+58,212,dim?"#7fd8e6":O,0,dim);face(g,x0+18,256,dim?"#7fd8e6":B,1,dim);face(g,x0+58,256,dim?"#7fd8e6":B,0,dim);return g};
+  const F1=grid(185,0),F2=grid(740,1);
+  const ar=sv("g",{class:"ca-pnl"},s);sv("line",{x1:612,y1:330,x2:40,y2:330,stroke:"#fff","stroke-width":9,"marker-end":"url(#caAl)",style:"filter:drop-shadow(0 0 6px rgba(255,255,255,.6))"},ar);sv("rect",{x:606,y:324,width:12,height:12,fill:O},ar);
+  const pulse=sv("circle",{cx:612,cy:330,r:9,fill:O,opacity:0,style:"filter:drop-shadow(0 0 10px #ff6a00)"},s);
+  const t1=sv("g",{class:"ca-pnl"},s);sv("text",{x:230,y:370,"text-anchor":"middle",fill:O,"font-size":15,"font-weight":800,style:"font-style:italic"},t1).textContent="RETROSPECTIVE ASSESSMENT";sv("text",{x:230,y:392,"text-anchor":"middle",fill:O,"font-size":15,"font-weight":800},t1).textContent="OF EXPOSURE";
+  const t2=sv("g",{class:"ca-pnl"},s);sv("text",{x:745,y:370,"text-anchor":"middle",fill:O,"font-size":15,"font-weight":800},t2).textContent="SELECTION BASED";sv("text",{x:745,y:392,"text-anchor":"middle",fill:O,"font-size":15,"font-weight":800},t2).textContent="ON DISEASE STATUS";
+  const parts=[now,L1,L2,L3,F1,F2,ar,t1,t2];
+  const ST=[[[now,L3,F2,t2],"<b>1 · NOW – the study starts.</b> People are <b>selected by disease status</b>: cases (ill +) and controls (ill −)."],[[ar,L2],"<b>2 · Look BACK in time</b> – the disease has already occurred before the study."],[[L1,F1,t1,ar],"<b>3 · Retrospective assessment of exposure:</b> find who was exposed in the past → 2×2 table → <b>odds ratio</b>. This backward design = <b>CASE-CONTROL</b>."]];
+  const bar=el("div","ca-figbar");const play=el("button","btn sm","▶ Play the study"),cap=el("div","ca-cap","Tap a label or press <b>Play</b> to walk through the diagram.");bar.append(play,cap);w.appendChild(bar);
+  let tm=null,an=null;const focus=k=>{parts.forEach(p=>p.style.opacity=k==null||ST[k][0].includes(p)?1:.2);cap.innerHTML=k==null?"Tap a label or press <b>Play</b>.":ST[k][1]};
+  const run=()=>{cancelAnimationFrame(an);if(RM)return;const t0=performance.now();const f=t=>{const p=Math.min(1,(t-t0)/1600);pulse.setAttribute("cx",612-570*p);pulse.setAttribute("opacity",p<1?1:0);if(p<1)an=requestAnimationFrame(f)};an=requestAnimationFrame(f)};
+  [[now,0],[L3,0],[F2,0],[t2,0],[L2,1],[ar,1],[L1,2],[F1,2],[t1,2]].forEach(([p,k])=>p.addEventListener("click",()=>{clearInterval(tm);focus(k);if(k===1)run()}));
+  play.onclick=()=>{clearInterval(tm);let k=0;focus(0);tm=setInterval(()=>{k++;if(k>2){clearInterval(tm);setTimeout(()=>focus(null),2200);return}focus(k);if(k===1)run()},RM?500:2400)};return w}
+
+show(0);
 })();
 </script>
 </body>
