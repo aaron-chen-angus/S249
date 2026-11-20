@@ -832,6 +832,77 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .ftflow .fa span{font-size:.6rem;letter-spacing:2px;color:var(--mute)}
 .ftflow .fa em{font-style:normal;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.84rem;color:#fff}
 .ftflow .fa code{margin-top:4px;white-space:normal}
+/* ===== EXTRA T-TEST QUESTIONS (Dr Lim) ===== */
+.xq-sec em{color:#ff4fd8!important}.xq-sec{color:#ff4fd8!important}.xq-sec::after{background:linear-gradient(90deg,#ff4fd8,transparent)!important}
+.xq-top{border-color:rgba(255,79,216,.55)!important;box-shadow:0 0 22px rgba(255,79,216,.15)}
+.xq-top .pqscore b{color:#ff4fd8;text-shadow:0 0 6px rgba(255,79,216,.9),0 0 22px rgba(255,79,216,.45)}
+.xqb{border-color:#ff4fd8!important;color:#ffc2f1}
+.xqb.cur{background:rgba(255,79,216,.25)!important;color:#fff;box-shadow:0 0 6px rgba(255,79,216,.9),0 0 22px rgba(255,79,216,.45)}
+.xqb.ok{background:#ff4fd8!important;color:#03060b!important}
+.xqb.part{background:rgba(255,79,216,.12)!important}
+.xq-card{border-color:rgba(255,79,216,.4)!important}
+.xq-tag{border-color:#ff4fd8!important;color:#ff4fd8!important}
+.xq-ttl{font-size:.72rem;letter-spacing:2px;color:#fff;margin-left:6px}
+.xq-stem{font-family:system-ui,sans-serif;letter-spacing:0;font-size:.98rem;line-height:1.65;padding:12px 14px;border:1px solid rgba(255,79,216,.45);background:rgba(255,79,216,.06);margin:10px 0 4px;color:#fff}
+.xq-stem b{color:#ff8de6}
+.xq-part{border:1px solid rgba(0,229,255,.22);background:rgba(4,10,18,.55);padding:14px;margin-top:14px;transition:.3s}
+.xq-part.done{border-color:rgba(255,79,216,.6);box-shadow:inset 3px 0 0 #ff4fd8}
+.xq-part>h4{display:flex;gap:12px;align-items:flex-start;font:600 .92rem/1.5 system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#fff;margin-bottom:10px}
+.xq-part>h4 em{font:900 .78rem 'Orbitron',sans-serif;font-style:normal;width:28px;height:28px;display:grid;place-items:center;border:2px solid #ff4fd8;color:#ff4fd8;transform:rotate(45deg);flex:none;margin-top:2px}
+.xq-part>h4 em span{transform:rotate(-45deg)}
+.xq-part.done>h4 em{background:#ff4fd8;color:#03060b}
+.xq-body{display:flex;flex-direction:column;gap:10px}
+.xq-w{border:1px solid rgba(0,229,255,.18);padding:10px 12px;background:rgba(3,6,11,.5);animation:xqIn .35s}
+@keyframes xqIn{from{opacity:0;transform:translateY(6px)}}
+.xq-w h6{font:800 .56rem 'Orbitron',sans-serif;letter-spacing:3px;color:#ff8de6;margin-bottom:8px}
+.xq-ob{display:flex;flex-direction:column;gap:6px}
+.xq-ob button{text-align:left;background:transparent;border:1px solid rgba(0,229,255,.22);color:var(--ink);padding:8px 11px;cursor:pointer;font:500 .84rem system-ui,sans-serif;letter-spacing:0;transition:.15s}
+.xq-ob button:hover:not(:disabled){border-color:#ff4fd8;background:rgba(255,79,216,.07)}
+.xq-ob button.ok{border-color:#ff4fd8;background:rgba(255,79,216,.18);color:#fff;box-shadow:inset 4px 0 0 #ff4fd8}
+.xq-ob button.bad{border-color:var(--bad);color:#ffb3c0;text-decoration:line-through;opacity:.75}
+.xq-fb{font:500 .8rem system-ui,sans-serif;letter-spacing:0;color:#ffd9b8;margin-top:6px;min-height:1em}
+.xq-fb.ok{color:#ffc2f1}
+.xq-fb .btn{margin-left:8px}
+.xq-nr{display:flex;gap:8px;align-items:center}
+.xq-nr input{width:180px;background:#000;border:1px solid rgba(0,229,255,.4);color:#fff;font:700 1rem ui-monospace,Menlo,monospace;padding:7px 9px;outline:none}
+.xq-nr input:focus{border-color:#ff4fd8;box-shadow:0 0 10px rgba(255,79,216,.4)}
+.xq-num.ok input{border-color:#ff4fd8;color:#ff8de6}
+.xq-num.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.xq-form{display:flex;align-items:center;justify-content:center;gap:14px;font:800 1.15rem 'Orbitron',sans-serif;color:#fff;padding:10px 0}
+.xq-form .fr{display:inline-flex;flex-direction:column;align-items:center}
+.xq-form .nu{border-bottom:2px solid #fff;padding:0 6px 6px}
+.xq-form .de{padding:6px 6px 0}
+.xq-form i{font-style:normal;display:inline-block;min-width:58px;text-align:center;border:2px dashed rgba(255,79,216,.7);padding:3px 8px;margin:0 3px;cursor:pointer;font-size:.86rem;color:#ff8de6}
+.xq-form i.fill{border-style:solid;border-color:var(--b);color:#fff;background:rgba(0,229,255,.1)}
+.xq-form i.ok{border-style:solid;border-color:#ff4fd8;background:rgba(255,79,216,.2);color:#fff}
+.xq-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.xq-chip{background:rgba(4,10,18,.8);border:1px solid rgba(0,229,255,.4);color:#fff;font:800 .9rem 'Orbitron',sans-serif;padding:7px 14px;cursor:pointer;min-width:60px}
+.xq-chip.sel{border-color:#ff4fd8;background:rgba(255,79,216,.25);box-shadow:0 0 10px rgba(255,79,216,.6)}
+.xq-chip:disabled{opacity:.4;cursor:default}
+.xq-tt{width:100%;border-collapse:collapse;font-family:ui-monospace,Menlo,monospace;letter-spacing:0}
+.xq-tt th{padding:4px 6px;color:#ff8de6;font:800 .8rem 'Orbitron',sans-serif;border-bottom:2px solid rgba(255,79,216,.6)}
+.xq-tt th svg{display:block;width:80px;height:34px;margin:0 auto 2px}
+.xq-tt th.col{background:rgba(255,79,216,.12)}
+.xq-tt td{text-align:center;padding:6px;border-bottom:1px solid rgba(0,229,255,.1);color:#fff;font-size:.9rem;cursor:pointer;transition:.15s}
+.xq-tt td.df{color:var(--b);font-weight:800;border-right:2px solid rgba(0,229,255,.4);cursor:default}
+.xq-tt td:not(.df):hover{background:rgba(255,79,216,.12)}
+.xq-tt tr.hrow td{background:rgba(255,79,216,.06)}
+.xq-tt td.bad{color:var(--bad);text-decoration:line-through}
+.xq-tt td.ok{background:#ff4fd8!important;color:#03060b;font-weight:900;box-shadow:0 0 14px rgba(255,79,216,.8)}
+.xq-cv svg{width:100%;height:auto;display:block}
+.xq-cv svg text,.xq-w svg text{font-family:'Orbitron',sans-serif}
+.xq-w>svg{width:100%;height:auto;display:block}
+.xq-cap{font:500 .82rem system-ui,sans-serif;letter-spacing:0;color:#fff;border-left:3px solid #ff4fd8;padding:4px 10px;background:rgba(255,79,216,.06);margin-top:6px}
+.xq-mr{margin-top:10px}
+.xq-mr .btn:disabled{opacity:.35}
+.xq-mr .btn.pulse{animation:xqP 1.2s ease-in-out infinite;border-color:#ff4fd8;color:#ff8de6}
+@keyframes xqP{50%{box-shadow:0 0 16px rgba(255,79,216,.8)}}
+.xq-lock{font:500 .7rem system-ui,sans-serif;letter-spacing:0}
+.xq-model{display:none;margin-top:10px;border:1px solid rgba(255,79,216,.55);background:rgba(255,79,216,.06);padding:12px 14px;font:500 .88rem/1.65 system-ui,sans-serif;letter-spacing:0;color:#fff}
+.xq-model.show{display:block}
+.xq-model h5{font:800 .58rem 'Orbitron',sans-serif;letter-spacing:3px;color:#ff8de6;margin-bottom:6px}
+.xq-model u{text-decoration:none;border-bottom:2px solid #ff4fd8}
 </style>
 </head>
 <body>
@@ -1039,11 +1110,15 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 
 <!-- 09 REVIEW QUIZ -->
 <section class="panel" id="p9" data-name="REVIEW QUIZ">
-  <div class="ph"><div class="kick">CONSOLIDATE</div><h2>Review <span>Quiz</span></h2><p>15 questions: low → medium → high. Open <span class="hl">How to approach</span> if you need a nudge. Your first answer counts.</p></div>
+  <div class="ph"><div class="kick">CONSOLIDATE</div><h2>Review <span>Quiz</span></h2><p>15 questions: low → medium → high, then 3 extra questions from Dr Lim. Open <span class="hl">How to approach</span> if you need a nudge. Your first answer counts.</p></div>
   <div class="card o"><div class="row" style="justify-content:space-between"><div class="qnav" id="qNav"></div><div class="pqscore"><b id="qS">0</b><span>/ 15 CORRECT</span></div></div>
     <div class="legend" style="margin-top:6px"><span><i style="background:#00e5ff"></i>LOW</span><span><i style="background:#ffa13d"></i>MEDIUM</span><span><i style="background:#ff3d5a"></i>HIGH</span></div></div>
   <div class="card" id="qCard"></div>
   <div class="card o" id="qEnd" style="display:none"></div>
+  <div class="sec xq-sec"><em>EX</em> EXTRA T-TEST QUESTIONS FROM DR LIM</div>
+  <div class="card xq-top"><div class="row" style="justify-content:space-between"><div class="qnav" id="xqNav"></div><div class="pqscore"><b id="xqS">0</b><span>/ <i id="xqT" style="font-style:normal">10</i> PARTS SOLVED</span></div></div>
+    <div class="legend" style="margin-top:6px"><span><i style="background:#ff4fd8"></i>EXTRA · DR LIM</span><span>Try first → hints guide you → model answer unlocks when solved</span></div></div>
+  <div class="card xq-card" id="xqCard"></div>
   <div class="pager"><button class="btn ghost" data-go="8">◂ Paired</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
 </section>
 </main>
@@ -2349,6 +2424,181 @@ qs(0);updateXP();
 const hs=parseInt((location.hash||"").slice(1),10);if(!isNaN(hs)&&hs>0&&hs<$$("main > .panel").length)window.__core.go(hs);
 })();
 
+</script>
+<script>
+/* ================= EXTRA T-TEST QUESTIONS FROM DR LIM (Q16–18) ================= */
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s),$$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const NS="http://www.w3.org/2000/svg";
+const sv=(t,a,p)=>{const e=document.createElementNS(NS,t);let st="";for(const k in a){if(t==="text"&&(k==="fill"||k==="font-size"||k==="font-weight")){st+=k+":"+a[k]+(k==="font-size"?"px":"")+";"}else e.setAttribute(k,a[k])}if(st)e.setAttribute("style",st+(a.style||""));if(p)p.appendChild(e);return e};
+const PK="#ff4fd8",O="#ff6a00",B="#00e5ff";const TS=window.TS;
+if(!$("#xqCard"))return;
+const shuffleOnce=(a,seed)=>{a=a.slice();let s=seed;for(let i=a.length-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* ---------- t tables (Dr Lim's Figures) ---------- */
+const COLS=[0.05,0.025,0.01,0.005];
+const TAB1={17:[1.740,2.110,2.567,2.898],18:[1.734,2.101,2.552,2.878],19:[1.729,2.093,2.539,2.861],20:[1.725,2.086,2.528,2.845]};
+const TAB2={20:[1.725,2.086,2.528,2.845],21:[1.721,2.080,2.518,2.831],22:[1.717,2.074,2.508,2.819],23:[1.714,2.069,2.500,2.807],24:[1.711,2.064,2.492,2.797],25:[1.708,2.060,2.485,2.787],26:[1.706,2.056,2.479,2.779],27:[1.703,2.052,2.473,2.771],28:[1.701,2.048,2.467,2.763],29:[1.699,2.045,2.462,2.756]};
+
+/* ---------- questions ---------- */
+const Q=[
+ {n:16,title:"Enzyme A in Area X",stem:"The mean level of enzyme A in the normal population is <b>100 ug/mL</b>. Researchers want to find out if the level in area X is <b>higher</b>. They measured <b>20 individuals</b> from area X: mean = <b>103.5 ug/mL</b>, SD = <b>8 ug/mL</b>.",
+  parts:[
+   {id:"a",q:"Formulate the Null Hypothesis (H₀) and Alternative Hypothesis (H₁).",w:[
+     {k:"pick",h:"H₀ · NULL",o:[["There is no significant difference in the level of enzyme A between the population in area X and the normal population",1],["The level of enzyme A in area X is significantly higher than in the normal population",0,"That's what the researchers HOPE to show – that's H₁. H₀ is the neutral ‘no difference’ position."],["The sample mean (103.5) is equal to 100",0,"Hypotheses are about POPULATIONS, not about the sample you already measured."]]},
+     {k:"pick",h:"H₁ · ALTERNATIVE",o:[["The level of enzyme A in area X is significantly higher than in the normal population",1],["There is a significant difference in enzyme A between area X and the normal population",0,"Close! Re-read the aim: “<b>higher</b> than”. That word gives H₁ a direction."],["There is no significant difference in enzyme A",0,"That's H₀ – the neutral position."]]},
+     {k:"pick",h:"ONE OR TWO TAILS?",o:[["One-tailed",1],["Two-tailed",0,"“Higher than” only looks in ONE direction. Two-tailed is for “different / change”."]]}],
+    model:"<b>H₀:</b> There is no significant difference in the level of enzyme A in the population within area X and the normal population.<br><b>H₁:</b> The level of enzyme A in the population within area X is significantly <u>higher</u> than that of the normal population. <b>(1-tail)</b>"},
+   {id:"b",q:"State the type of t-test (single sample, independent two sample or dependent two sample) that can be used. Justify your answer.",w:[
+     {k:"pick",h:"TYPE OF T-TEST",o:[["Single (one-sample) t-test",1],["Independent two-sample t-test",0,"Was a SECOND group of people measured? 100 ug/mL is a known reference value, not a group in this study."],["Dependent (paired) two-sample t-test",0,"Paired needs the same people measured twice, or matched pairs."]]},
+     {k:"pick",h:"JUSTIFICATION",o:[["There is only one sample (20 individuals) to compare with a reference mean value",1],["The participants were matched one to one",0,"No matching is mentioned – there's only one group."],["The sample size is smaller than 30",0,"Sample size doesn't decide WHICH t-test. Count the groups."]]}],
+    model:"<b>Single sample t-test</b> should be used since there is only <u>one sample</u> (20 individuals) that needs to be compared with the <u>reference mean value</u> (100 ug/mL)."},
+   {id:"c",q:"Calculate the t<sub>calculated</sub> value. Show all your workings clearly.",w:[
+     {k:"slots",xb:103.5,mu:100,s:8,n:20,chips:[103.5,100,8,20,19,0.05]},
+     {k:"num",h:"STEP 1 · x̄ − μ₀",ans:3.5,tol:.001,hint:v=>Math.abs(v+3.5)<.001?"Order: sample mean MINUS reference (103.5 − 100). Here the gap is positive.":"Subtract the reference mean from the sample mean."},
+     {k:"num",h:"STEP 2 · √n",ans:Math.sqrt(20),tol:.006,hint:v=>Math.abs(v-20)<.01?"Square-root it! √20, not 20.":Math.abs(v-Math.sqrt(19))<.01?"Use n = 20 (the number of people), not df.":"n = 20 → press √ on your calculator."},
+     {k:"num",h:"STEP 3 · SE = s ÷ √n",ans:8/Math.sqrt(20),tol:.006,hint:v=>Math.abs(v-0.4)<.01?"Divide by √n (4.472), not by n.":"SD = 8. Divide it by your answer in step 2.",se:1},
+     {k:"num",h:"STEP 4 · t = (x̄ − μ₀) ÷ SE",ans:3.5/(8/Math.sqrt(20)),tol:.006,hint:v=>Math.abs(v-3.5/8)<.01?"You divided by the SD. Divide by the SE (step 3) instead.":Math.abs(v-3.5/20)<.01?"Use √n inside the SE, not n.":Math.abs(v-3.5*1.789)<.05?"Divide, don't multiply.":"Step 1 ÷ Step 3.",fin:1}],
+    viz:"line",model:"t<sub>calculated</sub> = (103.5 − 100) ÷ (8 ÷ √20) = 3.5 ÷ 1.789 = <b>1.956</b>"},
+   {id:"d",q:"Compare t<sub>calculated</sub> with t<sub>critical</sub> from <b>Figure 1</b>. Is enzyme A in area X higher than in the normal population at the 95% level? Justify.",w:[
+     {k:"num",h:"DEGREES OF FREEDOM",ans:19,tol:.01,hint:v=>v===20?"df = n − 1, not n.":v===18?"Only subtract 1 for a one-sample t-test.":"df = n − 1 with n = 20."},
+     {k:"table",tab:TAB1,fig:"Figure 1 · t<sub>critical</sub> value table",df:19,col:0,tails:1},
+     {k:"curve",df:19,tc:1.729,t:3.5/(8/Math.sqrt(20)),lab:"1.956",side:"right"},
+     {k:"pick",h:"DECISION",o:[["t<sub>calc</sub> 1.956 &gt; t<sub>crit</sub> 1.729 → p &lt; 0.05 → reject H₀",1],["t<sub>calc</sub> &lt; t<sub>crit</sub> → do not reject H₀",0,"Compare the two numbers again: is 1.956 bigger or smaller than 1.729?"],["t<sub>calc</sub> &gt; t<sub>crit</sub> → accept H₀",0,"A t beyond the critical value lands in the rejection region – it's evidence AGAINST H₀."]]},
+     {k:"pick",h:"CONCLUSION",o:[["The level of enzyme A in area X is significantly higher than in the normal population",1],["There is no significant difference in enzyme A",0,"That would only be true if you did NOT reject H₀."],["Living in area X causes high enzyme A",0,"A t-test shows a difference – it can't prove what causes it."]]}],
+    model:"df = 20 − 1 = 19 → t<sub>critical</sub> (one-tailed, 0.05) = <b>1.729</b>.<br>t<sub>calculated</sub> (1.956) &gt; t<sub>critical</sub> (1.729), therefore p &lt; 0.05 → <b>reject the null hypothesis</b>.<br>The level of enzyme A in the population within area X is <u>significantly higher</u> than that in the normal population."}]},
+ {n:17,title:"Obesity & Blood Pressure",stem:"A <b>case-control</b> study investigated obesity and high blood pressure. Cases (high BP) and controls (no high BP) were <b>matched carefully one to one</b> by <b>age, gender and living environment</b>.",
+  parts:[
+   {id:"A",q:"Generate the null and alternative hypotheses for this case-control study.",w:[
+     {k:"pick",h:"H₀ · NULL",o:[["There is NO significant difference in the obesity rate between individuals with and without high blood pressure",1],["Obesity causes high blood pressure",0,"H₀ never claims an effect – and a case-control study can't prove causes."],["There is a significant difference in obesity rate between the groups",0,"That's H₁."]]},
+     {k:"pick",h:"H₁ · ALTERNATIVE",o:[["There is a significant difference in the obesity rate between individuals with and without high blood pressure",1],["There is no significant difference in the obesity rate",0,"That's H₀."],["People with high blood pressure eat more",0,"Stay with the variable being compared: obesity rate."]]},
+     {k:"pick",h:"ONE OR TWO TAILS?",o:[["Two-tailed – “difference”",1],["One-tailed – “higher”",0,"The study investigates a ‘relationship’ – no direction is stated, so test for any difference."]]}],
+    model:"<b>H₀:</b> There is NO significant difference in the obesity rate between individuals with high blood pressure and individuals without high blood pressure.<br><b>H₁:</b> There is a significant difference in the obesity rate between individuals with high blood pressure and individuals without high blood pressure."},
+   {id:"B",q:"Choose the most appropriate t-test (independent or paired) to compare the obesity rate between cases and controls. Justify.",w:[
+     {k:"pairs"},
+     {k:"pick",h:"WHICH T-TEST?",o:[["Paired t-test",1],["Independent t-test",0,"Look at the diagram: every case is linked to ONE specific control. Linked data are not independent."]]},
+     {k:"pick",h:"JUSTIFICATION",o:[["The two sets of data are related because cases and controls were matched one to one",1],["Cases and controls are different people, so they are independent",0,"Different people – but they were deliberately MATCHED (age, gender, environment), so each pair is related."],["The sample is large",0,"Size doesn't decide paired vs independent – the design does."]]}],
+    model:"<b>Paired t-test</b> should be used as the 2 sets of data are <u>related</u> since the case and control groups have been <u>matched carefully</u>."},
+   {id:"C",q:"The p-value was <b>0.02</b>. If the significance level is 0.05, what conclusion can you draw?",w:[
+     {k:"pbar",p:0.02},
+     {k:"pick",h:"DECISION",o:[["p (0.02) &lt; α (0.05) → reject H₀",1],["p &gt; α → do not reject H₀",0,"Where is 0.02 compared with the 0.05 line on the bar?"],["p &lt; α → accept H₀",0,"Small p = strong evidence AGAINST H₀."]]},
+     {k:"pick",h:"CONCLUSION",o:[["There is a statistically significant difference in obesity rates between people with and without high blood pressure – obesity may be associated with high BP",1],["Obesity causes high blood pressure",0,"Careful with ‘causes’ – this design shows an association."],["There is no difference in obesity rates",0,"That would need p ≥ 0.05."]]}],
+    model:"Since p = 0.02 &lt; 0.05 → <b>we reject the null hypothesis</b>.<br>There is a <u>statistically significant difference</u> in obesity rates between individuals with and without high blood pressure. This suggests that obesity may be <u>associated</u> with high blood pressure."}]},
+ {n:18,title:"Athletes' Pulse Rate",stem:"Healthy adults: mean pulse <b>75 beats/min</b>. Well-conditioned athletes: 40–60 beats/min. A FYP team selected <b>25 athletes</b>: mean = <b>55 beats/min</b>, SD = <b>4</b>.",
+  parts:[
+   {id:"a",q:"Formulate H₀ and H₁ for this study.",w:[
+     {k:"pick",h:"H₀ · NULL",o:[["There is no significant difference in the mean pulse rate between the normal healthy adult population and the athletes",1],["Athletes' mean pulse rate is significantly lower",0,"That's the claim to test – H₁."],["Athletes' pulse rate is between 40 and 60",0,"That's background information, not a hypothesis."]]},
+     {k:"pick",h:"H₁ · ALTERNATIVE",o:[["The mean pulse rate of the athletes is significantly lower than that of the normal healthy adult population",1],["There is a significant difference in mean pulse rate",0,"The background says athletes are much SLOWER → H₁ should have a direction."],["Athletes have a higher pulse rate",0,"Wrong direction – re-read the stem."]]},
+     {k:"pick",h:"ONE OR TWO TAILS?",o:[["One-tailed",1],["Two-tailed",0,"“Lower than” → one direction."]]}],
+    model:"<b>H₀:</b> There is no significant difference in the mean pulse rate between the normal healthy adult population and the athletes.<br><b>H₁:</b> The mean pulse rate of the athletes is significantly <u>lower</u> than that of the normal healthy adult population. <b>(1-tail)</b>"},
+   {id:"b",q:"Calculate the t<sub>calculated</sub> value. Show all your workings clearly.",w:[
+     {k:"slots",xb:55,mu:75,s:4,n:25,chips:[55,75,4,25,24,40,60]},
+     {k:"num",h:"STEP 1 · x̄ − μ₀",ans:-20,tol:.001,abs:1,hint:v=>"Sample mean (55) and reference mean (75): what's the gap?"},
+     {k:"num",h:"STEP 2 · √n",ans:5,tol:.001,hint:v=>v===25?"Square-root it: √25.":"n = 25."},
+     {k:"num",h:"STEP 3 · SE = s ÷ √n",ans:0.8,tol:.001,hint:v=>Math.abs(v-0.16)<.001?"Divide by √n (5), not n (25).":"SD = 4 ÷ step 2.",se:1},
+     {k:"num",h:"STEP 4 · t = (x̄ − μ₀) ÷ SE",ans:-25,tol:.01,abs:1,hint:v=>Math.abs(Math.abs(v)-5)<.01?"You divided by the SD (4). Divide by the SE (0.8).":Math.abs(Math.abs(v)-0.8)<.01?"Use 20 ÷ 0.8.":"Step 1 ÷ Step 3.",fin:1}],
+    viz:"line",model:"t<sub>calculated</sub> = (75 − 55) ÷ (4 ÷ √25) = 20 ÷ 0.8 = <b>25</b><br><span class='mute'>Using (55 − 75) gives −25: the sign only shows the direction (athletes are lower). Compare the size |t| = 25.</span>"},
+   {id:"c",q:"Compare t<sub>calculated</sub> with t<sub>critical</sub> from <b>Figure 2</b>. Is the athletes' pulse lower than healthy adults at the 95% level? Justify.",w:[
+     {k:"num",h:"DEGREES OF FREEDOM",ans:24,tol:.01,hint:v=>v===25?"df = n − 1.":"n = 25 athletes → df = ?"},
+     {k:"table",tab:TAB2,fig:"Figure 2 · t<sub>critical</sub> value table",df:24,col:0,tails:1},
+     {k:"curve",df:24,tc:1.711,t:-25,side:"left"},
+     {k:"pick",h:"DECISION",o:[["|t<sub>calc</sub>| 25 &gt; t<sub>crit</sub> 1.711 → p &lt; 0.05 → reject H₀",1],["t<sub>calc</sub> &lt; t<sub>crit</sub> → do not reject H₀",0,"Compare the SIZE of t: 25 vs 1.711."],["Cannot decide – the t value is too large",0,"A huge t just means very strong evidence against H₀."]]},
+     {k:"pick",h:"CONCLUSION",o:[["The mean pulse rate of these 25 athletes is significantly lower than the healthy adult mean of 75 beats/min",1],["There is no significant difference in pulse rate",0,"That needs |t| below t critical."],["All athletes have pulse rates of 55",0,"55 is the sample MEAN – individuals vary (SD = 4)."]]}],
+    model:"df = 25 − 1 = 24 → t<sub>critical</sub> (one-tailed, 0.05) = <b>1.711</b>.<br>t<sub>calculated</sub> (25) &gt; t<sub>critical</sub> (1.711), therefore p &lt; 0.05 → <b>reject the null hypothesis</b>.<br>The mean pulse rate of these 25 athletes is <u>significantly lower</u> than that of the normal healthy adult population (75 beats/min)."}]}];
+
+/* ---------- state ---------- */
+const S={};Q.forEach(q=>q.parts.forEach(p=>S[q.n+p.id]={w:{},done:false,rev:false}));
+const TOT=Q.reduce((a,q)=>a+q.parts.length,0);let cur=0;
+function score(){const k=Object.values(S).filter(s=>s.done).length;$("#xqS").textContent=k;$$(".xqb").forEach((b,i)=>{const q=Q[i],d=q.parts.filter(p=>S[q.n+p.id].done).length;b.className="qnb xqb"+(i===cur?" cur":"")+(d===q.parts.length?" ok":d?" part":"")})}
+const nav=$("#xqNav");Q.forEach((q,i)=>{const b=el("button","qnb xqb",String(q.n));b.onclick=()=>show(i);nav.appendChild(b)});$("#xqT").textContent=TOT;
+
+/* ---------- widgets ---------- */
+function wPick(w,ws,done,ctx){const box=el("div","xq-w");box.innerHTML="<h6>"+w.h+"</h6>";const ob=el("div","xq-ob"),fb=el("div","xq-fb");box.append(ob,fb);
+  const ord=ws.ord||(ws.ord=shuffleOnce(w.o.map((_,i)=>i),ctx.seed+w.h.length));ws.bad=ws.bad||[];
+  const fin=()=>{ws.ok=true;$$("button",ob).forEach(b=>b.disabled=true);fb.className="xq-fb ok";fb.innerHTML="✔ Correct";done()};
+  ord.forEach(i=>{const o=w.o[i],b=el("button","",o[0]);if(ws.ok&&o[1])b.classList.add("ok");if(ws.bad.includes(i))b.classList.add("bad");if(ws.ok||ws.bad.includes(i))b.disabled=true;
+    b.onclick=()=>{if(o[1]){b.classList.add("ok");fin()}else{ws.bad.push(i);b.classList.add("bad");b.disabled=true;fb.className="xq-fb";fb.innerHTML="💡 "+o[2]}};ob.appendChild(b)});
+  if(ws.ok){fb.className="xq-fb ok";fb.innerHTML="✔ Correct"}else if(ws.bad.length){fb.innerHTML="💡 "+w.o[ws.bad[ws.bad.length-1]][2]}return box}
+function wNum(w,ws,done,ctx){const box=el("div","xq-w xq-num");box.innerHTML="<h6>"+w.h+"</h6>";const row=el("div","xq-nr");const inp=el("input");inp.inputMode="decimal";inp.placeholder="your answer";inp.value=ws.v||"";const go=el("button","btn sm","Check");const fb=el("div","xq-fb");row.append(inp,go);box.append(row,fb);ws.n=ws.n||0;
+  const fin=(msg)=>{ws.ok=true;inp.disabled=true;go.disabled=true;box.classList.add("ok");fb.className="xq-fb ok";fb.innerHTML=msg;done()};
+  const chk=()=>{const v=parseFloat(String(inp.value).replace(/,/g,"").replace(/−/g,"-"));ws.v=inp.value;if(!isFinite(v)){fb.className="xq-fb";fb.innerHTML="Type a number.";return}
+    let ok=Math.abs(v-w.ans)<=w.tol,flip=false;if(!ok&&w.abs&&Math.abs(-v-w.ans)<=w.tol){ok=true;flip=true}
+    if(ok){fin("✔ "+(flip?"Correct size – the sign only shows direction (μ₀ − x̄ vs x̄ − μ₀). Dr Lim writes it as a positive number.":"Correct"));if(w.se&&ctx.onSE)ctx.onSE();if(w.fin&&ctx.onT)ctx.onT();return}
+    ws.n++;box.classList.add("shake");setTimeout(()=>box.classList.remove("shake"),400);fb.className="xq-fb";fb.innerHTML="💡 "+w.hint(v)+(ws.n>=3?" <button class='btn ghost sm xq-show'>Show me</button>":"");const sm=$(".xq-show",fb);if(sm)sm.onclick=()=>{inp.value=+w.ans.toFixed(3);ws.v=inp.value;ws.revealed=true;S[ctx.key].rev=true;fin("👁 Answer: <b>"+(+w.ans.toFixed(3))+"</b> – try the next step yourself.")}};
+  go.onclick=chk;inp.onkeydown=e=>{if(e.key==="Enter")chk()};if(ws.ok){inp.disabled=true;go.disabled=true;box.classList.add("ok");fb.className="xq-fb ok";fb.innerHTML="✔ Correct"}return box}
+function wSlots(w,ws,done,ctx){const box=el("div","xq-w");box.innerHTML="<h6>BUILD THE FORMULA · tap a number, then tap its slot</h6>";ws.put=ws.put||{};
+  const K=[["xb","x̄ (sample mean)",w.xb],["mu","μ₀ (reference mean)",w.mu],["s","s (sample SD)",w.s],["n","n (sample size)",w.n]];
+  const f=el("div","xq-form");f.innerHTML="<span>t =</span><span class='fr'><span class='nu'><i data-k='xb'></i> − <i data-k='mu'></i></span><span class='de'><i data-k='s'></i> ÷ √<i data-k='n'></i></span></span>";box.appendChild(f);
+  const ch=el("div","xq-chips");box.appendChild(ch);const fb=el("div","xq-fb");box.appendChild(fb);let sel=null;
+  const draw=()=>{$$("i[data-k]",f).forEach(s=>{const k=s.dataset.k,v=ws.put[k];s.textContent=v==null?K.find(x=>x[0]===k)[1].split(" ")[0]:v;s.className=v==null?"":(ws.ok?"ok":"fill")});
+    ch.innerHTML="";w.chips.forEach(v=>{const c=el("button","xq-chip"+(sel===v?" sel":""),String(v));c.disabled=!!ws.ok;c.onclick=()=>{sel=sel===v?null:v;draw()};ch.appendChild(c)})};
+  $$("i[data-k]",f).forEach(s=>s.onclick=()=>{if(ws.ok)return;if(sel==null){delete ws.put[s.dataset.k];draw();return}ws.put[s.dataset.k]=sel;sel=null;draw();
+    if(K.every(k=>ws.put[k[0]]!=null)){const wrong=K.filter(k=>ws.put[k[0]]!==k[2]);if(!wrong.length){ws.ok=true;fb.className="xq-fb ok";fb.innerHTML="✔ Formula built. Now work it out step by step ↓";draw();done()}
+      else{fb.className="xq-fb";const k=wrong[0];fb.innerHTML="💡 Check the <b>"+k[1]+"</b> slot."+(ws.put[k[0]]===19||ws.put[k[0]]===24?" That's df – the formula uses n.":"")+(ws.put.xb===w.mu&&ws.put.mu===w.xb?" (x̄ and μ₀ are swapped – the sample mean is what you measured.)":"")}}});
+  draw();if(ws.ok){fb.className="xq-fb ok";fb.innerHTML="✔ Formula built."}return box}
+function wTable(w,ws,done,ctx){const box=el("div","xq-w");box.innerHTML="<h6>"+w.fig+" · tap the correct t<sub>critical</sub></h6>";ws.bad=ws.bad||[];
+  const t=el("table","xq-tt");let h="<thead><tr><th>df</th>"+COLS.map((c,i)=>"<th><svg viewBox='0 0 80 34'>"+curveIcon(i)+"</svg><b>"+c+"</b></th>").join("")+"</tr></thead><tbody>";
+  Object.keys(w.tab).forEach(df=>{h+="<tr><td class='df'>"+df+"</td>"+w.tab[df].map((v,ci)=>"<td data-df='"+df+"' data-c='"+ci+"'>"+v.toFixed(3)+"</td>").join("")+"</tr>"});t.innerHTML=h+"</tbody>";box.appendChild(t);
+  const fb=el("div","xq-fb");box.appendChild(fb);
+  const fin=()=>{ws.ok=true;const c=t.querySelector("td[data-df='"+w.df+"'][data-c='"+w.col+"']");c.classList.add("ok");$$("tr",t).forEach(r=>{if(r.querySelector("td[data-df='"+w.df+"']"))r.classList.add("hrow")});t.querySelectorAll("th")[w.col+1].classList.add("col");fb.className="xq-fb ok";fb.innerHTML="✔ t<sub>critical</sub> = <b>"+w.tab[w.df][w.col].toFixed(3)+"</b> (df "+w.df+", 5% in one tail)";done();if(ctx.onTC)ctx.onTC()};
+  $$("td[data-df]",t).forEach(c=>c.onclick=()=>{if(ws.ok)return;const df=+c.dataset.df,ci=+c.dataset.c;if(df===w.df&&ci===w.col){fin();return}c.classList.add("bad");ws.bad.push(df+"_"+ci);
+    const m=[];if(df!==w.df)m.push(df===w.df+1?"That's the row for df = n. Use df = n − 1 = "+w.df+".":"Find the row for YOUR df.");
+    if(ci===1)m.push("The 0.025 column puts 2.5% in EACH tail – that's for a two-tailed test at α = 0.05. Your H₁ is one-tailed → put all 5% in one tail.");else if(ci>1)m.push("This column is for a stricter α (1% or 0.5%). You're testing at the 95% level → α = 0.05.");
+    fb.className="xq-fb";fb.innerHTML="💡 "+m.join(" ")+(ws.bad.length>=3?" <button class='btn ghost sm xq-show'>Show me</button>":"");const sm=$(".xq-show",fb);if(sm)sm.onclick=()=>{S[ctx.key].rev=true;fin()}});
+  if(ws.ok){const c=t.querySelector("td[data-df='"+w.df+"'][data-c='"+w.col+"']");c.classList.add("ok");t.querySelectorAll("th")[w.col+1].classList.add("col");$$("tr",t).forEach(r=>{if(r.querySelector("td[data-df='"+w.df+"']"))r.classList.add("hrow")});fb.className="xq-fb ok";fb.innerHTML="✔ t<sub>critical</sub> = <b>"+w.tab[w.df][w.col].toFixed(3)+"</b>"}
+  else ws.bad.forEach(k=>{const [d,c]=k.split("_");const e=t.querySelector("td[data-df='"+d+"'][data-c='"+c+"']");if(e)e.classList.add("bad")});return box}
+function curveIcon(i){const Xp=x=>40+x*9,Y=x=>30-24*Math.exp(-x*x/2);let d="";for(let k=0;k<=40;k++){const x=-4+8*k/40;d+=(k?"L":"M")+Xp(x).toFixed(1)+" "+Y(x).toFixed(1)}
+  const two=i===1||i===3,c=[1.645,1.96,2.33,2.58][i];let sh="";const area=(a,b)=>{let p="M"+Xp(a)+" 30";for(let k=0;k<=12;k++){const x=a+(b-a)*k/12;p+="L"+Xp(x).toFixed(1)+" "+Y(x).toFixed(1)}return"<path d='"+p+"L"+Xp(b)+" 30Z' fill='#ff4fd8'/>"};
+  sh=area(c,4)+(two?area(-4,-c):"");return sh+"<path d='"+d+"' fill='none' stroke='#00e5ff' stroke-width='1.6'/><line x1='4' y1='30' x2='76' y2='30' stroke='#00e5ff' stroke-opacity='.5'/>"}
+function wCurve(w,ws,done,ctx){const box=el("div","xq-w xq-cv");box.innerHTML="<h6>WHERE DOES YOUR t LAND?</h6>";const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 700 190");box.appendChild(s);const cap=el("div","xq-cap");box.appendChild(cap);
+  const draw=()=>{s.innerHTML="";const X=v=>350+v*62,y0=160,sc=330;let d="";for(let k=0;k<=200;k++){const x=-5.2+10.4*k/200;d+=(k?"L":"M")+X(x).toFixed(1)+" "+(y0-sc*TS.tPDF(x,w.df)).toFixed(1)}
+    for(let v=-5;v<=5;v++)sv("text",{x:X(v),y:180,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=v;sv("line",{x1:X(-5.4),y1:y0,x2:X(5.4),y2:y0,stroke:"rgba(0,229,255,.5)"},s);
+    const tcKnown=S[ctx.key].w[1]&&S[ctx.key].w[1].ok;
+    if(tcKnown){const a=w.side==="right"?w.tc:-5.4,b=w.side==="right"?5.4:-w.tc;let p="M"+X(a)+" "+y0;for(let k=0;k<=40;k++){const x=a+(b-a)*k/40;p+="L"+X(x)+" "+(y0-sc*TS.tPDF(x,w.df))}sv("path",{d:p+"L"+X(b)+" "+y0+"Z",fill:PK,opacity:.55},s);
+      const xc=w.side==="right"?w.tc:-w.tc;sv("line",{x1:X(xc),y1:40,x2:X(xc),y2:y0,stroke:PK,"stroke-width":2,"stroke-dasharray":"5 4"},s);sv("text",{x:X(xc),y:34,"text-anchor":"middle",fill:PK,"font-size":12,"font-weight":800},s).textContent="t crit "+(w.side==="right"?"":"−")+w.tc.toFixed(3);
+      sv("text",{x:w.side==="right"?X(4):X(-4),y:120,"text-anchor":"middle",fill:PK,"font-size":10,"font-weight":800},s).textContent="REJECT H₀ · 5%"}
+    sv("path",{d,fill:"none",stroke:B,"stroke-width":2.5,style:"filter:drop-shadow(0 0 5px #00e5ff)"},s);
+    const tv=Math.max(-5.1,Math.min(5.1,w.t)),off=Math.abs(w.t)>5.1;sv("line",{x1:X(tv),y1:16,x2:X(tv),y2:y0,stroke:"#fff","stroke-width":3,style:"filter:drop-shadow(0 0 6px #fff)"},s);
+    sv("text",{x:X(tv)+(tv>0?-6:6),y:14,"text-anchor":tv>0?"end":"start",fill:"#fff","font-size":12,"font-weight":800},s).textContent=(off?(w.t<0?"◂◂ ":"")+"t = "+w.t+" (way off the chart)"+(w.t>0?" ▸▸":""):"t calc = "+(w.lab||+w.t.toFixed(3)));
+    cap.innerHTML=tcKnown?"Is the white line inside the <b style='color:"+PK+"'>pink rejection region</b>?":"Find t<sub>critical</sub> in the table above to light up the rejection region."};
+  ctx.redraw.push(draw);draw();ws.ok=true;return box}
+function wPairs(w,ws,done){const box=el("div","xq-w");box.innerHTML="<h6>HOW WERE PARTICIPANTS CHOSEN? · tap a pair</h6>";const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 700 220");box.appendChild(s);const cap=el("div","xq-cap","Each case has its own matched control.");box.appendChild(cap);
+  const P=[["45","F","HDB"],["52","M","Condo"],["38","M","HDB"],["60","F","Landed"],["49","F","HDB"]];sv("text",{x:140,y:22,"text-anchor":"middle",fill:O,"font-size":12,"font-weight":800},s).textContent="CASES · HIGH BP";sv("text",{x:560,y:22,"text-anchor":"middle",fill:B,"font-size":12,"font-weight":800},s).textContent="CONTROLS · NO HIGH BP";
+  const gs=P.map((p,i)=>{const y=50+i*36,g=sv("g",{style:"cursor:pointer"},s);sv("rect",{x:110,y:y-18,width:480,height:34,fill:"transparent"},g);sv("line",{x1:170,y1:y,x2:530,y2:y,stroke:PK,"stroke-width":2,"stroke-dasharray":"6 5",opacity:.7},g);
+    [[140,O],[560,B]].forEach(([x,c])=>{sv("circle",{cx:x,cy:y-6,r:6,fill:c},g);sv("path",{d:"M"+(x-9)+" "+(y+10)+"Q"+x+" "+(y-4)+" "+(x+9)+" "+(y+10)+"Z",fill:c},g)});
+    const t=sv("text",{x:350,y:y-4,"text-anchor":"middle",fill:"#fff","font-size":11,"font-weight":700},g);t.textContent="age "+p[0]+" · "+p[1]+" · "+p[2];g.onclick=()=>{gs.forEach(x=>x.style.opacity=.3);g.style.opacity=1;cap.innerHTML="Pair "+(i+1)+": same <b>age</b>, <b>gender</b> and <b>living environment</b> → this case and control are <b style='color:"+PK+"'>linked</b>. Are the two columns independent?"};return g});
+  ws.ok=true;return box}
+function wPbar(w,ws){const box=el("div","xq-w");box.innerHTML="<h6>p VS α · where does p = "+w.p+" sit?</h6>";const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 700 110");box.appendChild(s);
+  const X=q=>30+640*(Math.log10(q)+3)/3;sv("rect",{x:30,y:36,width:X(0.05)-30,height:28,fill:"rgba(255,79,216,.25)",stroke:PK},s);sv("rect",{x:X(0.05),y:36,width:670-X(0.05),height:28,fill:"rgba(0,229,255,.08)",stroke:"rgba(0,229,255,.4)"},s);
+  [0.001,0.01,0.02,0.05,0.1,1].forEach(q=>sv("text",{x:X(q),y:84,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=q);sv("text",{x:X(0.05),y:28,"text-anchor":"middle",fill:PK,"font-size":12,"font-weight":800},s).textContent="α = 0.05";
+  sv("text",{x:(30+X(0.05))/2,y:104,"text-anchor":"middle",fill:PK,"font-size":10,"font-weight":800},s).textContent="p < α ZONE";sv("text",{x:(X(0.05)+670)/2,y:104,"text-anchor":"middle",fill:B,"font-size":10,"font-weight":800},s).textContent="p ≥ α ZONE";
+  sv("line",{x1:X(w.p),y1:30,x2:X(w.p),y2:70,stroke:"#fff","stroke-width":4,style:"filter:drop-shadow(0 0 6px #fff)"},s);sv("text",{x:X(w.p),y:22,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="p = "+w.p;ws.ok=true;return box}
+function wLine(q,p,host,key){/* SE ruler: how many SEs between x̄ and μ₀ */const w=p.w[0];const box=el("div","xq-w xq-cv");box.innerHTML="<h6>SIGNAL ÷ NOISE · how many SEs apart?</h6>";const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox","0 0 700 130");box.appendChild(s);const cap=el("div","xq-cap");box.appendChild(cap);host.appendChild(box);
+  const draw=()=>{s.innerHTML="";const lo=Math.min(w.xb,w.mu),hi=Math.max(w.xb,w.mu),pad=(hi-lo)*.25,X=v=>40+620*(v-(lo-pad))/((hi-lo)+2*pad);sv("line",{x1:30,y1:70,x2:670,y2:70,stroke:"rgba(0,229,255,.5)"},s);
+    [[w.mu,PK,"μ₀ = "+w.mu],[w.xb,B,"x̄ = "+w.xb]].forEach(([v,c,l])=>{sv("line",{x1:X(v),y1:36,x2:X(v),y2:96,stroke:c,"stroke-width":3},s);sv("text",{x:X(v),y:28,"text-anchor":"middle",fill:c,"font-size":13,"font-weight":800},s).textContent=l});
+    const st=S[key].w,seOk=st[3]&&st[3].ok,tOk=st[4]&&st[4].ok,se=+(w.s/Math.sqrt(w.n)).toFixed(3);
+    if(seOk){const n=Math.ceil((hi-lo)/se-1e-9);for(let k=0;k<n;k++){const a=X(lo+k*se),b=X(Math.min(hi,lo+(k+1)*se));sv("rect",{x:a+1,y:62,width:Math.max(1,b-a-2),height:16,fill:k%2?PK:"rgba(255,79,216,.45)",opacity:lo+(k+1)*se>hi+1e-9?.45:1},s);if(n<=12)sv("text",{x:(a+b)/2,y:96,"text-anchor":"middle",fill:PK,"font-size":10,"font-weight":800},s).textContent=lo+(k+1)*se>hi+1e-9?"part":(k+1)}
+      cap.innerHTML="Each pink block = <b>1 SE</b> ("+se+"). "+(tOk?"The gap is <b style='color:"+PK+"'>"+(Math.floor((hi-lo)/se*1000)/1000)+" SEs</b> wide → that IS t.":"Count how many SEs fit between μ₀ and x̄…")}
+    else cap.innerHTML="Gap between the means = <b>signal</b>. Find the SE (step 3) to measure it in SE-sized blocks."};
+  return draw}
+
+/* ---------- render ---------- */
+function show(i){cur=i;const q=Q[i],c=$("#xqCard");c.innerHTML="<div class='pqh'><span class='qn' style='color:"+PK+"'>Q"+q.n+"</span><span class='tag xq-tag'>EXTRA · DR LIM</span><b class='xq-ttl'>"+q.title+"</b></div><div class='xq-stem'>"+q.stem+"</div>";
+  q.parts.forEach((p,pi)=>{const key=q.n+p.id,st=S[key];const box=el("div","xq-part"+(st.done?" done":""));box.innerHTML="<h4><em><span>"+p.id+"</span></em><span>"+p.q+"</span></h4>";c.appendChild(box);
+    const body=el("div","xq-body");box.appendChild(body);const ctx={key,seed:q.n*7+pi,redraw:[]};let lineDraw=null;
+    const mr=el("div","ca-row xq-mr"),mb=el("button","btn ghost sm","📄 Dr Lim's model answer"),lock=el("span","mute xq-lock"),md=el("div","xq-model"+(st.mopen?" show":""),"<h5>DR LIM'S MODEL ANSWER</h5>"+p.model);
+    mb.onclick=()=>{if(!st.done)return;st.mopen=!st.mopen;md.classList.toggle("show",st.mopen);mb.classList.remove("pulse")};mr.append(mb,lock);
+    const seq=()=>{let open=true;$$(":scope > .xq-w",body).forEach(n=>{if(n.dataset.k==null)return;const k=+n.dataset.k;n.style.display=open?"":"none";if(!(st.w[k]&&st.w[k].ok))open=false})};
+    const update=()=>{if(!st.done&&p.w.every((w,k)=>st.w[k]&&st.w[k].ok)){st.done=true;box.classList.add("done");mb.classList.add("pulse");score()}mb.disabled=!st.done;lock.textContent=st.done?"":"🔒 Unlocks when you've solved this part";ctx.redraw.forEach(f=>f());if(lineDraw)lineDraw();seq()};
+    ctx.onSE=ctx.onT=ctx.onTC=update;
+    p.w.forEach((w,k)=>{const ws=st.w[k]||(st.w[k]={});const f={pick:wPick,num:wNum,slots:wSlots,table:wTable,curve:wCurve,pairs:wPairs,pbar:wPbar}[w.k];
+      if(p.viz==="line"&&k===1)lineDraw=wLine(q,p,body,key);const node=f(w,ws,update,ctx);node.dataset.k=k;body.appendChild(node)});
+    box.append(mr,md);update()});
+  const bar=el("div","pqbar"),pv=el("button","btn ghost sm","◂ Prev"),nx=el("button","btn b sm","Next ▸");pv.disabled=i===0;nx.disabled=i===Q.length-1;pv.onclick=()=>show(i-1);nx.onclick=()=>show(i+1);bar.append(el("span",""),el("div","row"));bar.lastChild.append(pv,nx);c.appendChild(bar);score()}
+show(0);
+})();
 </script>
 </body>
 </html>
