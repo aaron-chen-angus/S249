@@ -832,6 +832,8 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .ftflow .fa span{font-size:.6rem;letter-spacing:2px;color:var(--mute)}
 .ftflow .fa em{font-style:normal;font-family:system-ui,sans-serif;letter-spacing:0;font-size:.84rem;color:#fff}
 .ftflow .fa code{margin-top:4px;white-space:normal}
+
+.xs-tabs{display:flex;gap:2px;padding:0 8px;background:#050c16;border-top:1px solid rgba(0,229,255,.18);overflow-x:auto}.xs-tabs button{font:600 .7rem system-ui,sans-serif;letter-spacing:.02em;color:#8fb3c4;background:#0a1626;border:1px solid rgba(0,229,255,.2);border-top:0;padding:4px 14px;cursor:pointer;white-space:nowrap}.xs-tabs button.on{color:#fff;background:#0f2236;border-color:var(--o);box-shadow:inset 0 -2px 0 var(--o)}.xs-dlg .plyi{width:150px}
 /* ===== Lesson 11–12 ===== */
 .err-grid{display:grid;grid-template-columns:160px 1fr 1fr;gap:6px}
 @media(max-width:640px){.err-grid{grid-template-columns:96px 1fr 1fr}}
@@ -874,6 +876,18 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .abl-c.blank{border-style:dashed;border-color:rgba(0,229,255,.1);min-height:36px}
 .abl-x{margin-top:10px;font-family:system-ui;letter-spacing:0;font-size:.84rem;border-left:3px solid var(--o);padding:6px 10px;background:rgba(255,106,0,.06);min-height:2.2em}
 .bwh{transition:filter .2s}.bwh:hover{filter:brightness(1.4)}
+.dt-h{margin-top:0}.dt-h span{font-family:system-ui;letter-spacing:.5px;font-size:.7rem}
+.dt-g{margin-top:14px;align-items:stretch}
+.err-grid.sm{grid-template-columns:110px 1fr 1fr;gap:5px}.err-grid.sm .eg-c{padding:8px}.err-grid.sm .eg-c b{font-size:.62rem;letter-spacing:1.5px}.err-grid.sm .eg-x{min-height:74px;cursor:default}.err-grid.sm .eg-x span{font-size:.7rem}
+.eg-x.dim{opacity:.22;filter:saturate(.4)}.eg-r.act{border-color:#fff;box-shadow:0 0 14px rgba(255,255,255,.25)}
+.dt-x{display:flex;flex-direction:column;gap:8px;font-family:system-ui;font-size:.86rem;line-height:1.45}
+.dtl{border-left:3px solid rgba(0,229,255,.4);padding:6px 12px;background:rgba(8,18,32,.7)}.dtl span{display:block;font-family:Orbitron,sans-serif;font-size:.55rem;letter-spacing:2.5px;color:var(--mute);margin-bottom:2px}
+.tile2.wv{text-align:left}.tile2.wv b{font-size:.8rem;letter-spacing:2.5px;margin-bottom:6px}.tile2.wv span{font-family:system-ui;letter-spacing:0;font-size:.85rem;line-height:1.5;color:#d8e6ee}
+.pairs{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.pairs span{font-size:.6rem;letter-spacing:1.5px;border:1px solid rgba(255,106,0,.5);color:var(--o2);padding:4px 8px}
+.sumg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.sumg .tile2 span{font-family:system-ui;letter-spacing:0;font-size:.78rem;line-height:1.45;color:#d8e6ee}
+@media(max-width:760px){.sumg{grid-template-columns:1fr 1fr}.err-grid.sm{grid-template-columns:84px 1fr 1fr}}
+.tile2 span b{display:inline;font-size:inherit;letter-spacing:0;margin:0;text-shadow:none}
+.tile2 span b{font-family:inherit!important;letter-spacing:0!important}
 </style>
 </head>
 <body>
@@ -892,7 +906,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
     <canvas id="cvs" aria-label="Three neon bell curves move apart and together; the F ratio of between-group to within-group variance updates live"></canvas>
     <div class="ov">
       <div>
-        <div class="kick">LESSONS 11 – 12 · TYPES OF ERRORS · ONE-WAY ANOVA</div>
+        <div class="kick">LESSONS 11 – 12 · TYPES OF ERRORS · SINGLE-FACTOR ANOVA</div>
         <h2>Many Groups.<br><b>One Test.</b></h2>
         <p class="sub">Spread <i>between</i> the groups vs spread <i>within</i> them. Big ratio → real difference.</p>
       </div>
@@ -917,46 +931,45 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
   <div class="sec"><em>01</em> THE DOCTOR'S DILEMMA</div>
   <div class="card o"><svg class="viz" id="preg" viewBox="0 0 900 300"></svg><div class="row" style="justify-content:center;margin-top:8px" id="pregB"></div><div class="anatx" id="pregX"></div></div>
   <div class="comp-m" data-c="sortErr"></div>
-  <div class="sec"><em>02</em> LESSON EXAMPLES</div>
-  <div class="comp-m" data-c="mEx1"></div>
-  <div class="comp-m" data-c="mEx2"></div>
-  <div class="pager"><button class="btn ghost" data-go="0">◂ Cover</button><button class="btn" data-go="2">Error Lab ▸</button></div>
+  <div class="pager"><button class="btn ghost" data-go="0">◂ Cover</button><button class="btn" data-go="2">Drug Trial ▸</button></div>
 </section>
 
-<!-- 02 ALPHA BETA LAB -->
-<section class="panel" id="p2" data-name="ERROR LAB">
-  <div class="ph"><div class="kick">LESSON 11 · α, β AND POWER</div><h2>The Error <span>Tug-of-War</span></h2><p>Orange = Type I (α). Cyan = Type II (β). Move the sliders – watch them trade.</p></div>
-  <div class="card"><svg class="viz" id="abG" viewBox="0 0 900 300"></svg>
-    <div class="grid g3" style="margin-top:6px">
-      <label class="f">α (significance) <b id="abAv">0.05</b><input type="range" id="abA" min="1" max="20" value="5"></label>
-      <label class="f">True difference (effect) <b id="abDv">2.5</b><input type="range" id="abD" min="0" max="50" value="25"></label>
-      <label class="f">Sample size n <b id="abNv">10</b><input type="range" id="abN" min="2" max="60" value="10"></label>
-    </div>
-    <div class="meter"><div class="o"><b id="aba">–</b><span>α · TYPE I</span></div><div><b id="abb">–</b><span>β · TYPE II</span></div><div class="o"><b id="abp">–</b><span>POWER = 1 − β</span></div><div><b id="abc">–</b><span>CUT-OFF</span></div></div>
-    <div class="anatx" id="abX"></div></div>
-  <div class="sec"><em>01</em> WHAT DOES p TELL YOU ABOUT TYPE I ERROR?</div>
-  <div class="card o"><p style="font-family:system-ui;letter-spacing:0">Lesson 5 twins case study: BMI differs, <b class="hl">p = 0.0003</b> → reject H₀.</p><div class="grid g2" style="margin-top:10px"><div class="tile2"><b>α = 0.05</b><span>The benchmark we chose</span></div><div class="tile2 o"><b>p = 0.0003</b><span>Highest chance this rejection is a Type I error</span></div></div></div>
+<!-- 02 DRUG TRIAL -->
+<section class="panel" id="p2" data-name="DRUG TRIAL">
+  <div class="ph"><div class="kick">LESSON 11 · CONSIDER THIS…</div><h2>The Cancer <span>Drug</span> Trial</h2><p>Pick the p-value the trial gets. Follow the decision – and the error it could hide.</p></div>
+  <div class="card"><div class="chips dt-h"><span class="o">H₀ · the new drug has NO significant effect</span><span>H₁ · the drug HAS a significant effect</span><span>SIGNIFICANCE LEVEL 5%</span></div>
+    <div class="row" style="margin:12px 0 4px;gap:14px"><div class="seg" id="dtSeg"><button data-p="0.02" class="on">p = 0.02</button><button data-p="0.07">p = 0.07</button></div><label class="f" style="flex:1;min-width:220px">or drag your own p <b id="dtPv">0.020</b><input type="range" id="dtS" min="1" max="200" value="20"></label></div>
+    <svg class="viz" id="dtLine" viewBox="0 0 900 120"></svg>
+    <div class="grid g2 dt-g"><div class="err-grid sm" id="dtGrid"></div><div class="dt-x" id="dtX"></div></div></div>
+  <div class="sec"><em>01</em> IS A TYPE I OR TYPE II ERROR WORSE?</div>
+  <div class="grid g2"><div class="tile2 o wv"><b>STATISTICIANS</b><span>A <b class="hl">Type I</b> error is usually worse – it goes against the null hypothesis we assume, and can lead to treatments or policies that don't work: wasted resources, false hope.</span></div><div class="tile2 wv"><b>IN PRACTICE</b><span>Either error could be worse – it <b class="hb">depends on the research context</b>. Ask: what does each mistake cost?</span></div></div>
+  <div class="comp-m" data-c="sortWorse"></div>
+  <div class="sec"><em>02</em> SIGNIFICANCE LEVEL &amp; p-VALUE · WHAT DO THEY REPRESENT?</div>
+  <div class="card o"><p class="mute" style="font-family:system-ui;letter-spacing:0">Lesson 10 case study: BMI differs between the case and control groups, <b class="hl">p = 0.0003</b>. Try other p-values too.</p>
+    <div class="seg" id="spSeg" style="margin:10px 0"><button data-p="0.0003" class="on">p = 0.0003</button><button data-p="0.01">p = 0.01</button><button data-p="0.04">p = 0.04</button><button data-p="0.07">p = 0.07</button></div>
+    <svg class="viz" id="spG" viewBox="0 0 900 170"></svg><div class="anatx" id="spX"></div></div>
   <div class="comp-m" data-c="mP"></div>
-  <div class="comp-m" data-c="mTrade"></div>
-  <div class="pager"><button class="btn ghost" data-go="1">◂ Type I &amp; II</button><button class="btn" data-go="3">Multiple Tests ▸</button></div>
+  <div class="comp-m" data-c="mSmall"></div>
+  <div class="pager"><button class="btn ghost" data-go="1">◂ Type I &amp; II</button><button class="btn" data-go="3">t-Tests or Not? ▸</button></div>
 </section>
 
-<!-- 03 MULTIPLE TESTS -->
-<section class="panel" id="p3" data-name="MULTIPLE TESTS">
-  <div class="ph"><div class="kick">LESSON 11 · WHY NOT MANY t-TESTS?</div><h2>The Error <span>Snowball</span></h2></div>
+<!-- 03 t-TESTS OR NOT -->
+<section class="panel" id="p3" data-name="T-TESTS OR NOT?">
+  <div class="ph"><div class="kick">LESSON 11 · THREE OR MORE GROUPS</div><h2>t-Tests <span>or Not?</span></h2><p>A t-test compares only <b>two</b> groups. Add groups – watch the pairs pile up.</p></div>
   <div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;gap:16px">
-      <div style="flex:1;min-width:260px"><label class="f">Number of groups <b id="mgKv">3</b><input type="range" id="mgK" min="2" max="10" value="3"></label><svg class="viz" id="mgNet" viewBox="0 0 420 300"></svg></div>
-      <div style="flex:1;min-width:260px"><div class="meter" style="flex-direction:column"><div><b id="mgN">3</b><span>t-TESTS NEEDED · k(k−1)/2</span></div><div><b id="mgC">85.7%</b><span>CONFIDENCE · (1 − α)ⁿ</span></div><div class="o"><b id="mgE">14.3%</b><span>CHANCE OF ≥1 TYPE I ERROR · 1 − (1 − α)ⁿ</span></div></div></div>
-    </div><svg class="viz" id="mgCurve" viewBox="0 0 900 220"></svg></div>
-  <div class="sec"><em>01</em> SIMULATE IT · H₀ IS TRUE FOR ALL GROUPS</div>
-  <div class="card o"><p class="mute" style="font-family:system-ui;letter-spacing:0">1,000 studies. Three groups drawn from the <b>same</b> population – every “significant” result is a false alarm.</p>
+      <div style="flex:1;min-width:260px"><label class="f">Number of groups <b id="mgKv">3</b><input type="range" id="mgK" min="2" max="8" value="3"></label><svg class="viz" id="mgNet" viewBox="0 0 420 300"></svg></div>
+      <div style="flex:1;min-width:260px"><div class="meter" style="flex-direction:column"><div class="o"><b id="mgN">3</b><span>t-TESTS NEEDED (PAIRS)</span></div><div><b>1</b><span>SINGLE-FACTOR ANOVA</span></div></div><div class="pairs" id="mgL"></div></div>
+    </div><div class="anatx" id="mgX"></div></div>
+  <div class="sec"><em>01</em> SEE IT · 1,000 STUDIES WHERE H₀ IS TRUE</div>
+  <div class="card o"><p class="mute" style="font-family:system-ui;letter-spacing:0">Every group comes from the <b>same</b> population – so every “significant” result is a <b class="hl">Type I error</b>.</p>
     <div class="row" style="margin:10px 0"><button class="btn" id="simGo">▶ Run 1,000 studies</button><div class="seg" id="simK"><button data-k="3" class="on">3 GROUPS</button><button data-k="5">5 GROUPS</button><button data-k="10">10 GROUPS</button></div></div>
     <div class="grid g2"><div><h3 style="font-size:.7rem">Multiple t-tests</h3><div class="simgrid" id="simT"></div><div class="big2" id="simTv">–</div></div><div><h3 style="font-size:.7rem;color:var(--b)">One ANOVA</h3><div class="simgrid b" id="simA"></div><div class="big2 b" id="simAv">–</div></div></div>
     <div class="anatx" id="simX">Each square = 1 study. Lit square = at least one false “significant” result.</div></div>
-  <div class="comp-m" data-c="mInfl"></div>
-  <div class="sec"><em>02</em> EXCEL WARM-UP · BUILD THE ERROR TABLE</div>
-  <div class="card"><div id="warm"></div><div class="mis2" id="warmMis" style="margin-top:10px"></div></div>
-  <div class="pager"><button class="btn ghost" data-go="2">◂ Error Lab</button><button class="btn" data-go="4">ANOVA Idea ▸</button></div>
+  <div class="comp-m" data-c="mPairs"></div>
+  <div class="comp-m" data-c="mWhy"></div>
+  <div class="sec"><em>02</em> SUMMARY · LESSON 11</div>
+  <div class="sumg"><div class="tile2 o"><b>5%</b><span>Significance level = the MAX probability of a Type I error we allow</span></div><div class="tile2"><b>p</b><span>The ACTUAL highest probability of a Type I error for our data</span></div><div class="tile2 o"><b>3+</b><span>groups → NO multiple t-tests: they greatly increase the Type I error</span></div><div class="tile2"><b>ANOVA</b><span>Use single-factor ANOVA instead (Lesson 12)</span></div></div>
+  <div class="pager"><button class="btn ghost" data-go="2">◂ Drug Trial</button><button class="btn" data-go="4">ANOVA Idea ▸</button></div>
 </section>
 
 <!-- 04 ANOVA IDEA -->
@@ -970,26 +983,29 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
   <div class="sec"><em>01</em> ONE POINT, TWO PIECES</div>
   <div class="card"><p class="mute" style="font-family:system-ui;letter-spacing:0">Tap any dot in the chart above. Its distance from the grand mean splits into <b class="hl">between</b> + <b class="hb">within</b>.</p><div class="anatx" id="bwPt">Tap a dot ↑</div></div>
   <div class="comp-m" data-c="mBW"></div>
-  <div class="pager"><button class="btn ghost" data-go="3">◂ Multiple Tests</button><button class="btn" data-go="5">ANOVA Steps ▸</button></div>
+  <div class="pager"><button class="btn ghost" data-go="3">◂ t-Tests or Not?</button><button class="btn" data-go="5">ANOVA Steps ▸</button></div>
 </section>
 
 <!-- 05 ANOVA STEPS -->
 <section class="panel" id="p5" data-name="ANOVA STEPS">
-  <div class="ph"><div class="kick">LESSON 12 · HOW TO CONDUCT AN ANOVA</div><h2>Four <span>Steps</span></h2></div>
+  <div class="ph"><div class="kick">LESSON 12 · HOW TO CONDUCT A SINGLE-FACTOR ANOVA</div><h2>Four <span>Steps</span></h2></div>
   <div class="grid g2"><div class="card"><div class="ladder" id="lad">
-      <div class="lad on" data-k="0"><em>1</em><div><b>HYPOTHESES</b><small>μ₁ = μ₂ = μ₃ vs at least one differs</small></div></div>
+      <div class="lad on" data-k="0"><em>1</em><div><b>HYPOTHESES</b><small>No difference vs at least one differs</small></div></div>
       <div class="lad" data-k="1"><em>2</em><div><b>PARTITION VARIATION</b><small>Between + Within</small></div></div>
       <div class="lad" data-k="2"><em>3</em><div><b>SS · df · MS</b><small>MS = SS ÷ df</small></div></div>
       <div class="lad" data-k="3"><em>4</em><div><b>F vs F CRIT</b><small>F = MS between ÷ MS within</small></div></div></div></div>
     <div class="card o" id="ladX"></div></div>
-  <div class="sec"><em>01</em> ASSUMPTIONS</div>
+  <div class="sec"><em>01</em> ONE-WAY OR TWO-WAY?</div>
+  <div class="grid g2"><div class="tile2 o wv"><b>SINGLE-FACTOR (ONE-WAY)</b><span>ONE explanatory variable (e.g. social media use: low · medium · high → hours of sleep). <b class="hl">This is the ANOVA you learn in S249.</b></span></div><div class="tile2 wv"><b>TWO-WAY / MULTI-WAY</b><span>TWO or more explanatory variables (e.g. the combined effect of exercise <b>and</b> a drug on stress levels).</span></div></div>
+  <div class="comp-m" data-c="sortWay"></div>
+  <div class="sec"><em>02</em> ASSUMPTIONS</div>
   <div class="assm" id="assm"></div>
-  <div class="sec"><em>02</em> BUILD THE ANOVA TABLE BY HAND · THERAPY &amp; MOBILITY</div>
+  <div class="sec"><em>03</em> BUILD THE ANOVA TABLE BY HAND · THERAPY &amp; MOBILITY</div>
   <div class="card"><table class="cmp mt" id="mobT"></table><div class="abld" id="abld"></div></div>
-  <div class="sec"><em>03</em> t-TEST OR ANOVA?</div>
+  <div class="sec"><em>04</em> t-TEST OR SINGLE-FACTOR ANOVA?</div>
   <div class="comp-m" data-c="sortTA"></div>
-  <div class="card"><table class="cmp"><thead><tr><th></th><th>t-TEST</th><th>ANOVA</th></tr></thead><tbody>
-    <tr><td>Groups</td><td>2</td><td>3 or more</td></tr><tr><td>Statistic</td><td>t</td><td>F = MS<sub>between</sub> ÷ MS<sub>within</sub></td></tr><tr><td>Type I error</td><td>Grows if repeated</td><td>Stays at α</td></tr><tr><td>Tells you</td><td>Which of the 2 differs</td><td>At least one differs – not which</td></tr><tr><td>Both assume</td><td colspan="2">Random, independent samples · normal data · similar variances</td></tr></tbody></table></div>
+  <div class="card"><table class="cmp"><thead><tr><th></th><th>t-TEST</th><th>SINGLE-FACTOR ANOVA</th></tr></thead><tbody>
+    <tr><td>Groups</td><td>2</td><td>3 or more</td></tr><tr><td>Statistic</td><td>t</td><td>F = MS<sub>between</sub> ÷ MS<sub>within</sub></td></tr><tr><td>Type I error</td><td>Greatly increased if many are run</td><td>Controlled at 5% across all comparisons</td></tr><tr><td>Tells you</td><td>Whether the 2 means differ</td><td>At least 1 group differs – not which</td></tr><tr><td>Both</td><td colspan="2">Compare group MEANS (continuous data)</td></tr></tbody></table></div>
   <div class="pager"><button class="btn ghost" data-go="4">◂ ANOVA Idea</button><button class="btn" data-go="6">Excel Kit ▸</button></div>
 </section>
 
@@ -1013,7 +1029,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 
 <!-- 07 ANOVA PRACTICE -->
 <section class="panel" id="p7" data-name="ANOVA PRACTICE">
-  <div class="ph"><div class="kick">HANDS-ON · ONE-WAY ANOVA IN EXCEL</div><h2>Three or More <span>Groups</span></h2></div>
+  <div class="ph"><div class="kick">HANDS-ON · SINGLE-FACTOR ANOVA IN EXCEL</div><h2>Three or More <span>Groups</span></h2></div>
   <div class="prac"></div>
   <div class="pager"><button class="btn ghost" data-go="6">◂ Excel Kit</button><button class="btn" data-go="8">Practice Lab ▸</button></div>
 </section>
@@ -1038,7 +1054,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
   <div class="pager"><button class="btn ghost" data-go="8">◂ Practice Lab</button><button class="btn ghost" data-go="0">Cover ▸</button></div>
 </section>
 </main>
-<footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · STATISTICAL TECHNIQUES PART 2: ONE-WAY ANOVA · REPUBLIC POLYTECHNIC</div></footer>
+<footer><div class="wrap">S249 DATA ANALYTICS FOR POPULATION HEALTH · STATISTICAL TECHNIQUES · SINGLE-FACTOR ANOVA · REPUBLIC POLYTECHNIC</div></footer>
 <script>
 window.DATA={"A1":{"g":[[38.0,43.0,45.0,52.0,40.0,46.0],[47.0,53.0,42.0,45.0,46.0,37.0],[35.0,38.0,42.0,34.0,28.0,39.0]],"lab":["Physical Therapy","Physical Therapy with support group","Control"]},"A2":{"g":[[7.0,5.0,6.0,6.0,2.0,4.0,9.0,5.0,3.0,8.0,7.0,2.0,9.0,8.0,7.0,4.0,3.0,9.0,4.0,5.0,7.0,9.0,8.0,10.0,6.0,7.0,8.0,5.0,5.0,4.0,8.0],[2.0,8.0,4.0,7.0,8.0,4.0,7.0,6.0,9.0,6.0,8.0,4.0,9.0,3.0,5.0,2.0,4.0,7.0,8.0,7.0,6.0,10.0,10.0,7.0,9.0,5.0,8.0,6.0,7.0,6.0,7.0],[3.0,3.0,5.0,4.0,9.0,5.0,6.0,7.0,8.0,2.0,3.0,6.0,3.0,7.0,9.0,4.0,5.0,8.0,4.0,9.0,8.0,7.0,5.0,6.0,4.0,5.0,6.0,9.0,8.0,3.0,5.0]],"lab":["Scores(Age 30-39)","Scores(Age 40-49)","Scores(Age 50-59)"]},"A3":{"g":[[6.5,6.0,7.0,7.6,8.2,7.3,6.7,6.5],[7.3,8.1,6.8,5.5,5.7,8.0,6.8,5.0],[5.9,5.0,5.4,5.6,5.4,6.5,5.9,5.5],[7.3,7.6,5.4,6.7,6.0,6.7,5.7,6.9]],"lab":["Day shift","Evening shift","Night shift","Rotating shift"]},"A4":{"g":[[8.1,7.0,7.1,3.9,10.7,9.6,7.3,9.0,8.2,6.9],[9.0,6.9,6.9,6.1,8.1,7.2,8.3,6.4,7.6,6.0],[8.4,7.4,7.6,7.8,5.5,8.4,10.4,4.5,4.3,4.7]],"lab":["Age 20-34","Age 35-49","Age 50-64"]},"A5":{"g":[[3.3,2.4,2.6,-0.1,5.4,4.6,2.7],[5.9,5.3,4.2,6.2,4.5,4.5,3.9,5.5,4.8],[3.3,1.8,2.8,1.4,3.7,2.8,3.0,3.1]],"lab":["Low-carb","Mediterranean","Low-fat"]}};
 /* ================= STATISTICS (t distribution, t-tests) ================= */
@@ -1385,11 +1401,11 @@ function create(mount,opts){opts=opts||{};
    "<div class='xs-tipw'><div class='xs-tip'></div><div class='xs-ac'></div></div>"+
    "<div class='xs-dlg'></div>"+
    "<div class='xs-scroll' tabindex='-1'><table class='xs-t'></table><div class='xs-refs'></div><div class='xs-ants'></div><div class='xs-fillp'></div><div class='xs-selbox'><i class='xs-hnd'></i></div><input class='xs-ed' spellcheck='false' autocomplete='off'><button class='xs-dd' tabindex='-1'>▾</button><div class='xs-menu'></div></div>"+
-   "<div class='xs-status'><span class='xs-mode'>READY</span><span class='xs-msg'></span><span class='xs-agg'></span></div>"+
+   "<div class='xs-tabs'></div><div class='xs-status'><span class='xs-mode'>READY</span><span class='xs-msg'></span><span class='xs-agg'></span></div>"+
    "<textarea class='xs-kb' aria-label='Spreadsheet keyboard input' autocapitalize='off' autocomplete='off' spellcheck='false'></textarea>";
   const q=s=>root.querySelector(s);
-  const T=q(".xs-t"),SC=q(".xs-scroll"),ED=q(".xs-ed"),FX=q(".xs-fx"),NM=q(".xs-nm"),KB=q(".xs-kb"),SB=q(".xs-selbox"),HND=q(".xs-hnd"),REFS=q(".xs-refs"),ANTS=q(".xs-ants"),FILLP=q(".xs-fillp"),DD=q(".xs-dd"),MENU=q(".xs-menu"),TIP=q(".xs-tip"),AC=q(".xs-ac"),DLG=q(".xs-dlg"),MODE=q(".xs-mode"),MSG=q(".xs-msg"),AGG=q(".xs-agg");
-  let sh=null,vals={},sel={r:0,c:0},anc={r:0,c:0},edit=null,clip=null,undo=[],redo=[],drag=null,tabC=null,dlg=null,acSel=0,msgT=0,tds=[],ths=[],rhs=[];
+  const T=q(".xs-t"),SC=q(".xs-scroll"),ED=q(".xs-ed"),FX=q(".xs-fx"),NM=q(".xs-nm"),KB=q(".xs-kb"),SB=q(".xs-selbox"),HND=q(".xs-hnd"),REFS=q(".xs-refs"),ANTS=q(".xs-ants"),FILLP=q(".xs-fillp"),DD=q(".xs-dd"),MENU=q(".xs-menu"),TIP=q(".xs-tip"),AC=q(".xs-ac"),DLG=q(".xs-dlg"),MODE=q(".xs-mode"),MSG=q(".xs-msg"),AGG=q(".xs-agg"),TABS=q(".xs-tabs");
+  let book=[],ai=0,sh=null,vals={},sel={r:0,c:0},anc={r:0,c:0},edit=null,clip=null,undo=[],redo=[],drag=null,tabC=null,dlg=null,acSel=0,msgT=0,tds=[],ths=[],rhs=[];
   const listeners=[];
 
   /* ---------- helpers ---------- */
@@ -1401,7 +1417,12 @@ function create(mount,opts){opts=opts||{};
   function msg(t,bad){MSG.textContent=t;MSG.className="xs-msg"+(bad?" bad":"");clearTimeout(msgT);if(t)msgT=setTimeout(()=>{MSG.textContent=""},bad?6000:3500)}
   function snap(){undo.push(JSON.stringify({c:sh.cells,f:sh.fmt}));if(undo.length>80)undo.shift();redo=[]}
   function restore(s){const o=JSON.parse(s);sh.cells=o.c;sh.fmt=o.f||{};recalc()}
-  function recalc(){sh._ast=sh._ast||{};vals=XC.evalSheet(sh,opts.book);paint();listeners.forEach(f=>f(sh,vals))}
+  const bookObj=()=>{const B=Object.assign({},opts.book||{});book.forEach(x=>B[x.name]=x);return B};
+  function recalc(){sh._ast=sh._ast||{};vals=XC.evalSheet(sh,bookObj());paint();drawTabs();listeners.forEach(f=>f(sh,vals))}
+  function valsOf(i){const x=book[i];if(!x)return{};if(x===sh)return vals;x._ast=x._ast||{};return XC.evalSheet(x,bookObj())}
+  function drawTabs(){TABS.innerHTML=book.map((x,i)=>"<button data-sh='"+i+"' class='"+(i===ai?"on":"")+"'>"+String(x.name||"Sheet"+(i+1)).replace(/</g,"&lt;")+"</button>").join("")}
+  TABS.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b)switchTo(+b.dataset.sh)});
+  function switchTo(i){if(i===ai||!book[i])return;if(edit)commitEdit(null);if(dlg)closeDlg();if(sh){sh._u=undo;sh._rd=redo;sh._sel={s:sel,a:anc}}ai=i;sh=book[i];sh.fmt=sh.fmt||{};sh._ast={};if(!sh.init)sh.init=Object.assign({},sh.cells);undo=sh._u||[];redo=sh._rd||[];ED.style.display="none";build();const st=sh._sel||{s:sh.start||{r:0,c:0},a:sh.start||{r:0,c:0}};sel=Object.assign({},st.s);anc=Object.assign({},st.a);recalc();SC.scrollTop=0;SC.scrollLeft=0;msg("Sheet “"+sh.name+"”");focusKB()}
   function setCell(ref,v){if(v==null||v==="")delete sh.cells[ref];else sh.cells[ref]=v}
   function cellRect(r,c){const td=tds[r]&&tds[r][c];if(!td)return{x:0,y:0,w:0,h:0};const a=td.getBoundingClientRect(),b=SC.getBoundingClientRect();return{x:a.left-b.left+SC.scrollLeft,y:a.top-b.top+SC.scrollTop,w:a.width,h:a.height}}
   function boxRect(g){const a=cellRect(g.r1,g.c1),b=cellRect(Math.min(g.r2,sh.rows-1),Math.min(g.c2,sh.cols-1));return{x:a.x,y:a.y,w:b.x+b.w-a.x,h:b.y+b.h-a.y}}
@@ -1612,7 +1633,7 @@ function create(mount,opts){opts=opts||{};
     else if(a==="paste"){if(clip)pasteInternal();else{try{const t=await navigator.clipboard.readText();if(t)pasteText(t)}catch(_){msg("Use Ctrl+V (⌘V) to paste from outside",true)}}}
     else if(a==="filld")fillDown();else if(a==="decp")decimals(1);else if(a==="decm")decimals(-1);
     else if(a==="tall"){root.classList.toggle("tall");overlay()}
-    else if(a==="reset"){if(b.dataset.arm){delete b.dataset.arm;b.textContent="⟲ RESET";snap();sh.cells=Object.assign({},sh.init);sh.fmt={};clip=null;recalc();msg("Sheet reset")}else{b.dataset.arm=1;b.textContent="⟲ CONFIRM?";setTimeout(()=>{delete b.dataset.arm;b.textContent="⟲ RESET"},2500)}}
+    else if(a==="reset"){if(b.dataset.arm){delete b.dataset.arm;b.textContent="⟲ RESET";if(book.length>1){if(ai!==0)switchTo(0);book.splice(1)}snap();sh.cells=Object.assign({},sh.init);sh.fmt={};clip=null;recalc();msg("Sheet reset")}else{b.dataset.arm=1;b.textContent="⟲ CONFIRM?";setTimeout(()=>{delete b.dataset.arm;b.textContent="⟲ RESET"},2500)}}
     else if(a==="da")openDlg();focusKB()});
 
   /* ---------- Data Analysis (Analysis ToolPak simulation) ---------- */
@@ -1630,8 +1651,9 @@ function create(mount,opts){opts=opts||{};
      "<div class='drow chk'><label><input type='checkbox' data-k='lab' "+(f.lab?"checked":"")+"> <u>L</u>abels in first row</label></div>"+
      "<div class='drow'><label><u>A</u>lpha:</label><input data-k='al' value='"+f.al+"' class='sm'></div>"+
      "<div class='dsec'>Output options</div>"+
-     "<div class='drow'><label><input type='radio' checked> <u>O</u>utput Range:</label><input data-k='out' value='"+f.out+"' class='rngi'><button class='pk' data-p='out' title='Select cell'>⤒</button></div>"+
-     "<div class='drow off'><label><input type='radio' disabled> New Worksheet <u>P</u>ly:</label><small>use Output Range here</small></div>"+
+     "<div class='drow'><label class='rad'><input type='radio' data-om='r' "+(f.om!=="p"?"checked":"")+"> <u>O</u>utput Range:</label><input data-k='out' value='"+f.out+"' class='rngi'><button class='pk' data-p='out' title='Select cell'>⤒</button></div>"+
+     "<div class='drow'><label class='rad'><input type='radio' data-om='p' "+(f.om==="p"?"checked":"")+"> New Worksheet <u>P</u>ly:</label><input data-k='ply' value='"+(f.ply||"")+"' class='plyi'></div>"+
+     "<div class='drow off'><label><input type='radio' disabled> New <u>W</u>orkbook</label></div>"+
      "</div><div class='dbtn col'><button class='btn sm' data-d='ok2'>OK</button><button class='btn ghost sm' data-d='cancel'>Cancel</button><button class='btn ghost sm' data-d='back'>◂ Tools</button></div></div><div class='derr'></div><div class='dpick'>Select the range on the sheet, then press <b>Enter</b> or ⤒ again.</div>";
     else DLG.innerHTML="<div class='dh'><b>"+t+"</b><button class='x' data-d='cancel'>✕</button></div><div class='db two'><div>"+
      "<div class='dsec'>Input</div>"+
@@ -1644,6 +1666,8 @@ function create(mount,opts){opts=opts||{};
      "<div class='drow'><label><input type='radio' checked> <u>O</u>utput Range:</label><input data-k='out' value='"+f.out+"' class='rngi'><button class='pk' data-p='out' title='Select cell'>⤒</button></div>"+
      "<div class='drow off'><label><input type='radio' disabled> New Worksheet <u>P</u>ly:</label><small>use Output Range here</small></div>"+
      "</div><div class='dbtn col'><button class='btn sm' data-d='ok2'>OK</button><button class='btn ghost sm' data-d='cancel'>Cancel</button><button class='btn ghost sm' data-d='back'>◂ Tools</button></div></div><div class='derr'></div><div class='dpick'>Select the range on the sheet, then press <b>Enter</b> or ⤒ again.</div>";
+    DLG.querySelectorAll("input[data-om]").forEach(i=>{i.addEventListener("change",()=>{f.om=i.dataset.om;DLG.querySelectorAll("input[data-om]").forEach(x=>x.checked=x===i)})});
+    {const oi=DLG.querySelector("input[data-k=out]"),pi=DLG.querySelector("input[data-k=ply]");const setOm=m=>{f.om=m;DLG.querySelectorAll("input[data-om]").forEach(x=>x.checked=x.dataset.om===m)};if(pi){oi.addEventListener("focus",()=>setOm("r"));pi.addEventListener("focus",()=>{endPick();setOm("p")})}}
     DLG.querySelectorAll("input[data-gb]").forEach(i=>{i.addEventListener("change",()=>{f.gb=i.dataset.gb;DLG.querySelectorAll("input[data-gb]").forEach(x=>x.checked=x===i)})});
     DLG.querySelectorAll("input[data-k]").forEach(i=>{i.addEventListener("input",()=>{const k=i.dataset.k;f[k]=i.type==="checkbox"?i.checked:i.value});i.addEventListener("change",()=>{const k=i.dataset.k;f[k]=i.type==="checkbox"?i.checked:i.value});
       if(i.classList.contains("rngi")){i.addEventListener("focus",()=>startPick(i));i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();endPick()}})}})}
@@ -1684,9 +1708,12 @@ function create(mount,opts){opts=opts||{};
     const groups=[],labels=[];for(let i=0;i<nG;i++){const cells=[];if(byCol)for(let r=g.r1;r<=Math.min(g.r2,sh.rows-1);r++)cells.push(vals[A1(r,g.c1+i)]);else for(let c=g.c1;c<=Math.min(g.c2,sh.cols-1);c++)cells.push(vals[A1(g.r1+i,c)]);
       let lb=byCol?"Column "+(i+1):"Row "+(i+1);if(f.lab){const x=cells.shift();lb=x==null?"":XC.show(x)}const v=[];for(const x of cells){if(x==null||x==="")continue;if(typeof x!=="number")return derr(prefix+"Input range contains non-numeric data."+(f.lab?"":" <i>(Tip: tick <b>Labels in first row</b> if row 1 holds the group names.)</i>"));v.push(x)}
       if(!v.length)return derr(prefix+"Each group must contain at least one value.");groups.push(v);labels.push(lb)}
-    const al=parseFloat(f.al);if(!(al>0&&al<1))return derr(prefix+"Alpha must be greater than zero and less than 1.");const o=XC.parseRange(f.out||"");if(!o)return derr(prefix+"Output range must be a contiguous reference.");
+    const al=parseFloat(f.al);if(!(al>0&&al<1))return derr(prefix+"Alpha must be greater than zero and less than 1.");const ply=f.om==="p";let o=null,pn="";
+    if(ply){pn=String(f.ply||"").trim();if(/[\\/?*\[\]:]/.test(pn)||pn.length>31)return derr(prefix+"The sheet name is not valid.");if(!pn){let n=1;while(book.some(x=>String(x.name).toLowerCase()==="sheet"+n))n++;pn="Sheet"+n}else if(book.some(x=>String(x.name).toLowerCase()===pn.toLowerCase()))return derr(prefix+"A sheet with that name already exists. Type a different name.")}
+    else{o=XC.parseRange(f.out||"");if(!o)return derr(prefix+"Output range must be a contiguous reference.")}
     const A=TS.anova(groups);if(A.dfw<1)return derr(prefix+"Not enough data in the groups.");
     const out=[["Anova: Single Factor"],[],["SUMMARY"],["Groups","Count","Sum","Average","Variance"]].concat(A.sum.map((s2,i)=>[labels[i],s2.n,s2.s,s2.m,isFinite(s2.v)?s2.v:"#DIV/0!"])).concat([[],[],["ANOVA"],["Source of Variation","SS","df","MS","F","P-value","F crit"],["Between Groups",A.ssb,A.dfb,A.msb,A.F,A.p,A.fcA(al)],["Within Groups",A.ssw,A.dfw,A.msw],[],["Total",A.sst,A.dft]]);
+    if(ply){const ns={name:pn,rows:Math.max(30,out.length+6),cols:12,cells:{},style:{},widths:[150,70,80,90,110,110,110,80,80,80,80,80]};for(let i=0;i<out.length;i++)for(let j=0;j<7;j++){const v=out[i]&&out[i][j];if(v!=null&&v!=="")ns.cells[A1(i,j)]=String(v)}ns.init={};dlg=null;DLG.innerHTML="";DLG.classList.remove("on");book.push(ns);switchTo(book.length-1);msg("ToolPak output written to new sheet “"+pn+"” – use the sheet tabs below to switch");return}
     const r0=o.r1,c0=o.c1,W=7;if(r0+out.length>sh.rows||c0+W>sh.cols)return derr(prefix+"Output range is too close to the edge of this sheet – choose a cell higher up or further left.");
     let busy=false;for(let i=0;i<out.length;i++)for(let j=0;j<W;j++)if(raw(r0+i,c0+j)!=null)busy=true;
     if(busy&&!dlg.ow){dlg.ow=1;return derr("Output range will overwrite existing data. Press <b>OK</b> to overwrite data in range: "+absTxt({r1:r0,c1:c0,r2:r0+out.length-1,c2:c0+W-1}),true)}
@@ -1695,11 +1722,11 @@ function create(mount,opts){opts=opts||{};
   /* grid click in pick mode handled in down(); Enter in grid ends pick */
 
   /* ---------- public ---------- */
-  function load(sheet){sh=sheet;sh.fmt=sh.fmt||{};sh._ast={};if(!sh.init)sh.init=Object.assign({},sh.cells);undo=[];redo=[];edit=null;clip=null;dlg=null;DLG.innerHTML="";DLG.classList.remove("on");ED.style.display="none";build();
+  function load(sheet){book=Array.isArray(sheet)?sheet:[sheet];if(!book[0].name)book[0].name="Sheet1";ai=0;sheet=book[0];sh=sheet;sh.fmt=sh.fmt||{};sh._ast={};if(!sh.init)sh.init=Object.assign({},sh.cells);undo=[];redo=[];edit=null;clip=null;dlg=null;DLG.innerHTML="";DLG.classList.remove("on");ED.style.display="none";build();
     const s=sheet.start||{r:0,c:0};sel={r:s.r,c:s.c};anc={r:s.r,c:s.c};recalc();SC.scrollTop=0;SC.scrollLeft=0}
   root.addEventListener("focusin",()=>root.classList.add("focus"));root.addEventListener("focusout",()=>setTimeout(()=>{if(!root.contains(document.activeElement))root.classList.remove("focus")},50));
   const ro=window.ResizeObserver?new ResizeObserver(()=>{if(sh)overlay()}):null;if(ro)ro.observe(SC);
-  return{load,el:root,get sheet(){return sh},get vals(){return vals},on:f=>listeners.push(f),focus:focusKB,recalc,select:(r,c)=>{select(r,c);focusKB()},msg};
+  return{load,el:root,get sheet(){return sh},get vals(){return vals},get book(){return book},get active(){return ai},valsOf,switchTo,on:f=>listeners.push(f),focus:focusKB,recalc,select:(r,c)=>{select(r,c);focusKB()},msg};
 }
 window.XG={create};
 })();
@@ -1708,7 +1735,7 @@ window.XG={create};
 (function(){
 "use strict";
 const XC=window.XC,TS=window.TS,D=window.DATA;
-const DEC=["Reject H0","Do not reject H0"];
+const DEC=["Reject H0","Accept H0"];
 const T=[
  {id:"A1",guided:1,src:"Lesson Practice",icon:"walk",title:"Therapy & Mobility",unit:"score",idl:"Subject",
   story:"18 elderly patients were randomly put into <b>3 therapy groups</b>. Mobility score after 8 weeks (higher = better). Does mobility <b>differ</b> between the groups?",
@@ -1740,13 +1767,13 @@ function layout(t){const L=[];const it=(k,label,f,kind,hint,extra)=>L.push(Objec
   const tpB=TPR+4+t.k+2+2;/* row index of Between Groups */const rowB=tpB+1;
   m.tpF=XC.colL(TPC+4)+rowB;m.tpP=XC.colL(TPC+5)+rowB;m.tpFc=XC.colL(TPC+6)+rowB;m.tpMSb=XC.colL(TPC+3)+rowB;m.tpMSw=XC.colL(TPC+3)+(rowB+1);
   const by=k=>L.find(x=>x.k===k);by("dfb").f="="+t.k+"-1";by("dfw").f="=COUNT("+t.all+")-"+t.k;by("F").f="="+m.tpF;by("p").f="=F.DIST.RT("+m.F+","+m.dfb+","+m.dfw+")";by("fc").f="=F.INV.RT(H2,"+m.dfb+","+m.dfw+")";
-  by("dec").f='=IF('+m.p+'<H2,"Reject H0","Do not reject H0")';
+  by("dec").f='=IF('+m.p+'<H2,"Reject H0","Accept H0")';
   if(t.guided){by("p").hint="=F.DIST.RT("+m.F+","+m.dfb+","+m.dfw+")";by("fc").hint="=F.INV.RT(H2,"+m.dfb+","+m.dfw+")"}
   t.L=L;t.R=m;t.ansR0=r0}
 T.forEach(layout);
 function toolpak(t){const A=t.A;return[["Anova: Single Factor"],[],["SUMMARY"],["Groups","Count","Sum","Average","Variance"]].concat(A.sum.map((s,i)=>[t.lab[i],s.n,s.s,s.m,s.v])).concat([[],[],["ANOVA"],["Source of Variation","SS","df","MS","F","P-value","F crit"],["Between Groups",A.ssb,A.dfb,A.msb,A.F,A.p,A.fc],["Within Groups",A.ssw,A.dfw,A.msw],[],["Total",A.sst,A.dft]])}
 function buildSheet(t,mode){const cells={},style={},val={};
-  cells.A1="["+t.id+"] "+t.title+" · One-way ANOVA · S249 L11–12";style.A1="ttl";cells.A2=t.idl;style.A2="hdr";
+  cells.A1="["+t.id+"] "+t.title+" · Single-factor ANOVA · S249 L11–12";style.A1="ttl";cells.A2=t.idl;style.A2="hdr";
   t.lab.forEach((l,i)=>{const c=XC.colL(1+i);cells[c+"2"]=l;style[c+"2"]="hdr";t.g[i].forEach((v,r)=>cells[c+(r+3)]=String(v))});
   for(let r=0;r<t.maxN;r++)cells["A"+(r+3)]=String(r+1);
   cells.G1="YOUR ANSWERS ▸ fill the orange cells";style.G1="sub";cells.G2="α (significance level)";style.G2="lab";cells.H2="0.05";style.H2="giv";
@@ -1768,8 +1795,8 @@ function check(t,getC,tp){const A=t.A,out=[];const add=(it,st,msg,v,f)=>out.push
     if(v==null||v===""){add(it,"todo","",v,f);continue}
     if(XC.isE(v)){add(it,"bad","Excel shows "+v.e+"."+(v.e==="#NAME?"?" A function name is misspelt.":v.e==="#NUM!"?" Check the df values (they must be ≥ 1).":v.e==="#DIV/0!"?" A range is empty.":""),v,f);continue}
     if(it.kind==="dec"){const s=parseDec(v),want=t.rej?"rej":"keep";const sp=(getC(t.R.p)||{}).v;
-      if(s===want)add(it,"ok","",v,f);else if(s==="?")add(it,"bad","Write <b>Reject H0</b> or <b>Do not reject H0</b>.",v,f);
-      else add(it,"bad",typeof sp==="number"&&near(sp,A.p)==null&&((sp<.05)===(s==="rej"))?"Consistent with YOUR p-value – but your p-value isn't right yet. Fix p first.":"Compare p with α = 0.05 (or F with F crit): p "+(t.rej?"&lt;":"&gt;")+" 0.05 → "+(t.rej?"reject":"do not reject")+" H₀.",v,f);continue}
+      if(s===want)add(it,"ok","",v,f);else if(s==="?")add(it,"bad","Write <b>Reject H0</b> or <b>Accept H0</b>.",v,f);
+      else add(it,"bad",typeof sp==="number"&&near(sp,A.p)==null&&((sp<.05)===(s==="rej"))?"Consistent with YOUR p-value – but your p-value isn't right yet. Fix p first.":"Compare p with α = 0.05 (or F with F crit): p "+(t.rej?"&lt;":"&gt;")+" 0.05 → "+(t.rej?"reject":"accept")+" H₀.",v,f);continue}
     const nv=typeof v==="number"?v:XC.rawVal(String(v));if(typeof nv!=="number"){add(it,"bad","Enter a number here.",v,f);continue}
     const exp=it.exp;let m=near(nv,exp);
     if(m){let st="ok",ms="";if(m==="zero"){st="warn";ms="Too small to round to 0 – keep the full value."}
@@ -1788,7 +1815,7 @@ function check(t,getC,tp){const A=t.A,out=[];const add=(it,st,msg,v,f)=>out.push
     if(!why&&it.k==="fc"){why=near(nv,TS.fINV(.05,A.dfb,A.dfw))?"That's the LOWER cut-off. Use <code>=F.INV.RT(0.05, df1, df2)</code> (right tail).":near(nv,TS.fINV(.95,A.dfw,A.dfb))?"Check the df order: between first, within second.":near(nv,TS.fINV(.975,A.dfb,A.dfw))?"ANOVA's F test is one-tailed (right tail) – use α = 0.05, not 0.025.":"F crit: <code>=F.INV.RT(0.05, df between, df within)</code>."}
     if(!why)why=/^m\d/.test(it.k)?"Use <code>=AVERAGE(range)</code> on the whole column.":"Use <code>=STDEV(range)</code>.";add(it,"bad",why,nv,f)}
   if(tp){const it={k:"tp",ref:"ToolPak",label:"Analysis ToolPak · Anova: Single Factor"};const g=tp[0];
-    if(!g)out.push(Object.assign(it,{st:"todo",msg:"Data → Data Analysis → <b>Anova: Single Factor</b> (Output Range K2)."}));
+    if(!g)out.push(Object.assign(it,{st:"todo",msg:"Data → Data Analysis → <b>Anova: Single Factor</b> (Output Range K2 or New Worksheet Ply)."}));
     else if(typeof g.F==="number"&&near(g.F,A.F))out.push(Object.assign(it,{st:"ok",msg:"<b>Anova: Single Factor</b>"+(g.sheet?" on sheet “"+g.sheet+"”":"")+" · F = "+fmtN(g.F)+" ✔"+(g.groups&&g.groups!==t.k?" (but "+g.groups+" groups?)":"")}));
     else out.push(Object.assign(it,{st:"bad",msg:"ToolPak output found, but F = "+fmtN(g.F)+" doesn't match. Select ALL group columns (with headings → tick <b>Labels in first row</b>) and Grouped By <b>Columns</b>."}))}
   return out}
@@ -1819,22 +1846,26 @@ const addComps=n=>{totalComps+=n;updateXP()};
 /* ---------- CHALLENGES ---------- */
 const C={
  sortErr:{type:"sort",title:"CHALLENGE · TYPE I, TYPE II OR CORRECT?",bins:["Type I error","Type II error","Correct decision"],
-  items:[["Doctor tells a man he is pregnant",0,"H₀ (not pregnant) is TRUE but rejected → false positive."],["Doctor tells a pregnant woman she is not pregnant",1,"H₀ is FALSE but kept → false negative."],["Smoke alarm rings with no fire",0,"Alarm (reject H₀) when nothing is happening → Type I."],["Smoke alarm stays silent during a fire",1,"Missed a real effect → Type II."],
-   ["A drug truly does nothing, yet the study finds p = 0.01",0,"No real effect, but H₀ rejected → Type I."],["A drug truly works, yet the study finds p = 0.20",1,"Real effect, but H₀ not rejected → Type II."],["A drug truly works and the study finds p = 0.003",2,"Real effect detected → correct (power)."],["There is no real difference and the study finds p = 0.40",2,"No effect, H₀ kept → correct."]],
-  why:"Type I = rejecting a TRUE H₀ (false alarm). Type II = keeping a FALSE H₀ (missed effect)."},
- mEx1:{type:"mcq",title:"LESSON EXAMPLE (i)",q:"In the population there is <b>no difference</b> between men and women on a test. Your study finds <b>p = 0.03</b>, so you reject H₀. Which error could you be making?",o:["Type I error – rejecting a true H₀","Type II error – keeping a false H₀","No error – p is below 0.05","Both errors at once"],
-  why:"You concluded there IS a difference when in truth there isn't → <b>Type I error</b>."},
- mEx2:{type:"mcq",title:"LESSON EXAMPLE (ii)",q:"Recognition is known to be much better than recall. Your study finds <b>p = 0.08</b>, so you fail to reject H₀ (no difference). Which error could you be making?",o:["Type II error – missing a real difference","Type I error – a false alarm","No error – p is above 0.05","A sampling error that can't be named"],
-  why:"A real difference exists, but you kept H₀ → <b>Type II error</b>."},
- mP:{type:"mcq",title:"CHALLENGE · p AND TYPE I ERROR",q:"A study rejects H₀ with <b>p = 0.0003</b> (α = 0.05). What is the HIGHEST probability that this rejection is a Type I error?",o:["0.0003","0.05","0.95","0.9997"],
-  why:"α is only the benchmark. The p-value (0.0003) is the maximum chance of a Type I error for THIS result."},
- mTrade:{type:"mcq",title:"CHALLENGE · TRADE-OFF",q:"You make α stricter (0.05 → 0.01) but keep the same sample size. What happens?",o:["Type I risk falls, Type II risk rises (power falls)","Both errors fall","Type I risk rises","Nothing – α only affects the p-value"],
-  why:"A stricter cut-off makes false alarms rarer but real effects harder to detect. To cut BOTH errors, increase n."},
- mInfl:{type:"mcq",title:"CHALLENGE · ERROR INFLATION",q:"You compare <b>4 groups</b> using t-tests at α = 0.05. How many t-tests, and what is the chance of at least one Type I error?",o:["6 tests · 1 − 0.95⁶ = 26.5%","4 tests · 1 − 0.95⁴ = 18.5%","6 tests · 6 × 5% = 30%","3 tests · 14.3%"],
-  why:"Pairs = 4×3÷2 = 6. P(≥1 Type I) = 1 − 0.95⁶ = 0.265 → <b>26.5%</b>. ANOVA keeps it at 5%."},
+  items:[["Doctor tells a man he is pregnant",0,"H₀ (not pregnant) is TRUE but rejected → false positive."],["Doctor tells a pregnant woman she is not pregnant",1,"H₀ is FALSE but accepted → false negative."],["Smoke alarm rings with no fire",0,"Alarm (reject H₀) when nothing is happening → Type I."],["Smoke alarm stays silent during a fire",1,"Missed a real effect → Type II."],
+   ["A drug truly does nothing, yet the study finds p = 0.01",0,"No real effect, but H₀ rejected → Type I."],["A drug truly works, yet the study finds p = 0.20",1,"Real effect, but H₀ accepted → Type II."],["A drug truly works and the study finds p = 0.003",2,"Real effect detected → correct decision."],["There is no real difference and the study finds p = 0.40",2,"No effect, H₀ accepted → correct."]],
+  why:"Type I = rejecting a TRUE H₀ (false alarm). Type II = accepting a FALSE H₀ (missed effect)."},
+ mP:{type:"mcq",title:"CHALLENGE · p AND TYPE I ERROR",q:"Using a 5% significance level, the BMI study rejects H₀ with <b>p = 0.0003</b>. What is the HIGHEST probability that this rejection is a Type I error?",o:["0.0003 (0.03%)","0.05 (5%)","0.95 (95%)","0.9997 (99.97%)"],
+  why:"5% is the MAXIMUM limit we set. The p-value (0.0003) is the ACTUAL highest chance of a Type I error for this data."},
+ mSmall:{type:"mcq",title:"CHALLENGE · SMALLEST RISK",q:"Four studies all reject H₀ at the 5% level. Which one has the LOWEST chance of a Type I error?",o:["p = 0.001","p = 0.012","p = 0.03","p = 0.049"],
+  why:"The smaller the p-value, the lower the chance of making a Type I error."},
+ sortWorse:{type:"sort",title:"CHALLENGE · WHICH ERROR IS WORSE HERE?",bins:["Type I worse","Type II worse"],
+  items:[["Approving a new cancer drug (H₀: the drug has no effect)",0,"A useless drug is given → wasted resources and false hope (lesson example)."],["Airport scanner (H₀: the bag has no weapon)",1,"Missing a real weapon puts lives at risk; a false alarm only means an extra search."],["Court case (H₀: the person is innocent)",0,"Convicting an innocent person is the worse mistake."],["Screening donated blood (H₀: the blood is not infected)",1,"Missing infected blood harms the patient; a false alarm just discards one unit."],["Launching a costly nationwide health programme (H₀: it has no effect)",0,"Money and effort go into a programme that doesn't work."],["Early cancer screening with a follow-up test (H₀: no cancer)",1,"A missed cancer delays treatment; a false alarm is cleared by the follow-up test."]],
+  why:"Statisticians usually treat Type I as worse – but in practice it depends on what each mistake costs."},
  mBW:{type:"mcq",title:"CHALLENGE · READ THE F RATIO",q:"MS between = <b>146</b> and MS within = <b>25.47</b>. What is F and what does it suggest?",o:["F = 5.73 – between-group variation is much larger than within → likely a real difference","F = 0.17 – no difference","F = 120.5 – subtract the MS values","F = 5.73 – the groups have equal means"],
   why:"F = 146 ÷ 25.47 = <b>5.73</b>. Signal (between) is ~6× the noise (within). Compare with F crit 3.68 → significant."},
- sortTA:{type:"sort",title:"CHALLENGE · t-TEST OR ANOVA?",bins:["t-test","ANOVA"],
+ mPairs:{type:"mcq",title:"CHALLENGE · HOW MANY t-TESTS?",q:"You compare the mean BMI of <b>3 independent groups</b> with t-tests. How many t-tests are needed?",o:["3 – G1 vs G2, G2 vs G3, G1 vs G3","2 – G1 vs G2, G2 vs G3","1 – all three at once","6 – each pair twice"],
+  why:"A t-test only compares 2 groups, so every pair needs its own test: 3 groups → 3 t-tests."},
+ mWhy:{type:"mcq",title:"CHALLENGE · t-TESTS OR NOT?",q:"Why should we NOT run multiple t-tests to compare 3 or more groups?",o:["Every t-test carries a chance of a Type I error – many tests greatly increase it","t-tests can't use more than 10 values","Multiple t-tests only increase the Type II error","t-tests give the wrong group means"],
+  why:"The number of pairs grows quickly and each t-test adds a chance of a Type I error. Use single-factor ANOVA instead."},
+ sortWay:{type:"sort",title:"CHALLENGE · SINGLE-FACTOR OR TWO-WAY?",bins:["Single-factor ANOVA","Two-way ANOVA"],
+  items:[["Social media use (low, medium, high) → hours of sleep",0,"One explanatory variable (social media use) → single-factor (slide example)."],["Combined effect of exercise AND a drug on stress levels",1,"Two explanatory variables → two-way (slide example)."],["SAT scores of low-, middle- and high-income students",0,"One explanatory variable (income) → single-factor."],["Effect of diet type AND gender on weight loss",1,"Two explanatory variables → two-way."],["Mobility under 3 therapy programmes",0,"One explanatory variable (therapy) → single-factor."],["Effect of shift type AND age group on sleep",1,"Two explanatory variables → two-way."]],
+  why:"Count the explanatory variables: one → single-factor (one-way) ANOVA. Two or more → two-way / multi-way."},
+ sortTA:{type:"sort",title:"CHALLENGE · t-TEST OR ANOVA?",bins:["t-test","Single-factor ANOVA"],
   items:[["Mean BMI: men vs women",0,"2 groups → t-test."],["Stress level in 3 age groups",1,"3 groups → ANOVA."],["Blood pressure before vs after a drug (same people)",0,"2 related measurements → paired t-test."],["Sleep hours across 4 shift types",1,"4 groups → ANOVA."],["SAT scores: low-, middle-, high-income students",1,"3 income groups → ANOVA (slide example)."],["Shopping hours: males vs females",0,"2 groups → t-test (slide example)."],["Mobility under 3 therapy programmes",1,"3 groups → ANOVA (lesson practice)."],["Runners' heart rate vs 62 bpm",0,"1 group vs a reference → one-sample t-test."]],
   why:"Count the groups: 2 (or 1 vs a reference) → t-test. 3 or more → ANOVA."}
 };
@@ -1882,19 +1913,19 @@ function drawCv(){if(!W)resizeCv();cx.clearRect(0,0,W,H);const L=W<640?10:W*0.38
   cx.strokeStyle="rgba(0,229,255,.5)";cx.beginPath();cx.moveTo(L,base);cx.lineTo(R,base);cx.stroke();
   [O,B,PK].forEach((c,i)=>curve(ms[i],c,base,L,R,sc));const gm=(ms[0]+ms[1]+ms[2])/3,xg=L+(R-L)*(gm+7)/14;cx.setLineDash([5,4]);cx.strokeStyle="#fff";cx.beginPath();cx.moveTo(xg,base);cx.lineTo(xg,base-sc-14);cx.stroke();cx.setLineDash([]);
   const n=10,msb=n*ms.reduce((a,m)=>a+(m-gm)**2,0)/2,msw=1,F=msb/msw,fc=TS.fINV(.95,2,27);
-  $("#cvB").textContent=msb.toFixed(1);$("#cvW").textContent=msw.toFixed(1);$("#cvF").textContent=F.toFixed(2);const v=$("#cvV");v.textContent=F>fc?"REJECT H₀":"KEEP H₀";v.style.color=F>fc?O:B}
+  $("#cvB").textContent=msb.toFixed(1);$("#cvW").textContent=msw.toFixed(1);$("#cvF").textContent=F.toFixed(2);const v=$("#cvV");v.textContent=F>fc?"REJECT H₀":"ACCEPT H₀";v.style.color=F>fc?O:B}
 function loop(){tt++;if($("#p0").classList.contains("on"))drawCv();if(!RM)requestAnimationFrame(loop)}
 addEventListener("resize",()=>{resizeCv();drawCv()});resizeCv();if(RM)drawCv();else requestAnimationFrame(loop);
 /* module cards */
-(function(){const M=[["Type I & II","False alarms vs misses",'<path d="M8 38L24 8l16 30z" stroke="#ff6a00"/><path d="M24 20v9M24 33v1" stroke="#00e5ff"/>'],["Error Lab","α · β · power tug-of-war",'<path d="M4 38C12 38 14 12 20 12s8 26 16 26" stroke="#ff6a00"/><path d="M14 38c6 0 8-26 14-26s8 26 16 26" stroke="#00e5ff"/>'],["Multiple Tests","Why errors snowball",'<circle cx="12" cy="14" r="4" stroke="#00e5ff"/><circle cx="36" cy="14" r="4" stroke="#00e5ff"/><circle cx="24" cy="36" r="4" stroke="#00e5ff"/><path d="M16 14h16M14 18l8 14M34 18l-8 14" stroke="#ff6a00"/>'],["ANOVA Idea","Between vs within",'<path d="M6 40V8" stroke="#00e5ff"/><path d="M12 30h8M22 18h8M32 24h8" stroke="#ff6a00"/><path d="M6 24h38" stroke="#fff" stroke-dasharray="3 3"/>'],["ANOVA Steps","SS · df · MS · F",'<path d="M8 36h8v-8h8v-8h8v-8h8" stroke="#00e5ff"/><circle cx="40" cy="12" r="3" fill="#ff6a00"/>'],["Excel Kit","ToolPak walkthrough",'<rect x="6" y="8" width="36" height="32" stroke="#00e5ff"/><path d="M6 18h36M18 8v32" stroke="#00e5ff"/><path d="M24 28l4 4 8-9" stroke="#ff6a00"/>'],["ANOVA Practice","5 Excel tasks + upload",'<path d="M10 40V24M20 40V14M30 40V28M40 40V18" stroke="#ff6a00"/>'],["Practice Lab","16 drills with hints",'<circle cx="24" cy="24" r="16" stroke="#00e5ff"/><path d="M24 14v10l7 5" stroke="#ff6a00"/>'],["Review Quiz","Low → high",'<path d="M24 6l16 9v18l-16 9-16-9V15z" stroke="#00e5ff"/><path d="M18 24l5 5 8-10" stroke="#ff6a00"/>']];
+(function(){const M=[["Type I & II","False alarms vs misses",'<path d="M8 38L24 8l16 30z" stroke="#ff6a00"/><path d="M24 20v9M24 33v1" stroke="#00e5ff"/>'],["Drug Trial","Which error? Which is worse?",'<path d="M4 38C12 38 14 12 20 12s8 26 16 26" stroke="#ff6a00"/><path d="M14 38c6 0 8-26 14-26s8 26 16 26" stroke="#00e5ff"/>'],["t-Tests or Not?","Why ANOVA for 3+ groups",'<circle cx="12" cy="14" r="4" stroke="#00e5ff"/><circle cx="36" cy="14" r="4" stroke="#00e5ff"/><circle cx="24" cy="36" r="4" stroke="#00e5ff"/><path d="M16 14h16M14 18l8 14M34 18l-8 14" stroke="#ff6a00"/>'],["ANOVA Idea","Between vs within",'<path d="M6 40V8" stroke="#00e5ff"/><path d="M12 30h8M22 18h8M32 24h8" stroke="#ff6a00"/><path d="M6 24h38" stroke="#fff" stroke-dasharray="3 3"/>'],["ANOVA Steps","SS · df · MS · F",'<path d="M8 36h8v-8h8v-8h8v-8h8" stroke="#00e5ff"/><circle cx="40" cy="12" r="3" fill="#ff6a00"/>'],["Excel Kit","ToolPak walkthrough",'<rect x="6" y="8" width="36" height="32" stroke="#00e5ff"/><path d="M6 18h36M18 8v32" stroke="#00e5ff"/><path d="M24 28l4 4 8-9" stroke="#ff6a00"/>'],["ANOVA Practice","5 Excel tasks + upload",'<path d="M10 40V24M20 40V14M30 40V28M40 40V18" stroke="#ff6a00"/>'],["Practice Lab","16 drills with hints",'<circle cx="24" cy="24" r="16" stroke="#00e5ff"/><path d="M24 14v10l7 5" stroke="#ff6a00"/>'],["Review Quiz","Low → high",'<path d="M24 6l16 9v18l-16 9-16-9V15z" stroke="#00e5ff"/><path d="M18 24l5 5 8-10" stroke="#ff6a00"/>']];
   const w=$("#mods");M.forEach((m,i)=>{const b=el("button","mod",'<svg viewBox="0 0 48 48"><g fill="none" stroke-width="2.5">'+m[2]+'</g></svg><em>0'+(i+1)+'</em><b>'+m[0]+'</b><small>'+m[1]+'</small>');b.dataset.go=i+1;w.appendChild(b)})})();
 
 /* ---------- ERROR GRID ---------- */
-(function(){const g=$("#errGrid");const X={tl:["CORRECT","1 − α","H₀ is true and you keep it. No false alarm.",B],tr:["TYPE II ERROR","β","H₀ is false (there IS a difference) but you keep it. You <b>missed</b> a real effect – a false negative.",O],bl:["TYPE I ERROR","α","H₀ is true (no difference) but you reject it. A <b>false alarm</b> – a false positive. Its chance is set by α.",O],br:["CORRECT · POWER","1 − β","H₀ is false and you reject it. You detected a real effect. This is the test's <b>power</b>.",B]};
-  g.innerHTML="<div class='eg-c eg-h'></div><div class='eg-c eg-h'>TRUTH<b>H₀ TRUE</b><small>no real difference</small></div><div class='eg-c eg-h'>TRUTH<b>H₀ FALSE</b><small>real difference</small></div>"+
-   "<div class='eg-c eg-r'>DECISION<b>KEEP H₀</b><small>p ≥ 0.05</small></div><div class='eg-c eg-x ok' data-k='tl'><b>CORRECT</b><span>1 − α</span></div><div class='eg-c eg-x bad' data-k='tr'><b>TYPE II</b><span>β · miss</span></div>"+
-   "<div class='eg-c eg-r'>DECISION<b>REJECT H₀</b><small>p &lt; 0.05</small></div><div class='eg-c eg-x bad' data-k='bl'><b>TYPE I</b><span>α · false alarm</span></div><div class='eg-c eg-x ok' data-k='br'><b>CORRECT</b><span>1 − β · power</span></div>";
-  $$(".eg-x",g).forEach(c=>c.onclick=()=>{$$(".eg-x",g).forEach(x=>x.classList.toggle("on",x===c));const x=X[c.dataset.k];$("#errX").innerHTML="<b style='color:"+x[3]+"'>"+x[0]+" ("+x[1]+")</b> · "+x[2]})})();
+(function(){const g=$("#errGrid");const X={tl:["CORRECT DECISION","H₀ is true and you accept it. No difference – and none claimed.",B],tr:["TYPE II ERROR","H₀ is false (there IS a difference) but you accept it. You <b>missed</b> a real difference – a false negative.",O],bl:["TYPE I ERROR","H₀ is true (no difference) but you reject it. A <b>false alarm</b> – you observe a difference when in truth there is NONE.",O],br:["CORRECT DECISION","H₀ is false and you reject it. You detected the real difference.",B]};
+  g.innerHTML="<div class='eg-c eg-h'></div><div class='eg-c eg-h'>ACTUAL SITUATION<b>H₀ TRUE</b><small>no real difference</small></div><div class='eg-c eg-h'>ACTUAL SITUATION<b>H₀ FALSE</b><small>real difference</small></div>"+
+   "<div class='eg-c eg-r'>DECISION<b>ACCEPT H₀</b><small>p &gt; 0.05</small></div><div class='eg-c eg-x ok' data-k='tl'><b>CORRECT</b><span>correct decision</span></div><div class='eg-c eg-x bad' data-k='tr'><b>TYPE II</b><span>miss · incorrect decision</span></div>"+
+   "<div class='eg-c eg-r'>DECISION<b>REJECT H₀</b><small>p &lt; 0.05</small></div><div class='eg-c eg-x bad' data-k='bl'><b>TYPE I</b><span>false alarm · incorrect decision</span></div><div class='eg-c eg-x ok' data-k='br'><b>CORRECT</b><span>correct decision</span></div>";
+  $$(".eg-x",g).forEach(c=>c.onclick=()=>{$$(".eg-x",g).forEach(x=>x.classList.toggle("on",x===c));const x=X[c.dataset.k];$("#errX").innerHTML="<b style='color:"+x[2]+"'>"+x[0]+"</b> · "+x[1]})})();
 
 /* ---------- PREGNANCY ---------- */
 (function(){const s=$("#preg");const person=(x,col,belly)=>{const g=sv("g",{},s);sv("circle",{cx:x,cy:110,r:22,fill:"none",stroke:col,"stroke-width":3},g);sv("path",{d:"M"+x+" 132v70M"+x+" 150l-30 26M"+x+" 150l30 26M"+x+" 202l-24 50M"+x+" 202l24 50",stroke:col,"stroke-width":3,fill:"none"},g);if(belly)sv("path",{d:"M"+x+" 158q26 18 0 40",stroke:col,"stroke-width":3,fill:"rgba(255,79,216,.15)"},g);return g};
@@ -1905,31 +1936,44 @@ addEventListener("resize",()=>{resizeCv();drawCv()});resizeCv();if(RM)drawCv();e
   sv("text",{x:130,y:285,"text-anchor":"middle",fill:B,"font-size":12,"font-weight":800},s).textContent="MAN · H₀: not pregnant (TRUE)";sv("text",{x:600,y:285,"text-anchor":"middle",fill:PK,"font-size":12,"font-weight":800},s).textContent="WOMAN · H₀: not pregnant (FALSE)";
   const ans={1:0,2:1},done={};const w=$("#pregB");[1,2].forEach(k=>{const box=el("div","seg");box.innerHTML="<span class='mute' style='margin-right:8px'>SCENE "+k+"</span><button data-a='0'>TYPE I</button><button data-a='1'>TYPE II</button>";w.appendChild(box);
     $$("button",box).forEach(b=>b.onclick=()=>{if(done[k])return;const ok=+b.dataset.a===ans[k];b.classList.add(ok?"on":"x");if(ok){done[k]=1;$$("button",box).forEach(z=>z.disabled=true)}
-      $("#pregX").innerHTML=ok?(k===1?"<b class='hl'>Type I.</b> H₀ (a man is not pregnant) is TRUE, yet the doctor rejects it – a false alarm.":"<b class='hl'>Type II.</b> H₀ (not pregnant) is FALSE, yet the doctor keeps it – a missed effect."):"Not quite – ask: is H₀ actually true here? Then: did the doctor reject it or keep it?";if(done[1]&&done[2])markDone(null,"preg")})});addComps(1)})();
+      $("#pregX").innerHTML=ok?(k===1?"<b class='hl'>Type I.</b> H₀ (a man is not pregnant) is TRUE, yet the doctor rejects it – a false alarm.":"<b class='hl'>Type II.</b> H₀ (not pregnant) is FALSE, yet the doctor accepts it – a missed effect."):"Not quite – ask: is H₀ actually true here? Then: did the doctor reject it or accept it?";if(done[1]&&done[2])markDone(null,"preg")})});addComps(1)})();
 
-/* ---------- α · β LAB ---------- */
-function abDraw(){const a=+$("#abA").value/100,d=+$("#abD").value/10,n=+$("#abN").value,sd=5,se=sd/Math.sqrt(n);$("#abAv").textContent=a.toFixed(2);$("#abDv").textContent=d.toFixed(1);$("#abNv").textContent=n;
-  const c=zInv(1-a)*se,beta=Phi((c-d)/se),pw=1-beta;const s=$("#abG");s.innerHTML="";const lo=-4*se,hi=Math.max(d+4*se,6*se),X=v=>40+820*(v-lo)/(hi-lo),pk=npdf(0,0,se),Y=y=>250-210*y/pk;
-  const path=(m,a1,b1,close)=>{let p="";for(let i=0;i<=160;i++){const x=a1+(b1-a1)*i/160;p+=(i?"L":"M")+X(x).toFixed(1)+" "+Y(npdf(x,m,se)).toFixed(1)}return close?p+"L"+X(b1)+" 250L"+X(a1)+" 250Z":p};
-  sv("path",{d:path(0,c,hi,1),fill:O,opacity:.55},s);sv("path",{d:path(d,lo,c,1),fill:B,opacity:.35},s);
-  sv("path",{d:path(0,lo,hi),fill:"none",stroke:O,"stroke-width":2.5,style:"filter:drop-shadow(0 0 5px #ff6a00)"},s);sv("path",{d:path(d,lo,hi),fill:"none",stroke:B,"stroke-width":2.5,style:"filter:drop-shadow(0 0 5px #00e5ff)"},s);
-  sv("line",{x1:40,y1:250,x2:860,y2:250,stroke:"rgba(0,229,255,.5)"},s);sv("line",{x1:X(c),y1:30,x2:X(c),y2:252,stroke:"#fff","stroke-width":2,"stroke-dasharray":"6 4"},s);
-  sv("text",{x:X(c),y:24,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="CUT-OFF";sv("text",{x:X(0),y:274,"text-anchor":"middle",fill:O,"font-size":12,"font-weight":800},s).textContent="H₀ TRUE (no difference)";sv("text",{x:X(d),y:292,"text-anchor":"middle",fill:B,"font-size":12,"font-weight":800},s).textContent="H₁ TRUE (difference = "+d.toFixed(1)+")";
-  sv("text",{x:Math.min(840,X(c)+40),y:236,fill:O,"font-size":12,"font-weight":800},s).textContent="α";sv("text",{x:Math.max(60,X(c)-40),y:236,"text-anchor":"end",fill:B,"font-size":12,"font-weight":800},s).textContent="β";
-  $("#aba").textContent=pct(a);$("#abb").textContent=pct(beta);$("#abp").textContent=pct(pw);$("#abc").textContent=c.toFixed(2);
-  $("#abX").innerHTML=pw>=.8?"<b class='hb'>Power ≥ 80%</b> – a real effect of this size would usually be detected.":d===0?"No true difference: any rejection would be a <b class='hl'>Type I error</b>.":"Power below 80% – a real effect could easily be <b class='hl'>missed</b> (Type II). Try a bigger n."}
-["#abA","#abD","#abN"].forEach(i=>$(i).oninput=abDraw);abDraw();
+/* ---------- CANCER DRUG TRIAL ---------- */
+(function(){let p=.02,seen={};const S=$("#dtS");
+  function draw(){const rej=p<.05;$("#dtPv").textContent=p<.01?p.toFixed(3):p.toFixed(3);
+    $$("#dtSeg button").forEach(b=>b.classList.toggle("on",Math.abs(+b.dataset.p-p)<1e-9));
+    const s=$("#dtLine");s.innerHTML="";const X=v=>40+820*Math.min(v,.2)/.2;
+    sv("rect",{x:X(0),y:34,width:X(.05)-X(0),height:34,fill:O,opacity:rej?.55:.18},s);sv("rect",{x:X(.05),y:34,width:X(.2)-X(.05),height:34,fill:B,opacity:rej?.12:.4},s);
+    sv("text",{x:Math.abs(X(p)-(X(0)+X(.05))/2)<50?(X(p)<(X(0)+X(.05))/2?X(.05)-8:X(0)+8):(X(0)+X(.05))/2,y:56,"text-anchor":Math.abs(X(p)-(X(0)+X(.05))/2)<50?(X(p)<(X(0)+X(.05))/2?"end":"start"):"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="REJECT H₀";sv("text",{x:(X(.05)+X(.2))/2,y:56,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="ACCEPT H₀";
+    sv("line",{x1:X(.05),y1:24,x2:X(.05),y2:78,stroke:"#fff","stroke-width":2,"stroke-dasharray":"5 4"},s);sv("text",{x:X(.05),y:18,"text-anchor":"middle",fill:"#fff","font-size":11,"font-weight":800},s).textContent="0.05";
+    [0,.05,.1,.15,.2].forEach(v=>{sv("text",{x:X(v),y:96,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=v.toFixed(2)});
+    const c=rej?O:B;sv("polygon",{points:(X(p)-9)+",112 "+(X(p)+9)+",112 "+X(p)+",80",fill:c,style:"filter:drop-shadow(0 0 6px "+c+")"},s);sv("line",{x1:X(p),y1:70,x2:X(p),y2:82,stroke:c,"stroke-width":3},s);sv("line",{x1:X(p),y1:34,x2:X(p),y2:68,stroke:"#fff","stroke-width":2,opacity:.9},s);
+    const g=$("#dtGrid");g.innerHTML="<div class='eg-c eg-h'></div><div class='eg-c eg-h'>IN TRUTH<b>DRUG DOES NOT WORK</b><small>H₀ true</small></div><div class='eg-c eg-h'>IN TRUTH<b>DRUG WORKS</b><small>H₀ false</small></div>"+
+      "<div class='eg-c eg-r"+(rej?"":" act")+"'>DECISION<b>ACCEPT H₀</b><small>p &gt; 0.05</small></div><div class='eg-c eg-x ok"+(rej?" dim":"")+"'><b>CORRECT</b><span>no effect – and we say so</span></div><div class='eg-c eg-x bad"+(rej?" dim":" on")+"'><b>TYPE II</b><span>it works – but we say it doesn't</span></div>"+
+      "<div class='eg-c eg-r"+(rej?" act":"")+"'>DECISION<b>REJECT H₀</b><small>p &lt; 0.05</small></div><div class='eg-c eg-x bad"+(rej?" on":" dim")+"'><b>TYPE I</b><span>no effect – but we say it works!</span></div><div class='eg-c eg-x ok"+(rej?"":" dim")+"'><b>CORRECT</b><span>it works – and we say so</span></div>";
+    $("#dtX").innerHTML=rej?"<div class='dtl'><span>DECISION</span><b class='hl'>p = "+fp(p)+" &lt; 0.05 → REJECT H₀</b></div><div class='dtl'><span>CONCLUSION</span><b>The new drug IS effective</b></div><div class='dtl'><span>POSSIBLE ERROR</span><b class='hl'>TYPE I</b> – the drug may actually NOT work</div><div class='dtl'><span>IMPACT</span>Patients get a drug that doesn't work → <b>false hope</b> and wasted resources.</div>"
+      :"<div class='dtl'><span>DECISION</span><b class='hb'>p = "+fp(p)+" &gt; 0.05 → ACCEPT H₀</b></div><div class='dtl'><span>CONCLUSION</span><b>The new drug is NOT effective</b></div><div class='dtl'><span>POSSIBLE ERROR</span><b class='hb'>TYPE II</b> – the drug may actually WORK</div><div class='dtl'><span>IMPACT</span>Patients are not treated with it → their <b>chance of a cure</b> is taken away.</div>";
+    seen[rej?1:0]=1;if(seen[0]&&seen[1])markDone(null,"drug")}
+  $$("#dtSeg button").forEach(b=>b.onclick=()=>{p=+b.dataset.p;S.value=Math.round(p*1000);draw()});S.oninput=()=>{p=+S.value/1000;draw()};addComps(1);draw()})();
+/* ---------- SIGNIFICANCE LEVEL vs p ---------- */
+(function(){let p=.0003;function draw(){$$("#spSeg button").forEach(b=>b.classList.toggle("on",+b.dataset.p===p));const s=$("#spG");s.innerHTML="";const X=v=>210+640*Math.min(v,.1)/.1,rej=p<.05;
+    [0,.02,.04,.06,.08,.1].forEach(v=>{sv("line",{x1:X(v),y1:20,x2:X(v),y2:132,stroke:"rgba(0,229,255,.08)"},s);sv("text",{x:X(v),y:152,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=(v*100).toFixed(0)+"%"});
+    sv("text",{x:200,y:52,"text-anchor":"end",fill:O,"font-size":12,"font-weight":800},s).textContent="SIGNIFICANCE LEVEL";sv("text",{x:200,y:68,"text-anchor":"end",fill:"#7fa3b5","font-size":10},s).textContent="max Type I risk we ALLOW";
+    sv("rect",{x:X(0),y:36,width:X(.05)-X(0),height:30,fill:O,opacity:.6,style:"filter:drop-shadow(0 0 6px #ff6a00)"},s);sv("text",{x:X(.05)+8,y:57,fill:O,"font-size":13,"font-weight":800},s).textContent="5%";
+    sv("text",{x:200,y:102,"text-anchor":"end",fill:B,"font-size":12,"font-weight":800},s).textContent="p-VALUE";sv("text",{x:200,y:118,"text-anchor":"end",fill:"#7fa3b5","font-size":10},s).textContent=rej?"ACTUAL highest Type I risk":"above the limit";
+    sv("rect",{x:X(0),y:86,width:Math.max(3,X(p)-X(0)),height:30,fill:rej?B:"#556",opacity:.75,style:rej?"filter:drop-shadow(0 0 6px #00e5ff)":""},s);sv("text",{x:Math.max(X(p),X(0)+3)+8,y:107,fill:rej?B:"#9ab","font-size":13,"font-weight":800},s).textContent=(p*100<1?(p*100).toFixed(2):(p*100).toFixed(0))+"%  (p = "+fp(p)+")";
+    sv("line",{x1:X(.05),y1:28,x2:X(.05),y2:132,stroke:"#fff","stroke-width":2,"stroke-dasharray":"5 4"},s);
+    $("#spX").innerHTML=rej?"p = "+fp(p)+" &lt; 0.05 → <b class='hl'>reject H₀</b>. The highest chance that this is a <b>Type I error</b> is <b class='hb'>"+fp(p)+" ("+(p*100<1?(p*100).toFixed(2):(p*100).toFixed(0))+"%)</b> – well inside our 5% limit."+(p<.001?" <b>Smaller p → lower chance of a Type I error.</b>":"")
+      :"p = "+fp(p)+" &gt; 0.05 → <b class='hb'>accept H₀</b>. No rejection, so no Type I error – but a <b class='hl'>Type II error</b> is possible."}
+  $$("#spSeg button").forEach(b=>b.onclick=()=>{p=+b.dataset.p;draw()});draw()})();
 
-/* ---------- MULTIPLE TESTS ---------- */
-function mgDraw(){const k=+$("#mgK").value,n=k*(k-1)/2,conf=Math.pow(.95,n),fw=1-conf;$("#mgKv").textContent=k;$("#mgN").textContent=n;$("#mgC").textContent=pct(conf);$("#mgE").textContent=pct(fw);
+/* ---------- t-TESTS OR NOT ---------- */
+function mgDraw(){const k=+$("#mgK").value,n=k*(k-1)/2;$("#mgKv").textContent=k;$("#mgN").textContent=n;
   const s=$("#mgNet");s.innerHTML="";const P=[];for(let i=0;i<k;i++){const a=-Math.PI/2+2*Math.PI*i/k;P.push([210+120*Math.cos(a),150+120*Math.sin(a)])}
-  let e=0;for(let i=0;i<k;i++)for(let j=i+1;j<k;j++){const l=sv("line",{x1:P[i][0],y1:P[i][1],x2:P[j][0],y2:P[j][1],stroke:O,"stroke-width":1.6,opacity:.75},s);if(!RM){l.style.strokeDasharray="400";l.style.strokeDashoffset="400";l.style.transition="stroke-dashoffset .6s "+(e*0.03)+"s";requestAnimationFrame(()=>requestAnimationFrame(()=>l.style.strokeDashoffset="0"))}e++}
+  const L=[];for(let i=0;i<k;i++)for(let j=i+1;j<k;j++){L.push("G"+(i+1)+" vs G"+(j+1));const l=sv("line",{x1:P[i][0],y1:P[i][1],x2:P[j][0],y2:P[j][1],stroke:O,"stroke-width":1.6,opacity:.75},s);if(!RM){const len=Math.hypot(P[j][0]-P[i][0],P[j][1]-P[i][1]);l.style.strokeDasharray=len;l.style.strokeDashoffset=len;l.style.transition="stroke-dashoffset .5s "+(L.length*.04)+"s";requestAnimationFrame(()=>requestAnimationFrame(()=>l.style.strokeDashoffset=0))}}
   P.forEach((p,i)=>{sv("circle",{cx:p[0],cy:p[1],r:15,fill:"#03060b",stroke:B,"stroke-width":2.5,style:"filter:drop-shadow(0 0 5px #00e5ff)"},s);sv("text",{x:p[0],y:p[1]+4,"text-anchor":"middle",fill:"#fff","font-size":11,"font-weight":800},s).textContent="G"+(i+1)});
-  const c=$("#mgCurve");c.innerHTML="";const X=t=>50+800*(t-1)/44,Y=v=>190-170*v;for(let v=0;v<=1;v+=.25){sv("line",{x1:50,y1:Y(v),x2:850,y2:Y(v),stroke:"rgba(0,229,255,.1)"},c);sv("text",{x:44,y:Y(v)+4,"text-anchor":"end",fill:"#7fa3b5","font-size":10},c).textContent=(v*100)+"%"}
-  let p="";for(let t=1;t<=45;t++)p+=(t>1?"L":"M")+X(t)+" "+Y(1-Math.pow(.95,t));sv("path",{d:p,fill:"none",stroke:O,"stroke-width":3,style:"filter:drop-shadow(0 0 5px #ff6a00)"},c);
-  sv("line",{x1:50,y1:Y(.05),x2:850,y2:Y(.05),stroke:B,"stroke-width":2,"stroke-dasharray":"6 4"},c);sv("text",{x:846,y:Y(.05)-6,"text-anchor":"end",fill:B,"font-size":11,"font-weight":800},c).textContent="ANOVA · stays at 5%";
-  [[3,"3 tests · 14.3%"],[10,"10 tests · 40.1%"]].filter(([t])=>t!==n).forEach(([t,l])=>{sv("circle",{cx:X(t),cy:Y(1-Math.pow(.95,t)),r:4,fill:"#fff"},c);sv("text",{x:X(t)+6,y:Y(1-Math.pow(.95,t))-8,fill:"#fff","font-size":10},c).textContent=l});
-  sv("circle",{cx:X(n),cy:Y(fw),r:8,fill:O,style:"filter:drop-shadow(0 0 8px #ff6a00)"},c);sv("text",{x:X(n)+12,y:Y(fw)+18,"text-anchor":"start",fill:O,"font-size":12,"font-weight":800},c).textContent=n+" tests → "+pct(fw);sv("text",{x:450,y:214,"text-anchor":"middle",fill:"#7fa3b5","font-size":10},c).textContent="NUMBER OF t-TESTS (n)"}
+  $("#mgL").innerHTML=L.map(x=>"<span>"+x+"</span>").join("");
+  $("#mgX").innerHTML=k===2?"2 groups → <b>1 t-test</b> is fine.":"<b>"+k+" groups → "+n+" t-tests.</b> Every t-test carries its own chance of a <b class='hl'>Type I error</b> – so multiple t-tests greatly increase it. One <b class='hb'>single-factor ANOVA</b> keeps it at 5%."}
 $("#mgK").oninput=mgDraw;mgDraw();
 let simK=3;segs("#simK",b=>{simK=+b.dataset.k});
 (function(){const gT=$("#simT"),gA=$("#simA");const mk=g=>{let h="";for(let i=0;i<500;i++)h+="<i></i>";g.innerHTML=h};mk(gT);mk(gA);let busy=false;
@@ -1938,7 +1982,7 @@ let simK=3;segs("#simK",b=>{simK=+b.dataset.k});
         let any=false;for(let x=0;x<k&&!any;x++)for(let y=x+1;y<k;y++){if(Math.abs(TS.pooledT(G[x],G[y]).t)>tc){any=true;break}}const A=TS.anova(G);const fa1=A.F>fc;if(any)ft++;if(fa1)fa++;
         if(i<500){if(any)cT[i].classList.add("on");if(fa1)cA[i].classList.add("on")}}
       $("#simTv").textContent=pct(ft/i)+" false alarms";$("#simAv").textContent=pct(fa/i)+" false alarms";
-      if(i<1000)RM?step():requestAnimationFrame(step);else{busy=false;$("#simX").innerHTML="With <b>"+k+" groups</b> ("+k*(k-1)/2+" t-tests) <b class='hl'>"+pct(ft/1000)+"</b> of studies raised a false alarm. One ANOVA: <b class='hb'>"+pct(fa/1000)+"</b> ≈ α. Theory: 1 − 0.95<sup>"+k*(k-1)/2+"</sup> = "+pct(1-Math.pow(.95,k*(k-1)/2))+" (a little lower in practice because the t-tests share data).";markDone(null,"sim")}};step()};addComps(1)})();
+      if(i<1000)RM?step():requestAnimationFrame(step);else{busy=false;$("#simX").innerHTML="With <b>"+k+" groups</b> ("+k*(k-1)/2+" t-tests), <b class='hl'>"+pct(ft/1000)+"</b> of studies made at least one Type I error. One ANOVA: <b class='hb'>"+pct(fa/1000)+"</b> – close to the 5% we set.";markDone(null,"sim")}};step()};addComps(1)})();
 
 /* ---------- BETWEEN vs WITHIN LAB ---------- */
 const BW={m:[42,50,58],z:[],sd:10,sel:null};const GC=[O,B,PK];
@@ -1965,9 +2009,9 @@ function bwPt(V,A){const [g,i]=BW.sel,x=V[g][i],m=A.sum[g].m;$("#bwPt").innerHTM
 $("#bwS").oninput=bwDraw;$("#bwRe").onclick=bwNew;$("#bwSame").onclick=()=>{BW.m=[50,50,50];bwDraw()};$("#bwApart").onclick=()=>{BW.m=[34,50,68];bwDraw()};bwNew();
 
 /* ---------- STEPS LADDER ---------- */
-const LADX=["<h3>1 · Hypotheses</h3><p><b class='hl'>H₀</b>: all population means are equal – μ₁ = μ₂ = μ₃.<br><b class='hb'>H₁</b>: at least one mean is different.</p>","<h3>2 · Partition the variation</h3><p><b class='hl'>Between groups</b> – partly the effect of the treatment.<br><b class='hb'>Within groups</b> – individual differences we did not control.</p>","<h3>3 · SS · df · MS</h3><p>SS = Σ(X − μ)² · <b class='hl'>MS = SS ÷ df</b><br>df<sub>between</sub> = k − 1 · df<sub>within</sub> = N − k · df<sub>total</sub> = N − 1</p>","<h3>4 · F vs F crit</h3><p><b class='hl'>F = MS<sub>between</sub> ÷ MS<sub>within</sub></b><br>F &gt; F crit (p &lt; 0.05) → at least one group differs.<br>F &lt; F crit → no significant difference.</p>"];
+const LADX=["<h3>1 · Hypotheses</h3><p><b class='hl'>H₀</b>: there is NO significant difference among the group means.<br><b class='hb'>H₁</b>: at least one group mean is different from the others.</p><p class='mute' style='font-size:.72rem'>e.g. H₀: no significant difference in depression levels among the 3 groups. (In symbols: μ₁ = μ₂ = μ₃.)</p>","<h3>2 · Partition the variation</h3><p><b class='hl'>Between groups</b> – partly the effect of the treatment.<br><b class='hb'>Within groups</b> – individual differences we did not control.</p>","<h3>3 · SS · df · MS</h3><p>SS = Σ(X − μ)² · <b class='hl'>MS = SS ÷ df</b><br>df<sub>between</sub> = k − 1 · df<sub>within</sub> = N − k · df<sub>total</sub> = N − 1</p>","<h3>4 · F vs F crit</h3><p><b class='hl'>F = MS<sub>between</sub> ÷ MS<sub>within</sub></b><br>F &gt; F crit (p &lt; 0.05) → at least one group differs.<br>F &lt; F crit → no significant difference.</p>"];
 function lad(k){$$(".lad").forEach(x=>x.classList.toggle("on",+x.dataset.k===k));$("#ladX").innerHTML=LADX[k]}$$(".lad").forEach(x=>x.onclick=()=>lad(+x.dataset.k));lad(0);
-$("#assm").innerHTML=[["INDEPENDENCE","Random, independent samples – each person in one group only.",'<circle cx="14" cy="24" r="7" stroke="#ff6a00"/><circle cx="34" cy="24" r="7" stroke="#00e5ff"/>'],["NORMALITY","Each group's data roughly bell-shaped.",'<path d="M4 38C14 38 16 10 24 10S34 38 44 38" stroke="#00e5ff"/>'],["EQUAL VARIANCES","Groups have similar spread (check the ToolPak's Variance column).",'<path d="M8 14h32M8 24h32M8 34h32" stroke="#ff6a00"/>']].map(a=>"<div class='card asm'><svg viewBox='0 0 48 48'><g fill='none' stroke-width='3'>"+a[2]+"</g></svg><b>"+a[0]+"</b><span>"+a[1]+"</span></div>").join("");
+$("#assm").innerHTML=[["INDEPENDENCE","The samples are independent random samples – each person in one group only.",'<circle cx="14" cy="24" r="7" stroke="#ff6a00"/><circle cx="34" cy="24" r="7" stroke="#00e5ff"/>'],["NORMALITY","Each group's distribution is roughly normal (bell-shaped).",'<path d="M4 38C14 38 16 10 24 10S34 38 44 38" stroke="#00e5ff"/>'],["EQUAL VARIANCES","Homogeneity of variances – the population SD is similar for each group (check the ToolPak's Variance column).",'<path d="M8 14h32M8 24h32M8 34h32" stroke="#ff6a00"/>']].map(a=>"<div class='card asm'><svg viewBox='0 0 48 48'><g fill='none' stroke-width='3'>"+a[2]+"</g></svg><b>"+a[0]+"</b><span>"+a[1]+"</span></div>").join("");
 
 /* ---------- HAND-BUILT ANOVA TABLE ---------- */
 (function(){const t=window.TK.TASKS[0],A=t.A;const g=t.g;
@@ -2031,8 +2075,8 @@ function done(t,part){if(!state[t.id]["d"+part]){state[t.id]["d"+part]=1;markDon
 function show(t){$$(".tk",bar).forEach(b=>b.classList.toggle("on",b.dataset.id===t.id));const S=state[t.id],A=t.A;area.innerHTML="";
   const sc=el("div","card o scn");sc.innerHTML="<div><div class='st'>"+t.story+"</div><div class='chips'><span class='o'>"+t.src.toUpperCase()+"</span><span>k = "+t.k+" GROUPS</span><span>n = "+t.ns.join(" · ")+"</span><span>N = "+t.N+"</span><span>α = 0.05</span><span>UNIT · "+t.unit+"</span></div></div><svg class='dotrow' viewBox='0 0 420 210'></svg>";area.appendChild(sc);plot($("svg",sc),t);
   area.appendChild(el("div","stepn","<em><span>1</span></em><b>THINK</b><small>BEFORE YOU OPEN EXCEL</small>"));const th=el("div","think");area.appendChild(th);
-  const Qs=[{h:"WHICH TEST?",o:["One-way ANOVA","Several independent t-tests","Paired t-test"],ok:0,why:t.k+" independent groups, one factor → one-way ANOVA (keeps Type I error at α).",bad:["","Each extra t-test adds Type I error risk – "+(t.k*(t.k-1)/2)+" tests → "+(100*(1-Math.pow(.95,t.k*(t.k-1)/2))).toFixed(1)+"% false-alarm chance.","Paired needs the same people measured twice."]},
-    {h:"H₀ · NULL",o:["All group means are equal (μ₁ = μ₂ = …)","At least one group mean is different","All group means are different"],ok:0,why:"H₀: no difference between ANY of the groups.",bad:["","That's H₁.","ANOVA's H₁ only needs ONE mean to differ – not all."]},
+  const Qs=[{h:"WHICH TEST?",o:["Single-factor ANOVA","Several independent t-tests","Paired t-test"],ok:0,why:t.k+" independent groups, one factor → single-factor ANOVA (keeps the Type I error at 5%).",bad:["","Multiple t-tests ("+(t.k*(t.k-1)/2)+" pairs here) greatly increase the chance of a Type I error.","Paired needs the same people measured twice."]},
+    {h:"H₀ · NULL",o:["There is no significant difference among the group means","At least one group mean is different","All group means are different"],ok:0,why:"H₀: no significant difference among the "+t.k+" groups <span class='mute'>(in symbols μ₁ = μ₂ = …)</span>.",bad:["","That's H₁.","ANOVA's H₁ only needs ONE mean to differ – not all."]},
     {h:"df (BETWEEN, WITHIN)",o:[(t.k-1)+" and "+(t.N-t.k),t.k+" and "+t.N,(t.k-1)+" and "+(t.N-1)],ok:0,why:"k − 1 = "+(t.k-1)+" · N − k = "+t.N+" − "+t.k+" = "+(t.N-t.k)+".",bad:["","Subtract 1 from k and k from N.","N − 1 is df TOTAL. Within = N − k."]}];
   Qs.forEach((q,qi)=>{const box=el("div","tq"+(S.think[qi]!=null?" dn":""));box.innerHTML="<h4>"+q.h+"</h4>";const ob=el("div","ob"),w=el("div","w");box.append(ob,w);const ord=S["ord"+qi]||(S["ord"+qi]=shuffle(q.o.map((x,i)=>i)));
     ord.forEach(i=>{const b=el("button","",q.o[i]);if(S.think[qi]!=null){b.disabled=true;if(i===q.ok)b.classList.add("ok")}b.onclick=()=>{if(S.think[qi]!=null)return;if(i===q.ok){S.think[qi]=1;b.classList.add("ok");box.classList.add("dn");$$("button",ob).forEach(x=>x.disabled=true);w.innerHTML="✔ "+q.why;if(Object.keys(S.think).length===3)done(t,"think")}else{b.classList.add("bad");b.disabled=true;w.innerHTML="<span style='color:#ffb3c0'>"+(q.bad[i]||"Try again.")+"</span>"}};ob.appendChild(b)});
@@ -2040,11 +2084,11 @@ function show(t){$$(".tk",bar).forEach(b=>b.classList.toggle("on",b.dataset.id==
   area.appendChild(el("div","stepn","<em><span>2</span></em><b>EXCEL</b><small>FORMULAS · TOOLPAK · CHECK</small>"));
   const md=el("div","modes","<button data-m='web'>▦ WORK IN BROWSER</button><button data-m='file'>⬇ EXCEL FILE ⬆</button>");area.appendChild(md);const web=el("div"),file=el("div");area.append(web,file);const ckW=ckPanel(),ckF=ckPanel();
   const gm=el("div");web.appendChild(gm);web.appendChild(el("div","row","<button class='btn ghost sm' data-x='mine'>⬇ Download my sheet (.xlsx)</button><span class='mute' style='font-size:.62rem'>Orange cells = your answers · ▤ DATA ANALYSIS = Analysis ToolPak · results check live below</span>"));web.appendChild(ckW.el);
-  if(!S.sheet)S.sheet=TK.buildSheet(t,"tpl");grid=XG.create(gm,{daTool:0});grid.load(S.sheet);
-  const run=()=>{const v=grid.vals,sh=grid.sheet;const res=TK.check(t,ref=>({v:v[ref],f:XC.isF(sh.cells[ref])?sh.cells[ref]:null}),TK.scanTP([{name:"",rows:sh.rows,cols:sh.cols,get:(r,c)=>v[XC.A1(r,c)]}]));ckW.show(t,res,"LIVE CHECK · IN-BROWSER SHEET");if(ckW.won)done(t,"excel")};grid.on(run);run();
-  $("[data-x=mine]",web).onclick=()=>{const sh=grid.sheet;dl(XIO.writeXlsx([Object.assign({},sh,{vals:grid.vals}),howSheet(t)]),fname(t,"my_work"))};
+  if(!S.sheet)S.sheet=TK.buildSheet(t,"tpl");grid=XG.create(gm,{daTool:0});grid.load(S.book||S.sheet);S.book=grid.book;
+  const run=()=>{const bk=grid.book,V=bk.map((x,i)=>grid.valsOf(i)),v=V[0],sh=bk[0];const res=TK.check(t,ref=>({v:v[ref],f:XC.isF(sh.cells[ref])?sh.cells[ref]:null}),TK.scanTP(bk.map((x,i)=>({name:i?x.name:"",rows:x.rows,cols:x.cols,get:(r,c)=>V[i][XC.A1(r,c)]}))));ckW.show(t,res,"LIVE CHECK · IN-BROWSER SHEET");if(ckW.won)done(t,"excel")};grid.on(run);run();
+  $("[data-x=mine]",web).onclick=()=>{const bk=grid.book;dl(XIO.writeXlsx(bk.map((x,i)=>Object.assign({},x,{vals:grid.valsOf(i)})).concat([howSheet(t)])),fname(t,"my_work"))};
   file.innerHTML="<div class='filebox'><button class='fbig' data-x='tpl'>"+fileSvg(0)+"<div><b>DOWNLOAD TEMPLATE</b><small>"+fname(t)+"</small></div></button><label class='fbig up'>"+fileSvg(1)+"<div><b>UPLOAD TO CHECK</b><small>Drop your saved .xlsx here or tap to choose</small></div><input type='file' accept='.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' hidden></label></div>"+
-    "<div class='howto'><span>Download</span><span>Means &amp; SDs with formulas</span><span>Data Analysis → Anova: Single Factor (K2)</span><span>Fill F, p, F crit, decision</span><span>Save as .xlsx → upload</span></div><div class='upst'></div>";file.appendChild(ckF.el);
+    "<div class='howto'><span>Download</span><span>Means &amp; SDs with formulas</span><span>Data Analysis → Anova: Single Factor (K2 or New Worksheet Ply)</span><span>Fill F, p, F crit, decision</span><span>Save as .xlsx → upload</span></div><div class='upst'></div>";file.appendChild(ckF.el);
   $("[data-x=tpl]",file).onclick=()=>dl(XIO.writeXlsx([TK.buildSheet(t,"tpl"),howSheet(t)]),fname(t));
   const up=$("label.up",file),fi=$("input",up),st=$(".upst",file);fi.onchange=()=>{if(fi.files[0])upload(fi.files[0]);fi.value=""};
   ["dragenter","dragover"].forEach(e=>up.addEventListener(e,ev=>{ev.preventDefault();up.classList.add("over")}));["dragleave","drop"].forEach(e=>up.addEventListener(e,ev=>{ev.preventDefault();up.classList.remove("over")}));up.addEventListener("drop",ev=>{const f=ev.dataTransfer.files[0];if(f)upload(f)});
@@ -2062,8 +2106,8 @@ function show(t){$$(".tk",bar).forEach(b=>b.classList.toggle("on",b.dataset.id==
   const setMode=m=>{S.mode=m;$$("button",md).forEach(b=>b.classList.toggle("on",b.dataset.m===m));web.style.display=m==="web"?"":"none";file.style.display=m==="file"?"":"none";if(m==="web")setTimeout(()=>grid&&grid.recalc(),0)};$$("button",md).forEach(b=>b.onclick=()=>setMode(b.dataset.m));setMode(S.mode);
   area.appendChild(el("div","stepn","<em><span>3</span></em><b>CONCLUDE</b><small>α = 0.05</small>"));
   const cc=el("div","tq concl");area.appendChild(cc);const pS=fp(A.p),rej=t.rej,[yes,no]=CONC[t.id];
-  const opts=[(rej?"F = "+A.F.toFixed(3)+" &gt; F crit "+A.fc.toFixed(3)+" · p = "+pS+" &lt; 0.05 → <b>reject H₀</b>. ":"F = "+A.F.toFixed(3)+" &lt; F crit "+A.fc.toFixed(3)+" · p = "+pS+" &gt; 0.05 → <b>do not reject H₀</b>. ")+(rej?yes:no),
-    "p = "+pS+" → <b>"+(rej?"do not reject":"reject")+" H₀</b>. "+(rej?no:yes),(rej?"Reject H₀ → ALL "+t.k+" group means are different from each other.":"F is below 1 or close to it → the groups are identical."),"ANOVA shows <b>which</b> group is different: the one with the "+(rej?"highest":"lowest")+" mean."];
+  const opts=[(rej?"F = "+A.F.toFixed(3)+" &gt; F crit "+A.fc.toFixed(3)+" · p = "+pS+" &lt; 0.05 → <b>reject H₀</b>. ":"F = "+A.F.toFixed(3)+" &lt; F crit "+A.fc.toFixed(3)+" · p = "+pS+" &gt; 0.05 → <b>accept H₀</b>. ")+(rej?yes:no),
+    "p = "+pS+" → <b>"+(rej?"accept":"reject")+" H₀</b>. "+(rej?no:yes),(rej?"Reject H₀ → ALL "+t.k+" group means are different from each other.":"F is below 1 or close to it → the groups are identical."),"ANOVA shows <b>which</b> group is different: the one with the "+(rej?"highest":"lowest")+" mean."];
   cc.innerHTML="<h4>WHICH CONCLUSION IS CORRECT?</h4>";const ob=el("div","ob"),w=el("div","w");cc.append(ob,w);const ord=S.cord||(S.cord=shuffle([0,1,2,3]));
   ord.forEach(i=>{const b=el("button","",opts[i]);if(S.conc){b.disabled=true;if(i===0)b.classList.add("ok")}b.onclick=()=>{if(S.conc)return;if(i===0){S.conc=1;b.classList.add("ok");$$("button",ob).forEach(x=>x.disabled=true);w.innerHTML="✔ Compare p with α (or F with F crit).";done(t,"conc")}else{b.classList.add("bad");b.disabled=true;w.innerHTML="<span style='color:#ffb3c0'>"+(i===2?"ANOVA's H₁ is ‘at least ONE mean differs’ – not that all differ.":i===3?"ANOVA only says a difference exists somewhere – it doesn't tell you which group (that needs further tests).":"Check: is p smaller than 0.05?")+"</span>"}};ob.appendChild(b)});if(S.conc)w.innerHTML="✔ Compare p with α (or F with F crit).";
   area.appendChild(solution(t))}
@@ -2083,21 +2127,11 @@ function solution(t){const A=t.A,d=el("details","sol");d.innerHTML="<summary>◆
     for(let i=0;i<=fmax;i++)sv("text",{x:X(i),y:190,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=i;
     sv("line",{x1:X(A.fc),y1:30,x2:X(A.fc),y2:170,stroke:O,"stroke-dasharray":"5 4"},s);sv("text",{x:X(A.fc)+6,y:44,fill:O,"font-size":11,"font-weight":800},s).textContent="F crit "+A.fc.toFixed(3);
     const fx=Math.min(A.F,fmax*.99);sv("line",{x1:X(fx),y1:16,x2:X(fx),y2:170,stroke:"#fff","stroke-width":3},s);sv("text",{x:X(fx),y:12,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="F = "+A.F.toFixed(3);
-    const v2=el("div","verdict2"+(t.rej?"":" ns"));v2.innerHTML="df ("+A.dfb+", "+A.dfw+") · F = "+A.F.toFixed(3)+(t.rej?" &gt; ":" &lt; ")+"F crit "+A.fc.toFixed(3)+" · p = "+fp(A.p)+(t.rej?" &lt; ":" &gt; ")+"0.05 → <b>"+(t.rej?"REJECT H₀":"DO NOT REJECT H₀")+"</b>. "+CONC[t.id][t.rej?0:1]+
-      (t.id==="A2"?"<br><span class='mute'>Lesson note: running 3 separate t-tests here would push the chance of a false alarm to 14.3%.</span>":"");b.appendChild(v2);
+    const v2=el("div","verdict2"+(t.rej?"":" ns"));v2.innerHTML="df ("+A.dfb+", "+A.dfw+") · F = "+A.F.toFixed(3)+(t.rej?" &gt; ":" &lt; ")+"F crit "+A.fc.toFixed(3)+" · p = "+fp(A.p)+(t.rej?" &lt; ":" &gt; ")+"0.05 → <b>"+(t.rej?"REJECT H₀":"ACCEPT H₀")+"</b>. "+CONC[t.id][t.rej?0:1];b.appendChild(v2);
     const r=el("div","row");r.style.marginTop="10px";const bt=el("button","btn ghost sm","⬇ Download solution (.xlsx)");bt.onclick=()=>dl(XIO.writeXlsx([Object.assign({},shs,{vals:v}),howSheet(t)]),fname(t,"solution"));r.appendChild(bt);b.appendChild(r)});return d}
 show(tasks[0]);
 
-/* ---------- warm-up sheet (error inflation table) ---------- */
-(function(){const host=$("#warm");if(!host)return;const cells={A1:"Warm-up · How fast does the Type I error grow?",A2:"α per test",B2:"0.05",A4:"No. of t-tests (n)",B4:"Confidence (1 − α)^n",C4:"P(≥1 Type I error)",E4:"Groups k",F4:"t-tests needed"};
-  for(let i=1;i<=10;i++)cells["A"+(4+i)]=String(i);[3,4,5,10].forEach((k,i)=>cells["E"+(5+i)]=String(k));
-  const style={A1:"ttl",A2:"lab",B2:"giv",A4:"hdr",B4:"hdr",C4:"hdr",E4:"hdr",F4:"hdr",B5:"ans",C5:"ans",F5:"ans"};
-  const sh={name:"Warm-up",rows:20,cols:8,cells,style,widths:[150,170,170,20,110,120,60,60],start:{r:4,c:1}};const g=XG.create(host,{daTool:0});g.load(sh);
-  const conf=n=>Math.pow(.95,n),M=[["<code>B5</code>: confidence for 1 test, using <b>$B$2</b>","=(1-$B$2)^A5",(v,c)=>XC.isF(c.B5)&&Math.abs(v.B5-.95)<1e-9],["<code>C5</code>: P(≥1 Type I error) = 1 − B5","=1-B5",(v,c)=>XC.isF(c.C5)&&Math.abs(v.C5-.05)<1e-9],
-    ["Fill B5:C5 down to row 14 (select both → drag the ■ handle)","drag ■",(v,c)=>[...Array(10)].every((_,i)=>XC.isF(c["B"+(5+i)])&&Math.abs(v["B"+(5+i)]-conf(i+1))<1e-9&&Math.abs(v["C"+(5+i)]-(1-conf(i+1)))<1e-9)],
-    ["<code>F5</code>: t-tests needed for k groups = k(k−1)/2","=E5*(E5-1)/2",(v,c)=>XC.isF(c.F5)&&v.F5===3],["Fill F5 down to F8","drag ■",(v,c)=>[3,6,10,45].every((x,i)=>XC.isF(c["F"+(5+i)])&&v["F"+(5+i)]===x)],["Check: 10 t-tests → C14 = 40.1% · 3 → C7 = 14.3%","read",(v,c)=>Math.abs((v.C14||0)-(1-conf(10)))<1e-9&&Math.abs((v.C7||0)-(1-conf(3)))<1e-9]];
-  const w=$("#warmMis"),ok=new Set();addComps(1);M.forEach((m,i)=>{const d=el("div","mi","<span class='k'>"+(i+1)+"</span><p>"+m[0]+"</p><button class='btn ghost sm'>Hint</button><div class='hintx'>"+(m[1]==="drag ■"?"Select the cell(s) → drag the small orange square down (or double-click it).":m[1]==="read"?"If rows 5–14 are filled correctly this ticks itself. Press <b>.0⁻</b> / <b>.0⁺</b> to change decimals.":"Type: <code>"+m[1]+"</code> – the $ keeps B2 fixed when you fill down (press F4).")+"</div>");$("button",d).onclick=()=>$(".hintx",d).classList.toggle("show");w.appendChild(d)});
-  g.on((s2,v)=>{M.forEach((m,i)=>{if(ok.has(i))return;let r=false;try{r=m[2](v,s2.cells)}catch(e){}if(r){ok.add(i);const d=w.children[i];d.classList.add("ok");$(".k",d).textContent="✔"}});if(ok.size===M.length)markDone(null,"warm")})})();
+
 })();
 (function(){
 "use strict";
@@ -2143,7 +2177,7 @@ function dlgA(s,o){frame(s,"Data");sv("rect",{x:150,y:60,width:600,height:340,fi
   tx(s,164,172,"Grouped By:",{});sv("circle",{cx:310,cy:168,r:6,fill:"#fff",stroke:"#555"},s);sv("circle",{cx:310,cy:168,r:3,fill:GR},s);tx(s,322,172,"Columns",{});sv("circle",{cx:310,cy:192,r:6,fill:"#fff",stroke:"#555"},s);tx(s,322,196,"Rows",{});hot(s,302,160,80,16);
   sv("rect",{x:164,y:212,width:14,height:14,fill:"#fff",stroke:"#555"},s);tx(s,165,224,"✔",{fw:900,fill:GR});tx(s,186,224,"Labels in first row",{});hot(s,162,210,150,18);
   tx(s,164,258,"Alpha:",{});sv("rect",{x:220,y:243,width:60,height:22,fill:"#fff",stroke:"#888"},s);tx(s,228,258,"0.05",{fw:600});
-  tx(s,164,298,"Output options",{fw:700});sv("circle",{cx:172,cy:320,r:6,fill:"#fff",stroke:"#555"},s);sv("circle",{cx:172,cy:320,r:3,fill:GR},s);tx(s,186,324,"Output Range:",{});sv("rect",{x:290,y:309,width:110,height:22,fill:"#fff",stroke:"#888"},s);tx(s,296,324,o.out,{fw:600});hot(s,290,309,110,22);
+  tx(s,164,298,"Output options",{fw:700});sv("circle",{cx:172,cy:320,r:6,fill:"#fff",stroke:"#555"},s);sv("circle",{cx:172,cy:320,r:3,fill:GR},s);tx(s,186,324,"Output Range:",{});sv("rect",{x:290,y:309,width:110,height:22,fill:"#fff",stroke:"#888"},s);tx(s,296,324,o.out,{fw:600});hot(s,290,309,110,22);sv("circle",{cx:172,cy:348,r:6,fill:"#fff",stroke:"#555"},s);tx(s,186,352,"New Worksheet Ply:",{});sv("rect",{x:330,y:337,width:110,height:22,fill:"#fff",stroke:"#888"},s);sv("circle",{cx:172,cy:376,r:6,fill:"#fff",stroke:"#555"},s);tx(s,186,380,"New Workbook",{});
   sv("rect",{x:640,y:96,width:90,height:24,fill:"#f4f4f4",stroke:"#888"},s);tx(s,674,112,"OK",{fw:700});hot(s,640,96,90,24)}
 function demo(t){const sh=TK.buildSheet(t,"sol"),vals=XC.evalSheet(sh),R=t.R;const st=[],shown=new Set(),val=ref=>XC.show(vals[ref]);
   const rowsA=[];for(let i=0;i<17;i++)rowsA.push(i);const colsA=[0,1,2,3,6,7,8],WA={0:52,1:96,2:118,3:84,6:230,7:96,8:180};
@@ -2153,7 +2187,7 @@ function demo(t){const sh=TK.buildSheet(t,"sol"),vals=XC.evalSheet(sh),R=t.R;con
   [R.m1,R.s1,R.m2,R.s2].forEach(r=>shown.add(r));step("Same for columns C and D (or copy H4:H5 and change the column letters)",{sel:R.m0+":"+R.s2,fx:sh.cells[R.s2],ranges:[XC.parseRange("B3:D8")]});
   shown.add(R.dfb);shown.add(R.dfw);step("<b>df between</b> = k − 1 = <code>=3-1</code> → 2 · <b>df within</b> = N − k = <code>=COUNT(B3:D8)-3</code> → 15",{sel:R.dfb+":"+R.dfw,fx:sh.cells[R.dfw],ranges:[XC.parseRange("B3:D8")]});
   st.push({cap:"<b>Data</b> tab → <b>Data Analysis</b>",draw:s=>ribbon(s)});st.push({cap:"Choose <b>Anova: Single Factor</b> → OK",draw:s=>list(s,"Anova: Single Factor")});
-  st.push({cap:"Input Range <b>$B$2:$D$8</b> (all groups + headings) · Grouped By <b>Columns</b> · ✔ <b>Labels in first row</b> · Alpha 0.05 · Output Range <b>$K$2</b>",draw:s=>dlgA(s,{v1:"$B$2:$D$8",out:"$K$2"})});
+  st.push({cap:"Input Range <b>$B$2:$D$8</b> (all groups + headings) · Grouped By <b>Columns</b> · ✔ <b>Labels in first row</b> · Alpha 0.05 · Output Range <b>$K$2</b> <span class='mute'>(or <b>New Worksheet Ply</b> → results on a new sheet tab)</span>",draw:s=>dlgA(s,{v1:"$B$2:$D$8",out:"$K$2"})});
   const rows=[0];for(let i=1;i<16;i++)rows.push(i);const WO={0:46,1:62,2:62,3:62,10:200,11:84,12:70,13:70,14:84,15:96,16:90},rb=+R.tpF.slice(1)-1;
   st.push({cap:"Read the <b>Between Groups</b> row: <b>F</b> = "+t.A.F.toFixed(3)+" · <b>P-value</b> = "+XC.show(t.A.p)+" · <b>F crit</b> = "+t.A.fc.toFixed(3),draw:s=>{frame(s,"Data");sheet(s,{sh,vals,cols:[0,1,2,3,"gap",10,11,12,13,14,15,16],rows,show:new Set(Object.keys(sh.cells)),W:WO});const i=rows.indexOf(rb);const y=84+19*(i+1);hot(s,34+46+62*3+18,y,200+84+70+70+84+96+90,19)}});
   [R.F,R.p,R.fc].forEach(r=>shown.add(r));step("Bring the results across: F <code>="+R.tpF+"</code> · p <code>"+sh.cells[R.p]+"</code> · F crit <code>"+sh.cells[R.fc]+"</code>",{sel:R.F+":"+R.fc,fx:sh.cells[R.p]});
@@ -2174,19 +2208,19 @@ const LVN=["LOW","MEDIUM","HIGH"],LVC=["#00e5ff","#ffa13d","#ff3d5a"];
 const PQ=[
  {lv:0,tp:"Type of error",sc:"A new drug truly has <b>no effect</b>. A trial finds <b>p = 0.02</b> and the researchers reject H₀.",ask:"What has happened?",o:["A Type I error – a false alarm","A Type II error – a missed effect","A correct decision","Nothing can be said"],
   h:["Is H₀ actually true here?","H₀ true + rejected = ?"],w:["Truth: no effect → H₀ is TRUE","Decision: reject H₀","Rejecting a true H₀ = <span class='eq'>Type I error</span>"]},
- {lv:0,tp:"α",sc:"One t-test is run at the 95% confidence level.",ask:"What is the maximum probability of a Type I error? (decimal)",f:[{l:"P(Type I)",a:.05,tol:.0005,u:"",p:1}],
-  h:["Confidence level = 1 − α.","0.95 = 1 − α → α = ?"],w:["α = 1 − 0.95","= <span class='eq'>0.05</span> (5%)"]},
+ {lv:0,tp:"Significance level",sc:"A test uses a <b>5% significance level</b>.",ask:"What is the maximum probability of a Type I error it allows? (decimal)",f:[{l:"Max P(Type I)",a:.05,tol:.0005,u:"",p:1}],
+  h:["The significance level is the limit you set on Type I errors.","5% as a decimal."],w:["A 5% significance level limits the max probability of a Type I error to 5%","= <span class='eq'>0.05</span>"]},
  {lv:0,tp:"df between",sc:"An ANOVA compares <b>4 groups</b>.",ask:"df between groups = ?",f:[{l:"df between",a:3,tol:0,u:""}],h:["df between = k − 1.","k = 4."],w:["df<sub>between</sub> = k − 1","= 4 − 1 = <span class='eq'>3</span>"]},
  {lv:0,tp:"df within",sc:"An ANOVA has <b>4 groups of 8</b> people each.",ask:"df within groups = ?",f:[{l:"df within",a:28,tol:0,u:""}],h:["df within = N − k. First find N.","N = 4 × 8 = 32."],w:["N = 32, k = 4","df<sub>within</sub> = 32 − 4 = <span class='eq'>28</span>"]},
  {lv:0,tp:"Mean square",sc:"SS between = <b>120</b>, df between = <b>3</b>.",ask:"MS between = ?",f:[{l:"MS between",a:40,tol:.01,u:""}],h:["MS = SS ÷ df.","120 ÷ 3."],w:["MS = SS ÷ df","= 120 ÷ 3 = <span class='eq'>40</span>"]},
- {lv:1,tp:"Error inflation",sc:"A researcher runs <b>4</b> separate t-tests, each at α = 0.05.",ask:"Probability of at least one Type I error? (decimal, 3 d.p.)",f:[{l:"P(≥1 Type I)",a:1-Math.pow(.95,4),tol:.002,u:"",p:1}],
-  h:["P(no error in one test) = 0.95. For 4 tests multiply: 0.95⁴.","Then 1 − 0.95⁴."],w:["Confidence = 0.95⁴ = 0.8145","P(≥1 Type I) = 1 − 0.8145 = <span class='eq'>0.185 (18.5%)</span>"]},
- {lv:1,tp:"Groups → tests",sc:"You want to compare <b>5 groups</b> using t-tests (α = 0.05 each).",ask:"How many t-tests, and what is the chance of at least one Type I error?",f:[{l:"Number of t-tests",a:10,tol:0,u:""},{l:"P(≥1 Type I)",a:1-Math.pow(.95,10),tol:.002,u:"",p:1}],
-  h:["Pairs = k(k − 1) ÷ 2.","5 × 4 ÷ 2 = 10 tests. Then 1 − 0.95¹⁰."],w:["Pairs = 5 × 4 ÷ 2 = <span class='eq'>10</span>","0.95¹⁰ = 0.5987","1 − 0.5987 = <span class='eq'>0.401 (40.1%)</span> – the lesson's “more than 40%” warning"]},
+ {lv:1,tp:"Cancer drug trial",sc:"H₀: the new cancer drug has <b>NO</b> significant effect. α = 0.05. The trial gives <b>p = 0.07</b>.",ask:"What is the decision, and which error could have occurred?",o:["Accept H₀ – a Type II error may have occurred","Reject H₀ – a Type I error may have occurred","Accept H₀ – a Type I error may have occurred","Reject H₀ – no error is possible"],
+  h:["Compare p with 0.05.","When you ACCEPT H₀, the only error you can make is missing a real effect."],w:["p = 0.07 &gt; 0.05 → <span class='eq'>accept H₀</span>: we conclude the drug does NOT work","If the drug actually works → <span class='eq'>Type II error</span>","Impact: patients lose the chance to be cured with the new drug"]},
+ {lv:1,tp:"t-tests or not?",sc:"You want to compare the mean BMI of <b>3 independent groups</b> using t-tests.",ask:"How many t-tests would you need?",f:[{l:"Number of t-tests",a:3,tol:0,u:""}],
+  h:["A t-test compares only 2 groups – pair every group with every other.","Group 1 vs 2, Group 2 vs 3, Group 1 vs 3."],w:["G1 vs G2 · G2 vs G3 · G1 vs G3 = <span class='eq'>3</span> t-tests","Each one carries a chance of a Type I error → use single-factor ANOVA instead"]},
  {lv:1,tp:"F ratio",sc:"MS between = <b>40</b> and MS within = <b>8</b>.",ask:"F = ?",f:[{l:"F",a:5,tol:.01,u:""}],h:["F = MS between ÷ MS within.","40 ÷ 8."],w:["F = 40 ÷ 8 = <span class='eq'>5</span>"]},
- {lv:1,tp:"F vs F crit",sc:"An ANOVA gives <b>F = 2.10</b>; F crit (α = 0.05) = <b>3.35</b>.",ask:"What is the decision?",o:["Do not reject H₀ – no significant difference","Reject H₀ – at least one mean differs","Reject H₀ – all means differ","Cannot decide without the means"],
-  h:["Is F bigger than F crit?","2.10 &lt; 3.35."],w:["F (2.10) &lt; F crit (3.35)","→ p &gt; 0.05 → <span class='eq'>do not reject H₀</span>"]},
- {lv:1,tp:"Power",sc:"A study design has <b>β = 0.20</b>.",ask:"What is its power? (decimal)",f:[{l:"Power",a:.8,tol:.001,u:"",p:1}],h:["Power = 1 − β.","1 − 0.20."],w:["Power = 1 − β = 1 − 0.20 = <span class='eq'>0.80 (80%)</span>","There's an 80% chance of detecting a real effect."]},
+ {lv:1,tp:"F vs F crit",sc:"An ANOVA gives <b>F = 2.10</b>; F crit (α = 0.05) = <b>3.35</b>.",ask:"What is the decision?",o:["Accept H₀ – no significant difference","Reject H₀ – at least one mean differs","Reject H₀ – all means differ","Cannot decide without the means"],
+  h:["Is F bigger than F crit?","2.10 &lt; 3.35."],w:["F (2.10) &lt; F crit (3.35)","→ p &gt; 0.05 → <span class='eq'>accept H₀</span>"]},
+ {lv:1,tp:"p-value",sc:"A study uses a 5% significance level and finds <b>p = 0.004</b>, so H₀ is rejected.",ask:"What is the highest probability that this rejection is a Type I error? (decimal)",f:[{l:"Highest P(Type I)",a:.004,tol:.00005,u:"",p:1}],h:["5% is only the maximum limit you set.","The p-value is the ACTUAL highest chance of a Type I error for this data."],w:["Significance level 5% = the maximum limit","p = <span class='eq'>0.004</span> = the actual highest chance of a Type I error (0.4%)"]},
  {lv:1,tp:"All three df",sc:"<b>3 groups of 10</b> people.",ask:"Find df between, df within and df total.",f:[{l:"df between",a:2,tol:0,u:""},{l:"df within",a:27,tol:0,u:""},{l:"df total",a:29,tol:0,u:""}],
   h:["k = 3, N = 30.","Between = k − 1 · Within = N − k · Total = N − 1."],w:["df<sub>between</sub> = 3 − 1 = <span class='eq'>2</span>","df<sub>within</sub> = 30 − 3 = <span class='eq'>27</span>","df<sub>total</sub> = 30 − 1 = <span class='eq'>29</span> (= 2 + 27 ✔)"]},
  {lv:2,tp:"Complete the table",sc:"3 groups, N = 30. SS between = <b>84</b>, SS within = <b>270</b>.",ask:"Find MS between, MS within and F.",f:[{l:"MS between",a:42,tol:.01,u:""},{l:"MS within",a:10,tol:.01,u:""},{l:"F",a:4.2,tol:.01,u:""}],
@@ -2195,26 +2229,26 @@ const PQ=[
   h:["SS between = Σ n × (group mean − grand mean)².","6(2.33)² + 6(3.33)² + 6(−5.67)²."],w:["6 × (44 − 41.67)² = 32.7","6 × (45 − 41.67)² = 66.7","6 × (36 − 41.67)² = 192.7","Sum = <span class='eq'>292</span> (matches Excel)"]},
  {lv:2,tp:"SS within by hand",sc:"Same study: group variances <b>24.4, 28.4, 23.6</b>, each n = 6.",ask:"SS within = ?",f:[{l:"SS within",a:382,tol:.5,u:""}],
   h:["Each group's SS = (n − 1) × variance.","5 × 24.4 + 5 × 28.4 + 5 × 23.6."],w:["5 × 24.4 = 122","5 × 28.4 = 142","5 × 23.6 = 118","Total = <span class='eq'>382</span> → MS<sub>within</sub> = 382 ÷ 15 = 25.47"]},
- {lv:2,tp:"Error budget",sc:"You want the overall confidence across all your t-tests to stay <b>at least 90%</b> (α = 0.05 each).",ask:"What is the maximum number of t-tests you can run?",f:[{l:"Max tests",a:2,tol:0,u:""}],
-  h:["Overall confidence = 0.95ⁿ. Try n = 1, 2, 3…","0.95² = 0.9025 · 0.95³ = 0.857."],w:["0.95¹ = 0.95 ✔","0.95² = 0.9025 ✔","0.95³ = 0.857 ✘ (&lt; 0.90)","Max = <span class='eq'>2</span> tests – with 3 groups you'd already need 3. Use ANOVA!"]},
- {lv:2,tp:"Interpret carefully",sc:"Stress case study: F = 0.92, p = 0.40. A student writes: “Stress is exactly the same in all age groups.”",ask:"What is the best statement?",o:["No significant difference was detected at α = 0.05 – but a Type II error is still possible","The student is right – p &gt; 0.05 proves the means are equal","Reject H₀ because F &lt; 1","A Type I error has been made"],
-  h:["Does ‘not rejecting H₀’ prove H₀ is true?","Which error is possible when you DON'T reject H₀?"],w:["p = 0.40 &gt; 0.05 → do not reject H₀","That means ‘no evidence of a difference’ – not proof of equality","If a real difference exists, we've made a <span class='eq'>Type II error</span>"]}];
+ {lv:2,tp:"Which error is worse?",sc:"Airport scanner. H₀: the bag contains <b>no</b> weapon.",ask:"Which error would be WORSE here?",o:["Type II – a real weapon gets through undetected","Type I – a safe bag is searched again","Type I – statisticians always treat it as worse","Neither – they cost the same"],
+  h:["Type I = false alarm (reject a true H₀). Type II = miss (accept a false H₀).","What does each mistake cost here?"],w:["Type I: a safe bag is flagged → an extra search","Type II: a real weapon is missed → lives at risk","Here <span class='eq'>Type II is worse</span> – either error can be worse depending on the context"]},
+ {lv:2,tp:"Interpret carefully",sc:"Stress case study: F = 0.92, p = 0.40. A student writes: “Stress is exactly the same in all age groups.”",ask:"What is the best statement?",o:["No significant difference was found at the 5% level – but a Type II error is still possible","The student is right – p &gt; 0.05 proves the means are equal","Reject H₀ because F &lt; 1","A Type I error has been made"],
+  h:["Does accepting H₀ prove there is no difference at all?","Which error is possible when you ACCEPT H₀?"],w:["p = 0.40 &gt; 0.05 → accept H₀","That means ‘no significant difference found’ – not proof the means are identical","If a real difference exists, we've made a <span class='eq'>Type II error</span>"]}];
 const Q=[
- {lv:0,q:"What is a Type I error?",o:["Rejecting H₀ when it is actually true","Accepting H₀ when it is actually false","Using the wrong t-test","Calculating the mean incorrectly"],g:"Type I = a false alarm.",w:"Type I = <b>rejecting a true H₀</b> – seeing a difference that isn't there. Probability ≤ α."},
- {lv:0,q:"What is a Type II error?",o:["Failing to reject H₀ when H₁ is actually true","Rejecting a true H₀","Setting α too high","Having unequal group sizes"],g:"Type II = a missed effect.",w:"Type II = <b>keeping a false H₀</b> – missing a real difference. Probability = β."},
- {lv:0,q:"What does one-way ANOVA compare?",o:["The means of 3 or more groups at once","The variances of 2 groups only","The medians of paired data","The correlation between two variables"],g:"ANOVA = Analysis of Variance … but what does it test?",w:"ANOVA tests whether the <b>means of three or more groups</b> differ, all in one test."},
- {lv:0,q:"What is H₀ for a one-way ANOVA with 3 groups?",o:["μ₁ = μ₂ = μ₃","μ₁ ≠ μ₂ ≠ μ₃","At least one mean differs","μ₁ &gt; μ₂ &gt; μ₃"],g:"H₀ is the ‘no difference’ statement.",w:"H₀: <b>all population means are equal</b>. H₁: at least one mean is different."},
+ {lv:0,q:"What is a Type I error?",o:["Rejecting H₀ when it is actually true","Accepting H₀ when it is actually false","Using the wrong t-test","Calculating the mean incorrectly"],g:"Type I = a false alarm.",w:"Type I = <b>rejecting a true H₀</b> – observing a difference when in truth there is none."},
+ {lv:0,q:"What is a Type II error?",o:["Accepting H₀ when the alternative hypothesis is actually true","Rejecting a true H₀","Setting the significance level too high","Having unequal group sizes"],g:"Type II = a missed effect.",w:"Type II = <b>accepting a false H₀</b> – failing to observe a difference when there is one."},
+ {lv:0,q:"What does single-factor ANOVA compare?",o:["The means of 3 or more independent groups","The variances of 2 groups only","The medians of paired data","The correlation between two variables"],g:"ANOVA = Analysis of Variance … but what does it test?",w:"Single-factor ANOVA tests whether the <b>means of three or more independent groups</b> differ, all in one test."},
+ {lv:0,q:"What is H₀ for a single-factor ANOVA with 3 groups?",o:["There is no significant difference among the 3 group means","At least one group mean is different","All 3 group means are different","Group 1 has the highest mean"],g:"H₀ is the ‘no difference’ statement.",w:"H₀: <b>no significant difference among the groups</b>. H₁: at least one group mean is different."},
  {lv:0,q:"How is the F statistic calculated?",o:["MS between ÷ MS within","MS within ÷ MS between","SS between − SS within","Mean ÷ SD"],g:"Signal on top, noise underneath.",w:"<b>F = MS<sub>between</sub> ÷ MS<sub>within</sub></b>. Large F → between-group variation dominates."},
- {lv:1,q:"Comparing 3 groups with three t-tests at α = 0.05: what is the chance of at least one Type I error?",o:["14.3%","5%","15%","85.7%"],g:"1 − (1 − α)ⁿ with n = 3.",w:"1 − 0.95³ = 1 − 0.857 = <b>0.143 = 14.3%</b>. (85.7% is the confidence level.)"},
+ {lv:1,q:"Cancer drug trial: p = 0.02 (α = 0.05), so H₀ (no effect) is rejected. In truth the drug does NOT work. What has happened?",o:["A Type I error – patients get false hope from a drug that doesn't work","A Type II error – patients miss out on a drug that works","A correct decision","No decision can be made"],g:"Is H₀ actually true? Was it rejected?",w:"H₀ was true but rejected → <b>Type I error</b>: we conclude the drug works when it doesn't – wasted resources and false hope."},
  {lv:1,q:"Therapy study: 3 groups × 6 subjects. What is df within?",o:["15","17","2","18"],g:"df within = N − k.",w:"N = 18, k = 3 → 18 − 3 = <b>15</b>. (17 = df total, 2 = df between.)"},
- {lv:1,q:"ANOVA: F = 5.73, F crit = 3.68, p = 0.014. Conclusion?",o:["Reject H₀ – at least one group mean differs","Do not reject H₀","Reject H₀ – every group differs from every other","Accept H₀ because F crit is smaller"],g:"Compare F with F crit, or p with 0.05.",w:"F &gt; F crit and p &lt; 0.05 → <b>reject H₀</b>: at least one mean differs."},
+ {lv:1,q:"ANOVA: F = 5.73, F crit = 3.68, p = 0.014. Conclusion?",o:["Reject H₀ – at least one group mean differs","Accept H₀","Reject H₀ – every group differs from every other","Accept H₀ because F crit is smaller"],g:"Compare F with F crit, or p with 0.05.",w:"F &gt; F crit and p &lt; 0.05 → <b>reject H₀</b>: at least one mean differs."},
  {lv:1,q:"In ANOVA, what is ‘between-groups’ variation partly caused by?",o:["The effect of the treatment / group","Individual differences we did not control","Measurement rounding","The sample size only"],g:"Between = how far the group MEANS are apart.",w:"Between-groups variation is partly the <b>treatment effect</b>. Within-groups variation is individual differences."},
- {lv:1,q:"Which is NOT an assumption of one-way ANOVA?",o:["Every group must have exactly the same sample size","Samples are independent and random","Data in each group are roughly normal","Groups have similar variances"],g:"Recall the 3 assumptions from Lesson 12.",w:"ANOVA assumes independence, normality and homogeneity of variance. <b>Equal group sizes are not required</b> (the diet task has n = 7, 9, 8)."},
- {lv:2,q:"Ten t-tests are run at α = 0.05. What is the probability of at least one Type I error?",o:["40.1%","50%","5%","59.9%"],g:"1 − 0.95¹⁰.",w:"0.95¹⁰ = 0.599 → 1 − 0.599 = <b>40.1%</b>. (59.9% is the confidence.)"},
- {lv:2,q:"A study rejects H₀ with p = 0.0003. What is the highest probability that this is a Type I error?",o:["0.0003","0.05","0.95","Impossible to say"],g:"Lesson 11: the benchmark vs the result.",w:"α (0.05) is just the benchmark. The p-value <b>0.0003</b> is the maximum chance of a Type I error for this result."},
+ {lv:1,q:"Which is NOT an assumption of single-factor ANOVA?",o:["Every group must have exactly the same sample size","Samples are independent random samples","Each group's distribution is roughly normal","Groups have similar standard deviations (homogeneity of variances)"],g:"Recall the 3 assumptions from Lesson 12.",w:"ANOVA assumes independence, normality and homogeneity of variances. <b>Equal group sizes are not required</b> (the diet task has n = 7, 9, 8)."},
+ {lv:2,q:"Why should the means of 3 or more groups NOT be compared with multiple t-tests?",o:["Every t-test carries a chance of a Type I error, so many t-tests greatly increase it","A t-test cannot handle more than 10 values","Multiple t-tests only increase the Type II error","ANOVA gives a different mean for each group"],g:"What risk comes with EVERY t-test you run?",w:"Each t-test has its own chance of a Type I error, and the number of pairs grows quickly → <b>multiple t-tests greatly increase the Type I error</b>. Use single-factor ANOVA."},
+ {lv:2,q:"Using a 5% significance level, a study rejects H₀ with p = 0.0003. What is the highest probability that this is a Type I error?",o:["0.0003","0.05","0.95","Impossible to say"],g:"The limit you set vs what the data gives.",w:"5% is the <b>maximum</b> limit we set. The p-value <b>0.0003 (0.03%)</b> is the actual highest chance of a Type I error for this data."},
  {lv:2,q:"An ANOVA on 4 diets gives p = 0.01. What can you conclude?",o:["At least one diet's mean differs – but ANOVA doesn't say which","All four diets differ from each other","The diet with the highest mean is significantly better than all others","There is a 1% chance the diets are equal"],g:"What exactly does ANOVA's H₁ say?",w:"ANOVA only tells you <b>a difference exists somewhere</b>. Finding which groups differ needs further (post-hoc) comparisons."},
  {lv:2,q:"SS between = 292 (df 2), SS within = 382 (df 15). What is F?",o:["5.73","0.76","146","25.47"],g:"Find each MS first, then divide.",w:"MS<sub>b</sub> = 292 ÷ 2 = 146 · MS<sub>w</sub> = 382 ÷ 15 = 25.47 · F = 146 ÷ 25.47 = <b>5.73</b>."},
- {lv:2,q:"You lower α from 0.05 to 0.01 without changing n. What happens to the error risks?",o:["Type I risk falls, Type II risk rises","Both risks fall","Type I risk rises, Type II falls","Neither changes"],g:"Think about the α · β lab: move the cut-off.",w:"A stricter cut-off means fewer false alarms (Type I ↓) but more missed effects (<b>Type II ↑</b>, power ↓). Larger n reduces both."}];
+ {lv:2,q:"Which statement about Type I and Type II errors is correct?",o:["Statisticians usually treat a Type I error as worse, but either can be worse depending on the context","A Type II error is always worse","Type I errors can only happen in ANOVA","A 5% significance level removes both errors completely"],g:"Lesson 11: ‘Is a Type I or Type II error worse?’",w:"A Type I error goes against the null hypothesis and can lead to treatments or policies that don't work. But <b>in practice either error could be worse depending on the research context</b>."}];
 const PS=PQ.map(()=>({st:"",tries:0,hint:0,first:false,vals:[],pick:null}));let pq=0;addComps(PQ.length);
 const nav=$("#pqNav");PQ.forEach((q,i)=>{const b=el("button","pqd","<span>"+(i+1)+"</span>");b.style.setProperty("--lc",LVC[q.lv]);b.title=LVN[q.lv]+" · "+q.tp;b.onclick=()=>show(i);nav.appendChild(b)});
 const parse=(v,f)=>{v=String(v).trim().replace(/,/g,"");if(!v)return NaN;if(/^[\d.]+\s*\/\s*[\d.]+$/.test(v)){const [a,b]=v.split("/").map(Number);return a/b}let n=parseFloat(v.replace("%",""));if(f.p&&(/%/.test(v)||n>1))n/=100;return n};
