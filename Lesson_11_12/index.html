@@ -894,6 +894,20 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .phf em{display:inline-grid;place-items:center;width:22px;height:22px;border:1px solid var(--o);color:var(--o);font-style:normal;font-size:.65rem;margin-bottom:6px}.phf b{display:block;font-size:.6rem;letter-spacing:2px;color:#fff;margin-bottom:6px}.phf span{font-family:system-ui;font-size:.74rem;color:var(--mute)}
 @media(max-width:760px){.phf{grid-template-columns:1fr 1fr}.phf>div::after{display:none}}
 .ph-t{margin-top:8px}
+
+.phidea{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px;align-items:center}.phidea p{font-family:system-ui;letter-spacing:0;font-size:.95rem;line-height:1.6;margin:0}
+@media(max-width:760px){.phidea{grid-template-columns:1fr}}
+.phx{font-family:system-ui;letter-spacing:0;font-size:.86rem;line-height:1.55}
+.wxs,.wsteps{display:flex;flex-direction:column;gap:8px}
+.wst,.wsteps>div{display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--o);background:rgba(8,18,32,.7);padding:8px 12px;animation:wsin .35s ease}
+.wsteps>div{flex-direction:column;gap:2px}
+.wst em,.wsteps em{display:inline-grid;place-items:center;min-width:24px;height:24px;border:1px solid var(--o);color:var(--o);font-style:normal;font-size:.7rem}
+.wst b,.wsteps b{font-size:.62rem;letter-spacing:2px;color:#fff;display:block;margin-bottom:3px}.wst span,.wsteps span{font-family:system-ui;letter-spacing:0;font-size:.86rem;line-height:1.6;color:#d8e6ee}
+.wst span b,.wsteps span b{display:inline;font-size:inherit;letter-spacing:0;font-family:inherit;margin:0}
+@keyframes wsin{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+.qtab td,.qtab th{text-align:center}.qtab td.qh{color:var(--o);font-weight:800;box-shadow:inset 0 0 0 1px var(--o)}
+.wst span b.hl,.wsteps span b.hl{color:var(--o)}.wst span b.hb,.wsteps span b.hb{color:var(--b)}
+.card>.kick{font-family:Orbitron,sans-serif;color:var(--o);font-size:.62rem;letter-spacing:3px;font-weight:700}
 </style>
 </head>
 <body>
@@ -1030,13 +1044,16 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
     <tr><td><code>=F.DIST.RT(F, df1, df2)</code></td><td>p-value (right tail)</td></tr>
     <tr><td><code>=F.INV.RT(0.05, df1, df2)</code></td><td>F crit at α = 0.05</td></tr></tbody></table>
     <p class="mute" style="margin-top:8px;font-family:system-ui;letter-spacing:0">df1 = between groups (k − 1) · df2 = within groups (N − k)</p></div>
-  <div class="sec"><em>03</em> POST-HOC · WHICH GROUPS DIFFER?</div>
-  <div class="card"><p class="mute" style="font-family:system-ui;letter-spacing:0">ANOVA says <b>at least one</b> group differs – not which. Only if you <b class="hl">reject H₀</b>, run a post-hoc test: a t-test for every pair, with a stricter <b class="hb">Bonferroni α</b> so the Type I error stays at 5% overall.</p>
-    <div class="phf"><div><em>1</em><b>REJECT H₀?</b><span>Accept H₀ → stop here</span></div><div><em>2</em><b>COUNT PAIRS</b><span><code>=k*(k-1)/2</code></span></div><div><em>3</em><b>BONFERRONI α</b><span><code>=0.05/pairs</code></span></div><div><em>4</em><b>t-TEST EACH PAIR</b><span><code>=T.TEST(A, B, 2, 2)</code></span></div><div><em>5</em><b>COMPARE</b><span>p &lt; Bonferroni α → significant</span></div></div></div>
-  <div class="card o"><p class="mute" style="font-family:system-ui;letter-spacing:0">Therapy &amp; mobility (F = 5.73, p = 0.014 → reject H₀). Switch the cut-off and watch the verdicts.</p>
-    <div class="seg" id="phSeg" style="margin:10px 0"><button data-c="raw">COMPARE WITH 0.05</button><button data-c="bon" class="on">COMPARE WITH BONFERRONI 0.0167</button></div>
-    <svg class="viz" id="phG" viewBox="0 0 900 200"></svg><div class="anatx" id="phX"></div>
-    <p class="mute" style="margin-top:8px;font-family:system-ui;letter-spacing:0;font-size:.78rem">ToolPak alternative: <b>t-Test: Two-Sample Assuming Equal Variances</b> for each pair → read <b>P(T&lt;=t) two-tail</b>. (Tukey's HSD is another post-hoc test, but Excel has no built-in function for it.)</p></div>
+  <div class="sec"><em>03</em> POST-HOC · TUKEY HSD · WHICH GROUPS DIFFER?</div>
+  <div class="grid g2"><div class="tile2 o wv"><b>ANOVA SAYS</b><span>“At least one group is different.” <b>But which one?</b></span></div><div class="tile2 wv"><b>TUKEY HSD ANSWERS</b><span>Which <b>pairs</b> of groups are really different. Only run it if you <b class="hl">rejected H₀</b>.</span></div></div>
+  <div class="card"><div class="phidea"><svg viewBox="0 0 420 120" class="viz"><line x1="30" y1="40" x2="390" y2="40" stroke="rgba(0,229,255,.3)"/><circle cx="90" cy="40" r="9" fill="#ff6a00"/><circle cx="300" cy="40" r="9" fill="#00e5ff"/><line x1="90" y1="70" x2="300" y2="70" stroke="#ff6a00" stroke-width="5"/><text x="195" y="92" text-anchor="middle" fill="#ff6a00" font-size="13" font-weight="800">GAP between two means</text><line x1="90" y1="104" x2="230" y2="104" stroke="#fff" stroke-width="5" stroke-dasharray="6 4"/><text x="240" y="108" fill="#fff" font-size="13" font-weight="800">HSD stick</text></svg>
+    <p><b class="hl">HSD</b> = “Honestly Significant Difference” = the <b>smallest gap</b> between two group means that counts as real.<br><b>Gap longer than the HSD stick → the two groups are different.</b></p></div>
+    <div class="phf"><div><em>1</em><b>REJECT H₀?</b><span>No → stop.<br>Yes → go on</span></div><div><em>2</em><b>GET q</b><span>From the Tukey table (given)</span></div><div><em>3</em><b>HSD</b><span>q × √(MS within ÷ n)</span></div><div><em>4</em><b>GAP</b><span>|mean A − mean B| for each pair</span></div><div><em>5</em><b>COMPARE</b><span>Gap &gt; HSD → different</span></div></div></div>
+  <div class="card o"><div class="kick" style="margin-bottom:6px">WORKED EXAMPLE 1 · THERAPY &amp; MOBILITY (LESSON PRACTICE)</div><div class="wx" id="wx1"></div></div>
+  <div class="card"><div class="kick" style="margin-bottom:6px">WORKED EXAMPLE 2 · PAIN SCORE AFTER 3 PHYSIO PROGRAMMES</div><div class="wx" id="wx2"></div></div>
+  <div class="card"><div class="kick" style="margin-bottom:6px">WHERE DOES q COME FROM?</div><p class="mute" style="font-family:system-ui;letter-spacing:0">Excel has no function for q, so it is <b>always given</b> in our sheets. It comes from a printed Tukey table (α = 0.05): pick the column for <b>k groups</b> and the row for <b>df within</b>.</p>
+    <table class="cmp qtab"><thead><tr><th>df within ↓ · k →</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td>10</td><td>3.88</td><td>4.33</td><td>4.65</td></tr><tr><td>12</td><td class="qh">3.77</td><td>4.20</td><td>4.51</td></tr><tr><td>15</td><td class="qh">3.67</td><td>4.08</td><td>4.37</td></tr><tr><td>20</td><td>3.58</td><td>3.96</td><td>4.23</td></tr><tr><td>30</td><td>3.49</td><td>3.85</td><td>4.10</td></tr></tbody></table>
+    <p class="mute" style="margin-top:8px;font-family:system-ui;letter-spacing:0;font-size:.78rem">Highlighted: Example 1 (k = 3, df = 15 → 3.67) and Example 2 (k = 3, df = 12 → 3.77). Bigger k → bigger q → a longer HSD stick.</p></div>
   <div class="pager"><button class="btn ghost" data-go="5">◂ ANOVA Steps</button><button class="btn" data-go="7">ANOVA Practice ▸</button></div>
 </section>
 
@@ -1748,7 +1765,7 @@ window.XG={create};
 (function(){
 "use strict";
 const XC=window.XC,TS=window.TS,D=window.DATA;
-const DEC=["Reject H0","Accept H0"],SIG=["Significant","Not significant"];
+const DEC=["Reject H0","Accept H0"],SIG=["Different","Not different"],QT={A1:3.67,A3:3.86,A5:3.56};
 const T=[
  {id:"A1",guided:1,src:"Lesson Practice",icon:"walk",title:"Therapy & Mobility",unit:"score",idl:"Subject",
   story:"18 elderly patients were randomly put into <b>3 therapy groups</b>. Mobility score after 8 weeks (higher = better). Does mobility <b>differ</b> between the groups?",
@@ -1767,7 +1784,8 @@ const T=[
   lab:["Low-carb","Mediterranean","Low-fat"],h1:"At least one diet's mean weight loss is different"}];
 T.forEach(t=>{t.g=D[t.id].g;t.k=t.g.length;t.ns=t.g.map(a=>a.length);t.N=t.ns.reduce((a,b)=>a+b,0);t.maxN=Math.max(...t.ns);t.A=TS.anova(t.g);t.alpha=.05;t.rej=t.A.p<.05;t.dec=t.rej?DEC[0]:DEC[1];
   t.rng=t.g.map((_,i)=>XC.colL(1+i)+"3:"+XC.colL(1+i)+(t.ns[i]+2));t.all="B3:"+XC.colL(t.k)+(t.maxN+2);
-  t.np=t.k*(t.k-1)/2;t.bon=.05/t.np;t.pairs=[];for(let i=0;i<t.k;i++)for(let j=i+1;j<t.k;j++){const r=TS.pooledT(t.g[i],t.g[j]);t.pairs.push({i,j,p:r.p2,p1:r.p1,pw:TS.welchT(t.g[i],t.g[j]).p2,d:t.A.sum[i].m-t.A.sum[j].m,sig:r.p2<t.bon,raw:r.p2<.05})}});
+  t.eqn=t.ns.every(n=>n===t.ns[0]);t.q=QT[t.id]||null;t.pairs=[];if(t.q)for(let i=0;i<t.k;i++)for(let j=i+1;j<t.k;j++){const d=Math.abs(t.A.sum[i].m-t.A.sum[j].m),hsd=t.q*Math.sqrt(t.A.msw/2*(1/t.ns[i]+1/t.ns[j]));t.pairs.push({i,j,d,hsd,sig:d>hsd})}
+  t.hsd=t.eqn&&t.q?t.q*Math.sqrt(t.A.msw/t.ns[0]):null;});
 
 /* layout: data A..E · labels G · answers H · hints I · ToolPak K..Q */
 const TPC=10,TPR=1;/* ToolPak output at K2 */
@@ -1778,15 +1796,19 @@ function layout(t){const L=[];const it=(k,label,f,kind,hint,extra)=>L.push(Objec
   it("F","F = MS between ÷ MS within",null,"num","ToolPak → F",{exp:t.A.F});it("p","P-value",null,"num","=F.DIST.RT(F, df1, df2)",{exp:t.A.p});it("fc","F crit",null,"num","=F.INV.RT(α, df1, df2)",{exp:t.A.fc});
   it("dec","Decision",null,"dec","pick ▾");
   L.forEach((x,i)=>x.ref="H"+(r0+i));const m={};L.forEach(x=>m[x.k]=x.ref);
-  const last=r0+L.length-1;t.phHead=last+2;
-  if(t.rej){let r=last+3;const P=(k,label,f,hint,extra)=>{const x=Object.assign({k,label,f,kind:"num",hint,ref:"H"+r,ph:1},extra||{});L.push(x);m[k]=x.ref;r++;return x};
-    P("np","No. of pairs to compare","="+t.k+"*("+t.k+"-1)/2","=k*(k-1)/2",{exp:t.np});
-    P("bon","Bonferroni α = α ÷ no. of pairs","=H2/"+m.np,"=H2/"+m.np,{exp:t.bon});
-    t.pairs.forEach((q,n)=>{const ra=t.rng[q.i],rb=t.rng[q.j];const x=P("pp"+n,"p · "+t.lab[q.i]+" vs "+t.lab[q.j],"=T.TEST("+ra+","+rb+",2,2)",t.guided?"=T.TEST("+ra+","+rb+",2,2)":"=T.TEST(arr1, arr2, 2, 2)",{exp:q.p,need:1,pair:n});
-      L.push({k:"sg"+n,label:"Significant? · "+t.lab[q.i]+" vs "+t.lab[q.j],kind:"sig",ref:"J"+x.ref.slice(1),f:'=IF('+x.ref+'<'+m.bon+',"Significant","Not significant")',ph:1,pair:n,pref:x.ref});m["sg"+n]=L[L.length-1].ref});
-    t.phEnd=r-1}else t.phEnd=t.phHead;
   const tpB=TPR+4+t.k+2+2;/* row index of Between Groups */const rowB=tpB+1;
   m.tpF=XC.colL(TPC+4)+rowB;m.tpP=XC.colL(TPC+5)+rowB;m.tpFc=XC.colL(TPC+6)+rowB;m.tpMSb=XC.colL(TPC+3)+rowB;m.tpMSw=XC.colL(TPC+3)+(rowB+1);
+  const last=r0+L.length-1;t.phHead=last+2;
+  if(t.rej){let r=last+3;const P=(k,label,f,hint,extra)=>{const x=Object.assign({k,label,f,kind:"num",hint,ref:"H"+r,ph:1},extra||{});L.push(x);m[k]=x.ref;r++;return x};
+    t.qRef="H"+r;r++;/* given q */
+    P("msw","MS within (ToolPak · Within Groups row)","="+m.tpMSw,"="+m.tpMSw+"  (ToolPak cell)",{exp:t.A.msw});
+    if(t.eqn){P("n","n = number of values in EACH group","=COUNT("+t.rng[0]+")","=COUNT("+t.rng[0]+")",{exp:t.ns[0]});
+      P("hsd","HSD = q × √(MS within ÷ n)","="+t.qRef+"*SQRT("+m.msw+"/"+m.n+")","="+t.qRef+"*SQRT("+m.msw+"/"+m.n+")",{exp:t.hsd})}
+    t.pairs.forEach((q,n)=>{const A=t.lab[q.i],B=t.lab[q.j];let hr=m.hsd;
+      if(!t.eqn){const hx=P("h"+n,"HSD · "+A+" vs "+B,"="+t.qRef+"*SQRT("+m.msw+"/2*(1/COUNT("+t.rng[q.i]+")+1/COUNT("+t.rng[q.j]+")))","=q*SQRT(MSw/2*(1/nA+1/nB))",{exp:q.hsd});hr=hx.ref}
+      const x=P("gp"+n,"Gap · "+A+" vs "+B,"=ABS("+m["m"+q.i]+"-"+m["m"+q.j]+")","=ABS("+m["m"+q.i]+"-"+m["m"+q.j]+")",{exp:q.d,pair:n});
+      L.push({k:"sg"+n,label:"Different? · "+A+" vs "+B,kind:"sig",ref:"J"+x.ref.slice(1),f:'=IF('+x.ref+'>'+hr+',"Different","Not different")',ph:1,pair:n,pref:x.ref,href:hr});m["sg"+n]=L[L.length-1].ref});
+    t.phEnd=r-1}else t.phEnd=t.phHead;
   const by=k=>L.find(x=>x.k===k);by("dfb").f="="+t.k+"-1";by("dfw").f="=COUNT("+t.all+")-"+t.k;by("F").f="="+m.tpF;by("p").f="=F.DIST.RT("+m.F+","+m.dfb+","+m.dfw+")";by("fc").f="=F.INV.RT(H2,"+m.dfb+","+m.dfw+")";
   by("dec").f='=IF('+m.p+'<H2,"Reject H0","Accept H0")';
   if(t.guided){by("p").hint="=F.DIST.RT("+m.F+","+m.dfb+","+m.dfw+")";by("fc").hint="=F.INV.RT(H2,"+m.dfb+","+m.dfw+")"}
@@ -1798,8 +1820,9 @@ function buildSheet(t,mode){const cells={},style={},val={};
   t.lab.forEach((l,i)=>{const c=XC.colL(1+i);cells[c+"2"]=l;style[c+"2"]="hdr";t.g[i].forEach((v,r)=>cells[c+(r+3)]=String(v))});
   for(let r=0;r<t.maxN;r++)cells["A"+(r+3)]=String(r+1);
   cells.G1="YOUR ANSWERS ▸ fill the orange cells";style.G1="sub";cells.G2="α (significance level)";style.G2="lab";cells.H2="0.05";style.H2="giv";
-  t.L.forEach(x=>{if(x.kind==="sig"){style[x.ref]="ans";val[x.ref]=SIG;return}const r=x.ref.slice(1);cells["G"+r]=x.label;style["G"+r]="lab";style[x.ref]="ans";if(x.kind==="dec")val[x.ref]=DEC;if(t.guided&&x.hint){cells["I"+r]="'"+x.hint;style["I"+r]="hint"}});
-  if(t.rej){cells["G"+t.phHead]="POST-HOC ▸ which groups differ? (Bonferroni)";style["G"+t.phHead]="sub";cells["J"+t.phHead]="Significant? ▾";style["J"+t.phHead]="lab"}
+  t.L.forEach(x=>{if(x.kind==="sig"){style[x.ref]="ans";val[x.ref]=SIG;return}const r=x.ref.slice(1);cells["G"+r]=x.label;style["G"+r]="lab";style[x.ref]="ans";if(x.kind==="dec")val[x.ref]=DEC;if((t.guided||x.ph)&&x.hint){cells["I"+r]="'"+x.hint;style["I"+r]="hint"}});
+  if(t.rej){cells["G"+t.phHead]="POST-HOC ▸ TUKEY HSD · which groups differ?";style["G"+t.phHead]="sub";cells["J"+t.phHead]="Different? ▾";style["J"+t.phHead]="lab";
+    const qr=t.qRef.slice(1);cells["G"+qr]="q from the Tukey table (k = "+t.k+", df within = "+t.A.dfw+")";style["G"+qr]="lab";cells[t.qRef]=String(t.q);style[t.qRef]="giv";cells["I"+qr]="given ✔";style["I"+qr]="hint";}
   else{cells["G"+t.phHead]="POST-HOC ▸ not needed – H0 accepted, there is no difference to locate";style["G"+t.phHead]="sub"}
   cells.K1="ToolPak ▸ Data Analysis → Anova: Single Factor → Output Range K2";style.K1="sub";
   if(mode==="sol"){t.L.forEach(x=>cells[x.ref]=x.f);toolpak(t).forEach((row,i)=>row.forEach((v,j)=>{if(v!==""&&v!=null)cells[XC.colL(TPC+j)+(TPR+1+i)]=typeof v==="number"?String(v):v}))}
@@ -1817,11 +1840,11 @@ function check(t,getC,tp){const A=t.A,out=[];const add=(it,st,msg,v,f)=>out.push
   for(const it of t.L){const c=getC(it.ref)||{},v=c.v,f=c.f||null;
     if(v==null||v===""){add(it,"todo","",v,f);continue}
     if(XC.isE(v)){add(it,"bad","Excel shows "+v.e+"."+(v.e==="#NAME?"?" A function name is misspelt.":v.e==="#NUM!"?" Check the df values (they must be ≥ 1).":v.e==="#DIV/0!"?" A range is empty.":""),v,f);continue}
-    if(it.kind==="sig"){const q=t.pairs[it.pair],s2=/not|no\b|n't/i.test(String(v))?"no":/sig|yes|differ/i.test(String(v))?"yes":"?",want=q.sig?"yes":"no";const sp=(getC(it.pref)||{}).v,sb=(getC(t.R.bon)||{}).v;
-      if(s2===want)add(it,"ok","",v,f);else if(s2==="?")add(it,"bad","Pick <b>Significant</b> or <b>Not significant</b>.",v,f);
-      else if(typeof sp==="number"&&near(sp,q.p)==null)add(it,"bad","Fix this pair's p-value first.",v,f);
-      else if(q.raw&&!q.sig&&s2==="yes")add(it,"bad","p = "+fmtN(q.p)+" is below 0.05 – but NOT below the Bonferroni α ("+fmtN(t.bon)+"). Compare with the Bonferroni α.",v,f);
-      else add(it,"bad","Compare this pair's p with the Bonferroni α = "+fmtN(t.bon)+": p "+(q.sig?"&lt;":"&gt;")+" "+fmtN(t.bon)+" → "+(q.sig?"significant":"not significant")+".",v,f);continue}
+    if(it.kind==="sig"){const q=t.pairs[it.pair],s2=/not|no\b|n't/i.test(String(v))?"no":/differ|sig|yes/i.test(String(v))?"yes":"?",want=q.sig?"yes":"no";const gv=(getC(it.pref)||{}).v,hv=(getC(it.href)||{}).v;
+      if(s2===want)add(it,"ok","",v,f);else if(s2==="?")add(it,"bad","Pick <b>Different</b> or <b>Not different</b>.",v,f);
+      else if(typeof gv==="number"&&near(gv,q.d)==null)add(it,"bad","Fix this pair's gap first.",v,f);
+      else if(typeof hv==="number"&&near(hv,q.hsd)==null)add(it,"bad","Fix the HSD first.",v,f);
+      else add(it,"bad","Compare the gap with HSD: "+fmtN(+q.d.toFixed(4))+(q.sig?" &gt; ":" &lt; ")+fmtN(+q.hsd.toFixed(4))+" → "+(q.sig?"<b>Different</b>":"<b>Not different</b>")+".",v,f);continue}
     if(it.kind==="dec"){const s=parseDec(v),want=t.rej?"rej":"keep";const sp=(getC(t.R.p)||{}).v;
       if(s===want)add(it,"ok","",v,f);else if(s==="?")add(it,"bad","Write <b>Reject H0</b> or <b>Accept H0</b>.",v,f);
       else add(it,"bad",typeof sp==="number"&&near(sp,A.p)==null&&((sp<.05)===(s==="rej"))?"Consistent with YOUR p-value – but your p-value isn't right yet. Fix p first.":"Compare p with α = 0.05 (or F with F crit): p "+(t.rej?"&lt;":"&gt;")+" 0.05 → "+(t.rej?"reject":"accept")+" H₀.",v,f);continue}
@@ -1841,9 +1864,11 @@ function check(t,getC,tp){const A=t.A,out=[];const add=(it,st,msg,v,f)=>out.push
       else if(near(nv,1-A.p))why="That's the LEFT tail. ANOVA uses the right tail: <code>=F.DIST.RT(F, df1, df2)</code> (or 1 − F.DIST(…, TRUE)).";else if(near(nv,.05))why="p = 0.05 is just α – use the F value from your data.";
       else if(near(nv,TS.fRT(A.F,A.dfw,A.dfb)))why="Check the df order: df1 = between (k − 1), df2 = within (N − k).";else why="p-value: <code>=F.DIST.RT(F, df between, df within)</code> or read it from the ToolPak."}
     if(!why&&it.k==="fc"){why=near(nv,TS.fINV(.05,A.dfb,A.dfw))?"That's the LOWER cut-off. Use <code>=F.INV.RT(0.05, df1, df2)</code> (right tail).":near(nv,TS.fINV(.95,A.dfw,A.dfb))?"Check the df order: between first, within second.":near(nv,TS.fINV(.975,A.dfb,A.dfw))?"ANOVA's F test is one-tailed (right tail) – use α = 0.05, not 0.025.":"F crit: <code>=F.INV.RT(0.05, df between, df within)</code>."}
-    if(!why&&it.k==="np")why=nv===t.k?"That's the number of GROUPS. Count the PAIRS: k(k − 1) ÷ 2.":nv===t.k*(t.k-1)?"Each pair is counted twice – divide by 2.":"Pairs = k(k − 1) ÷ 2.";
-    if(!why&&it.k==="bon")why=near(nv,.05*t.np)?"Divide α by the number of pairs – don't multiply.":near(nv,.05/t.k)?"Divide by the number of PAIRS ("+t.np+"), not groups.":"Bonferroni α = α ÷ number of pairs = 0.05 ÷ "+t.np+".";
-    if(!why&&/^pp/.test(it.k)){const q=t.pairs[it.pair];why=near(nv,q.p1)?"That's one-tailed. Use <b>2</b> tails: <code>=T.TEST(arr1, arr2, 2, 2)</code>.":near(nv,q.pw)&&!near(nv,q.p)?"That's type 3 (unequal variances). ANOVA assumes equal variances → type <b>2</b>.":"<code>=T.TEST(group A, group B, 2, 2)</code> – 2 tails, type 2 (equal variances). Check both ranges."}
+    if(!why&&it.k==="msw")why=near(nv,A.msb)?"That's MS <b>between</b>. Use the <b>Within Groups</b> row.":near(nv,A.ssw)?"That's SS within. Use the <b>MS</b> column (SS ÷ df).":"Read MS from the <b>Within Groups</b> row of the ToolPak output.";
+    if(!why&&it.k==="n")why=nv===t.N?"That's ALL the values (N). n = values in ONE group.":"n = how many values in each group.";
+    if(!why&&it.k==="hsd")why=near(nv,t.q*A.msw/t.ns[0])?"Don't forget the square root: <code>SQRT(MS within / n)</code>.":near(nv,t.q*Math.sqrt(A.msw))?"Divide MS within by n inside the square root.":near(nv,t.q*Math.sqrt(A.msw/t.N))?"Use n of ONE group, not N.":near(nv,t.q*Math.sqrt(A.msb/t.ns[0]))?"Use MS <b>within</b>, not MS between.":"HSD = q × √(MS within ÷ n).";
+    if(!why&&/^h\d/.test(it.k))why="HSD for this pair = q × √(MS within ÷ 2 × (1/n<sub>A</sub> + 1/n<sub>B</sub>)).";
+    if(!why&&/^gp/.test(it.k)){const q=t.pairs[it.pair];why=near(nv,-q.d)||near(-nv,q.d)?"Gaps are never negative – wrap it in <code>ABS( )</code>.":"Gap = |mean A − mean B| using the two means above.";}
     if(!why)why=/^m\d/.test(it.k)?"Use <code>=AVERAGE(range)</code> on the whole column.":"Use <code>=STDEV(range)</code>.";add(it,"bad",why,nv,f)}
   if(tp){const it={k:"tp",ref:"ToolPak",label:"Analysis ToolPak · Anova: Single Factor"};const g=tp[0];
     if(!g)out.push(Object.assign(it,{st:"todo",msg:"Data → Data Analysis → <b>Anova: Single Factor</b> (Output Range K2 or New Worksheet Ply)."}));
@@ -2070,14 +2095,24 @@ $("#assm").innerHTML=[["INDEPENDENCE","The samples are independent random sample
       let key=td.dataset.x;if(!X[key]){if(ri>3&&ri<4+t.k)key=hdr[ci];else if(ri>t.k+7)key=hdr2[ci]||td.parentNode.children[0].textContent}if(ci===0&&ri>t.k+7)key=td.textContent;
       $("#anatx").innerHTML=X[key]?"<b class='hl'>"+key+"</b> · "+X[key]:"Tap a labelled row or a value."});$("#anatx").innerHTML="Read <b class='hl'>F</b>, <b class='hl'>P-value</b> and <b class='hl'>F crit</b> on the <b>Between Groups</b> row.";addComps(0)})();
 
-/* ---------- POST-HOC DEMO ---------- */
-(function(){const t=window.TK.TASKS[0];let mode="bon";const draw=()=>{$$("#phSeg button").forEach(b=>b.classList.toggle("on",b.dataset.c===mode));const s=$("#phG");s.innerHTML="";const cut=mode==="bon"?t.bon:.05;
-  const LX=v=>300+560*Math.max(0,Math.min(1,(Math.log10(v)+3)/3));[.001,.01,.1,1].forEach(v=>{sv("line",{x1:LX(v),y1:20,x2:LX(v),y2:176,stroke:"rgba(0,229,255,.08)"},s);sv("text",{x:LX(v),y:194,"text-anchor":"middle",fill:"#7fa3b5","font-size":11},s).textContent=v});
-  sv("rect",{x:LX(.001),y:20,width:LX(cut)-LX(.001),height:156,fill:O,opacity:.1},s);sv("line",{x1:LX(cut),y1:14,x2:LX(cut),y2:176,stroke:O,"stroke-width":2.5,"stroke-dasharray":"6 4"},s);sv("text",{x:LX(cut)-6,y:14,"text-anchor":"end",fill:O,"font-size":11,"font-weight":800},s).textContent=(mode==="bon"?"BONFERRONI ":"")+(+cut.toFixed(4))+" · SIGNIFICANT ◂";
-  t.pairs.forEach((q,n)=>{const y=46+n*48,sg=q.p<cut,c=sg?O:B;sv("text",{x:10,y:y+4,fill:"#fff","font-size":12,"font-weight":700},s).textContent=t.lab[q.i]+" vs "+t.lab[q.j];sv("text",{x:10,y:y+20,fill:"#7fa3b5","font-size":10},s).textContent="means "+t.A.sum[q.i].m+" vs "+t.A.sum[q.j].m;
-    sv("line",{x1:LX(1),y1:y,x2:LX(q.p),y2:y,stroke:c,"stroke-width":3,opacity:.55},s);sv("circle",{cx:LX(q.p),cy:y,r:7,fill:c,style:"filter:drop-shadow(0 0 6px "+c+")"},s);sv("text",{x:10,y:y+34,fill:c,"font-size":11,"font-weight":800},s).textContent="p = "+fp(q.p)+(sg?" · SIGNIFICANT":" · not significant")});
-  $("#phX").innerHTML=mode==="raw"?"With 0.05, <b class='hl'>two</b> pairs look significant – but 3 t-tests at 0.05 each inflate the Type I error (Lesson 11). <b>Switch to Bonferroni.</b>":"Bonferroni α = 0.05 ÷ 3 = <b>0.0167</b>. Only <b class='hl'>PT + support group vs Control</b> differs significantly. PT vs Control (p = 0.018) no longer counts."};
-  $$("#phSeg button").forEach(b=>b.onclick=()=>{mode=b.dataset.c;draw()});draw()})();
+/* ---------- TUKEY WORKED EXAMPLES ---------- */
+function tukeyWX(box,ex){const k=ex.g.length,A=TS.anova(ex.g),n=ex.g[0].length,hsd=ex.q*Math.sqrt(A.msw/n),r3=v=>+v.toFixed(3),P=[];for(let i=0;i<k;i++)for(let j=i+1;j<k;j++){const d=Math.abs(A.sum[i].m-A.sum[j].m);P.push({i,j,d,sig:d>hsd})}
+  const S=[["ANOVA first","F = "+A.F.toFixed(2)+", p = "+fp(A.p)+" &lt; 0.05 → <b class='hl'>reject H₀</b>. At least one group differs → run Tukey."],
+    ["Get q","k = "+k+" groups, df within = "+A.dfw+" → Tukey table → <b class='hl'>q = "+ex.q+"</b>"],
+    ["MS within &amp; n","MS within = <b>"+r3(A.msw)+"</b> (ToolPak, Within Groups row) · n = <b>"+n+"</b> per group"],
+    ["HSD","HSD = q × √(MS within ÷ n) = "+ex.q+" × √("+r3(A.msw)+" ÷ "+n+") = "+ex.q+" × "+r3(Math.sqrt(A.msw/n))+" = <b class='hl'>"+r3(hsd)+"</b>"],
+    ["Gaps","Means: "+ex.lab.map((l,i)=>l+" "+r3(A.sum[i].m)).join(" · ")+"<br>"+P.map(q=>ex.lab[q.i]+" vs "+ex.lab[q.j]+": |"+r3(A.sum[q.i].m)+" − "+r3(A.sum[q.j].m)+"| = <b>"+r3(q.d)+"</b>").join("<br>")],
+    ["Compare","Gap bigger than "+r3(hsd)+" → different.<br>"+P.map(q=>ex.lab[q.i]+" vs "+ex.lab[q.j]+": "+r3(q.d)+(q.sig?" &gt; ":" &lt; ")+r3(hsd)+" → <b class='"+(q.sig?"hl":"hb")+"'>"+(q.sig?"DIFFERENT":"not different")+"</b>").join("<br>")+"<br><b>Answer:</b> "+(P.filter(q=>q.sig).map(q=>ex.lab[q.i]+" vs "+ex.lab[q.j]).join(" · ")||"no pair")+"."]];
+  box.innerHTML="<p class='mute' style='font-family:system-ui;letter-spacing:0;margin:0 0 10px'>"+ex.story+"</p><div class='wxs'></div><div class='row' style='margin-top:10px'><button class='btn sm' data-w='n'>Next step ▸</button><button class='btn ghost sm' data-w='all'>Show all</button><button class='btn ghost sm' data-w='r'>⟲ Restart</button></div><svg class='viz' viewBox='0 0 900 10'></svg>";
+  const L=$(".wxs",box),sv2=$("svg",box);let st=0;
+  const draw=()=>{L.innerHTML=S.slice(0,st).map((x,i)=>"<div class='wst'><em>"+(i+1)+"</em><div><b>"+x[0]+"</b><span>"+x[1]+"</span></div></div>").join("")||"<div class='mute' style='font-family:system-ui;letter-spacing:0'>Press <b>Next step</b> to work through it.</div>";
+    sv2.innerHTML="";if(st<6){sv2.setAttribute("viewBox","0 0 900 10");return}const H=30+P.length*46;sv2.setAttribute("viewBox","0 0 900 "+H);const mx=Math.max(hsd,...P.map(q=>q.d))*1.15,X=v=>330+540*v/mx;
+    P.forEach((q,m)=>{const y=24+m*46,c=q.sig?O:B;sv("text",{x:10,y:y+4,fill:"#fff","font-size":12,"font-weight":700},sv2).textContent=ex.lab[q.i]+" vs "+ex.lab[q.j];sv("text",{x:10,y:y+20,fill:c,"font-size":11,"font-weight":800},sv2).textContent="gap "+r3(q.d)+(q.sig?" > ":" < ")+"HSD → "+(q.sig?"DIFFERENT":"not different");
+      const bar=sv("rect",{x:X(0),y:y-8,width:Math.max(2,X(q.d)-X(0)),height:18,fill:c,opacity:.75,style:"filter:drop-shadow(0 0 5px "+c+")"},sv2);sv("line",{x1:X(hsd),y1:y-14,x2:X(hsd),y2:y+16,stroke:"#fff","stroke-width":2.5,"stroke-dasharray":"4 3"},sv2)});
+    sv("text",{x:X(hsd),y:H-2,"text-anchor":"middle",fill:"#fff","font-size":10,"font-weight":800},sv2).textContent="HSD "+r3(hsd)};
+  box.addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(!b)return;const a=b.dataset.w;st=a==="n"?Math.min(6,st+1):a==="all"?6:0;draw();if(st===6)markDone(null,ex.id)});addComps(1);draw()}
+tukeyWX($("#wx1"),{id:"wx1",g:window.TK.TASKS[0].g,lab:["PT","PT + support","Control"],q:3.67,story:"18 patients, 3 therapy groups (n = 6 each). Mobility score after 8 weeks."});
+tukeyWX($("#wx2"),{id:"wx2",g:[[6,5,7,6,6],[4,3,4,5,4],[5,6,5,4,5]],lab:["Prog A","Prog B","Prog C"],q:3.77,story:"15 patients, 3 physio programmes (n = 5 each). Pain-relief score (higher = better). A: 6, 5, 7, 6, 6 · B: 4, 3, 4, 5, 4 · C: 5, 6, 5, 4, 5."});
 window.__core={$,$$,el,sv,shuffle,markDone,addComps,updateXP,go,segs,fp,RM,PK,O,B};
 })();
 /* ================= ANOVA PRACTICE TAB ================= */
@@ -2096,7 +2131,7 @@ const fileSvg=up=>"<svg viewBox='0 0 48 48'><g fill='none' stroke-width='2.5'><p
 function dl(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
 const fname=(t,s)=>"S249_L11-12_"+t.id+"_"+t.title.replace(/[^A-Za-z0-9]+/g,"_").replace(/_$/,"")+(s?"_"+s:"")+".xlsx";
 function howSheet(t){const L=["HOW TO DO THIS PRACTICE","1. Fill every ORANGE cell on the 'ANOVA' sheet. Means and SDs need FORMULAS (e.g. =AVERAGE("+t.rng[0]+")).","2. Data → Data Analysis → Anova: Single Factor.","   Input Range: "+"$B$2:$"+XC.colL(t.k)+"$"+(t.maxN+2)+" · Grouped By: Columns · tick Labels in first row · Alpha 0.05 · Output Range: $K$2",
-  "3. Read F, P-value and F crit from the Between Groups row (or use =F.DIST.RT and =F.INV.RT).","4. Pick the Decision from the drop-down list.","5. POST-HOC (only if you rejected H0): no. of pairs = k(k-1)/2 · Bonferroni α = α ÷ no. of pairs · for each pair =T.TEST(group A, group B, 2, 2) · column J: Significant if p < Bonferroni α.","6. Save as .xlsx and upload it back to the learning package to check your answers.","","Analysis ToolPak missing? File → Options → Add-ins → Manage: Excel Add-ins → Go → tick Analysis ToolPak."];
+  "3. Read F, P-value and F crit from the Between Groups row (or use =F.DIST.RT and =F.INV.RT).","4. Pick the Decision from the drop-down list.","5. POST-HOC – TUKEY HSD (only if you rejected H0): q is given · MS within from the ToolPak · HSD = q × √(MS within ÷ n) · Gap = ABS(mean A − mean B) · column J: Different if Gap > HSD.","6. Save as .xlsx and upload it back to the learning package to check your answers.","","Analysis ToolPak missing? File → Options → Add-ins → Manage: Excel Add-ins → Go → tick Analysis ToolPak."];
   const cells={},style={};L.forEach((x,i)=>cells["A"+(i+1)]=x);style.A1="ttl";return{name:"How to",cells,style,widths:[820],rows:L.length}}
 
 /* ---------- check panel ---------- */
@@ -2151,21 +2186,19 @@ function show(t){$$(".tk",bar).forEach(b=>b.classList.toggle("on",b.dataset.id==
   ord.forEach(i=>{const b=el("button","",opts[i]);if(S.conc){b.disabled=true;if(i===0)b.classList.add("ok")}b.onclick=()=>{if(S.conc)return;if(i===0){S.conc=1;b.classList.add("ok");$$("button",ob).forEach(x=>x.disabled=true);w.innerHTML="✔ Compare p with α (or F with F crit).";done(t,"conc")}else{b.classList.add("bad");b.disabled=true;w.innerHTML="<span style='color:#ffb3c0'>"+(i===2?"ANOVA's H₁ is ‘at least ONE mean differs’ – not that all differ.":i===3?"ANOVA only says a difference exists somewhere – it doesn't tell you which group (that needs further tests).":"Check: is p smaller than 0.05?")+"</span>"}};ob.appendChild(b)});if(S.conc)w.innerHTML="✔ Compare p with α (or F with F crit).";
   area.appendChild(posthoc(t,S));
   area.appendChild(solution(t))}
-/* ---------- post-hoc step ---------- */
+/* ---------- post-hoc step (Tukey HSD) ---------- */
 const pairTxt=(t,q)=>t.lab[q.i]+" vs "+t.lab[q.j];
-function posthoc(t,S){const w=el("div");w.appendChild(el("div","stepn","<em><span>4</span></em><b>POST-HOC</b><small>WHICH GROUPS DIFFER?</small>"));
-  const cc=el("div","tq concl");w.appendChild(cc);const ob=el("div","ob"),fb=el("div","w");
-  let opts,why;
-  if(!t.rej){cc.innerHTML="<h4>H₀ WAS ACCEPTED. DO YOU NEED A POST-HOC TEST?</h4>";opts=["No – ANOVA found no significant difference, so there is nothing to locate","Yes – always run pairwise t-tests after any ANOVA","Yes – to find which group has the highest mean","Only if the p-value is above 0.5"];why=["","A post-hoc test is only run AFTER H₀ is rejected.","Means always differ a little – without a significant ANOVA that is just chance.","The rule is simply: reject H₀ → post-hoc; accept H₀ → stop."]}
-  else{const sig=t.pairs.filter(q=>q.sig),raw=t.pairs.filter(q=>q.raw);const list=a=>a.length?a.map(q=>pairTxt(t,q)).join(" · "):"No pair";
-    cc.innerHTML="<h4>WHICH PAIRS DIFFER SIGNIFICANTLY? (BONFERRONI CUT-OFF = 0.05 ÷ "+t.np+" = "+(+t.bon.toFixed(4))+")</h4>";
-    const o=[list(sig)];const wy=[""];if(raw.length!==sig.length){o.push(list(raw));wy.push("These pairs have p &lt; 0.05 – but you must compare with the <b>Bonferroni α</b>, not 0.05.")}
-    o.push("All "+t.np+" pairs differ");wy.push("ANOVA's H₁ only says at least ONE mean differs – check each pair's p.");
-    const ns=t.pairs.filter(q=>!q.sig);if(ns.length&&!o.includes(list(ns))){o.push(list(ns));wy.push("These pairs have p ABOVE the Bonferroni α – they are NOT significant.")}
-    opts=o.slice(0,4);why=wy}
-  cc.append(ob,fb);const ord=S.pord||(S.pord=shuffle(opts.map((_,i)=>i)));const okMsg=t.rej?"✔ Post-hoc = a t-test for every pair, judged against α ÷ number of pairs.":"✔ Accept H₀ → stop. Post-hoc tests are only for a significant ANOVA.";
+const r3=v=>+v.toFixed(3);
+function posthoc(t,S){const w=el("div");w.appendChild(el("div","stepn","<em><span>4</span></em><b>POST-HOC</b><small>TUKEY HSD · WHICH GROUPS DIFFER?</small>"));
+  const cc=el("div","tq concl");w.appendChild(cc);const ob=el("div","ob"),fb=el("div","w");let opts,why;
+  if(!t.rej){cc.innerHTML="<h4>H₀ WAS ACCEPTED. DO YOU NEED A POST-HOC TEST?</h4>";opts=["No – there is no significant difference, so there is nothing to look for","Yes – always run Tukey after any ANOVA","Yes – to find the group with the highest mean","Only if F is bigger than 1"];why=["","Tukey is only run AFTER H₀ is rejected.","Means always differ a little – without a significant ANOVA that is just chance.","The rule: reject H₀ → Tukey. Accept H₀ → stop."]}
+  else{const dif=t.pairs.filter(q=>q.sig),nd=t.pairs.filter(q=>!q.sig);const list=a=>a.length?a.map(q=>pairTxt(t,q)).join(" · "):"None";
+    cc.innerHTML="<h4>WHICH PAIRS HAVE A GAP BIGGER THAN HSD?</h4>";opts=[list(dif),"All "+t.pairs.length+" pairs"];why=["","Check each gap against HSD – not every pair passes."];
+    if(nd.length){opts.push(list(nd));why.push("These gaps are SMALLER than HSD → not different.")}
+    if(dif.length>1){opts.push(pairTxt(t,dif[0])+" only");why.push("Check the other pairs too – more than one gap is bigger than HSD.")}}
+  cc.append(ob,fb);const ord=S.pord||(S.pord=shuffle(opts.map((_,i)=>i)));const okMsg=t.rej?"✔ Gap bigger than HSD → those two groups are really different.":"✔ Accept H₀ → stop. Tukey is only for a significant ANOVA.";
   ord.forEach(i=>{const b=el("button","",opts[i]);if(S.post){b.disabled=true;if(i===0)b.classList.add("ok")}b.onclick=()=>{if(S.post)return;if(i===0){S.post=1;b.classList.add("ok");$$("button",ob).forEach(x=>x.disabled=true);fb.innerHTML=okMsg;done(t,"post")}else{b.classList.add("bad");b.disabled=true;fb.innerHTML="<span style='color:#ffb3c0'>"+why[i]+"</span>"}};ob.appendChild(b)});if(S.post)fb.innerHTML=okMsg;
-  if(t.rej){const tb=el("div","card ph-t");tb.innerHTML="<div class='mute' style='font-family:system-ui;letter-spacing:0;margin-bottom:8px'>Fill the <b class='hl'>POST-HOC</b> block in the sheet: rows "+t.R.np.slice(1)+"–"+t.L[t.L.length-1].ref.slice(1)+". <code>=T.TEST(group A, group B, 2, 2)</code> for each pair, then pick <b>Significant</b> / <b>Not significant</b> in column J.</div>";w.appendChild(tb)}
+  if(t.rej){const tb=el("div","card ph-t");tb.innerHTML="<div class='phx'><b class='hl'>HSD</b> = the smallest gap between two group means that counts as a <b>real</b> difference.<br>Fill the <b class='hl'>POST-HOC</b> block (rows "+t.qRef.slice(1)+"–"+t.L[t.L.length-1].ref.slice(1)+"): "+(t.eqn?"MS within → n → HSD → the gap for each pair":"MS within → HSD and gap for each pair (group sizes differ, so each pair gets its own HSD)")+" → pick <b>Different</b> / <b>Not different</b> in column J.</div>";w.appendChild(tb)}
   return w}
 function plot(s,t){s.innerHTML="";const all=[].concat(...t.g),lo=Math.min(...all),hi=Math.max(...all),pad=(hi-lo)*.1||1,Y=v=>180-150*(v-lo+pad)/(hi-lo+2*pad),cols=[O,B,PK,"#7dff6a"],gx=i=>60+i*(330/(t.k-1||1));
   const gm=t.A.gm;s.innerHTML="";sv("line",{x1:20,y1:Y(gm),x2:410,y2:Y(gm),stroke:"#fff","stroke-dasharray":"5 4",opacity:.6},s);
@@ -2173,6 +2206,10 @@ function plot(s,t){s.innerHTML="";const all=[].concat(...t.g),lo=Math.min(...all
     sv("text",{x,y:202,"text-anchor":"middle",fill:c,"font-size":9,"font-weight":800},s).textContent=t.lab[i].toUpperCase().slice(0,16)})}
 
 /* ---------- worked solution ---------- */
+function gapChart(ps,t){const n=t.pairs.length,H=36+n*46;ps.setAttribute("viewBox","0 0 900 "+H);ps.setAttribute("class","tsvg");const mx=Math.max(...t.pairs.map(q=>Math.max(q.d,q.hsd)))*1.12,X=v=>330+540*v/mx;
+  t.pairs.forEach((q,k)=>{const y=26+k*46,c=q.sig?O:B;sv("text",{x:10,y:y+4,fill:"#fff","font-size":12,"font-weight":700},ps).textContent=pairTxt(t,q);sv("text",{x:10,y:y+20,fill:c,"font-size":11,"font-weight":800},ps).textContent="gap "+r3(q.d)+(q.sig?" > ":" < ")+"HSD "+r3(q.hsd)+" → "+(q.sig?"DIFFERENT":"not different");
+    sv("rect",{x:X(0),y:y-8,width:Math.max(2,X(q.d)-X(0)),height:18,fill:c,opacity:.75,style:"filter:drop-shadow(0 0 5px "+c+")"},ps);sv("line",{x1:X(q.hsd),y1:y-14,x2:X(q.hsd),y2:y+16,stroke:"#fff","stroke-width":2.5,"stroke-dasharray":"4 3"},ps)});
+  sv("text",{x:X(t.pairs[0].hsd),y:H-4,"text-anchor":"middle",fill:"#fff","font-size":10,"font-weight":800},ps).textContent="┆ HSD";sv("text",{x:X(0),y:H-4,"text-anchor":"start",fill:"#7fa3b5","font-size":10},ps).textContent="bar = gap between the two means"}
 function solution(t){const A=t.A,d=el("details","sol");d.innerHTML="<summary>◆ WORKED SOLUTION · REVEAL WHEN YOU'RE DONE</summary>";const b=el("div","sb");d.appendChild(b);
   d.addEventListener("toggle",()=>{if(!d.open||b.childNodes.length)return;const shs=TK.buildSheet(t,"sol"),v=XC.evalSheet(shs);
     let h="<table class='soltab'><tbody>";t.L.forEach(x=>{const val=v[x.ref];h+="<tr><td>"+x.ref+"</td><td>"+x.label+(x.f?" · <code>"+x.f.replace(/</g,"&lt;")+"</code>":"")+"</td><td>"+(typeof val==="number"?XC.general(val):val)+"</td></tr>"});h+="</tbody></table>";
@@ -2184,13 +2221,14 @@ function solution(t){const A=t.A,d=el("details","sol");d.innerHTML="<summary>◆
     sv("line",{x1:X(A.fc),y1:30,x2:X(A.fc),y2:170,stroke:O,"stroke-dasharray":"5 4"},s);sv("text",{x:X(A.fc)+6,y:44,fill:O,"font-size":11,"font-weight":800},s).textContent="F crit "+A.fc.toFixed(3);
     const fx=Math.min(A.F,fmax*.99);sv("line",{x1:X(fx),y1:16,x2:X(fx),y2:170,stroke:"#fff","stroke-width":3},s);sv("text",{x:X(fx),y:12,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="F = "+A.F.toFixed(3);
     const v2=el("div","verdict2"+(t.rej?"":" ns"));v2.innerHTML="df ("+A.dfb+", "+A.dfw+") · F = "+A.F.toFixed(3)+(t.rej?" &gt; ":" &lt; ")+"F crit "+A.fc.toFixed(3)+" · p = "+fp(A.p)+(t.rej?" &lt; ":" &gt; ")+"0.05 → <b>"+(t.rej?"REJECT H₀":"ACCEPT H₀")+"</b>. "+CONC[t.id][t.rej?0:1];b.appendChild(v2);
-    if(t.rej){const ph=el("div");ph.innerHTML="<div class='sec' style='margin:14px 0 6px'><em>PH</em> POST-HOC · BONFERRONI CUT-OFF = 0.05 ÷ "+t.np+" = "+XC.general(t.bon)+"</div>";const ps=document.createElementNS("http://www.w3.org/2000/svg","svg");const H=44+t.np*56;const lo=Math.min(-3,Math.floor(Math.log10(Math.min(...t.pairs.map(q=>q.p)))));ps.setAttribute("viewBox","0 0 900 "+H);ps.setAttribute("class","tsvg");ph.appendChild(ps);b.appendChild(ph);
-      const LX=v=>360+500*Math.max(0,Math.min(1,(Math.log10(Math.max(v,1e-9))-lo)/(-lo)));[...Array(-lo+1)].map((_,i)=>Math.pow(10,lo+i)).forEach(v=>{sv("line",{x1:LX(v),y1:14,x2:LX(v),y2:H-18,stroke:"rgba(0,229,255,.08)"},ps);sv("text",{x:LX(v),y:H-4,"text-anchor":"middle",fill:"#7fa3b5","font-size":10},ps).textContent=v>=.001?String(v):v.toExponential(0)});
-      sv("line",{x1:LX(.05),y1:10,x2:LX(.05),y2:H-18,stroke:"#7fa3b5","stroke-dasharray":"3 4"},ps);sv("text",{x:LX(.05)+4,y:12,fill:"#7fa3b5","font-size":10},ps).textContent="0.05";
-      sv("line",{x1:LX(t.bon),y1:10,x2:LX(t.bon),y2:H-18,stroke:O,"stroke-width":2.5,"stroke-dasharray":"6 4"},ps);sv("text",{x:LX(t.bon)-4,y:12,"text-anchor":"end",fill:O,"font-size":10,"font-weight":800},ps).textContent="BONFERRONI "+(+t.bon.toFixed(4));
-      t.pairs.forEach((q,n)=>{const y=40+n*56,c=q.sig?O:B;sv("text",{x:10,y:y+5,fill:"#fff","font-size":12,"font-weight":700},ps).textContent=pairTxt(t,q);sv("text",{x:10,y:y+21,fill:"#7fa3b5","font-size":10},ps).textContent="means "+(+t.A.sum[q.i].m.toFixed(2))+" vs "+(+t.A.sum[q.j].m.toFixed(2));
-        sv("line",{x1:LX(1),y1:y+2,x2:LX(q.p),y2:y+2,stroke:c,"stroke-width":3,opacity:.6},ps);sv("circle",{cx:LX(q.p),cy:y+2,r:7,fill:c,style:"filter:drop-shadow(0 0 6px "+c+")"},ps);sv("text",{x:10,y:y+36,fill:c,"font-size":11,"font-weight":800},ps).textContent="p = "+fp(q.p)+(q.sig?" · SIGNIFICANT":q.raw?" · < 0.05 but NOT < Bonferroni":" · not significant")});
-      const sg=t.pairs.filter(q=>q.sig);const v3=el("div","verdict2");v3.innerHTML="Post-hoc: <b>"+(sg.length?sg.map(q=>pairTxt(t,q)).join(" · "):"no pair")+"</b> differ"+(sg.length===1?"s":"")+" significantly."+(t.pairs.some(q=>q.raw&&!q.sig)?"<br><span class='mute'>Note: "+t.pairs.filter(q=>q.raw&&!q.sig).map(q=>pairTxt(t,q)).join(" · ")+" has p &lt; 0.05 but is NOT significant after the Bonferroni correction – exactly the Type I error trap from Lesson 11.</span>":"");b.appendChild(v3)}
+    if(t.rej){const ph=el("div");const A2=t.A;let h2="<div class='sec' style='margin:14px 0 6px'><em>PH</em> POST-HOC · TUKEY HSD</div><div class='wsteps'>";
+      h2+="<div><em>1</em><b>q from the Tukey table</b><span>k = "+t.k+" groups · df within = "+A2.dfw+" → <b class='hl'>q = "+t.q+"</b> (given)</span></div>";
+      h2+="<div><em>2</em><b>MS within</b><span>ToolPak, Within Groups row → <b class='hl'>"+r3(A2.msw)+"</b></span></div>";
+      if(t.eqn){h2+="<div><em>3</em><b>HSD = q × √(MS within ÷ n)</b><span>"+t.q+" × √("+r3(A2.msw)+" ÷ "+t.ns[0]+") = "+t.q+" × "+r3(Math.sqrt(A2.msw/t.ns[0]))+" = <b class='hl'>"+r3(t.hsd)+"</b></span></div>"}
+      else{h2+="<div><em>3</em><b>HSD for each pair (unequal n)</b><span>q × √(MS within ÷ 2 × (1/n<sub>A</sub> + 1/n<sub>B</sub>))<br>"+t.pairs.map(q=>pairTxt(t,q)+": "+t.q+" × √("+r3(A2.msw)+" ÷ 2 × (1/"+t.ns[q.i]+" + 1/"+t.ns[q.j]+")) = <b class='hl'>"+r3(q.hsd)+"</b>").join("<br>")+"</span></div>"}
+      h2+="<div><em>4</em><b>Gap = |mean − mean| → compare with HSD</b><span>"+t.pairs.map(q=>pairTxt(t,q)+": |"+r3(A2.sum[q.i].m)+" − "+r3(A2.sum[q.j].m)+"| = <b>"+r3(q.d)+"</b> "+(q.sig?"&gt;":"&lt;")+" "+r3(q.hsd)+" → <b class='"+(q.sig?"hl":"hb")+"'>"+(q.sig?"DIFFERENT":"not different")+"</b>").join("<br>")+"</span></div></div>";
+      ph.innerHTML=h2;const ps=document.createElementNS("http://www.w3.org/2000/svg","svg");ph.appendChild(ps);b.appendChild(ph);gapChart(ps,t);
+      const sg=t.pairs.filter(q=>q.sig);const v3=el("div","verdict2");v3.innerHTML="Tukey: <b>"+(sg.length?sg.map(q=>pairTxt(t,q)).join(" · "):"no pair")+"</b> "+(sg.length===1?"is":"are")+" significantly different. Every other pair is not.";b.appendChild(v3)}
     const r=el("div","row");r.style.marginTop="10px";const bt=el("button","btn ghost sm","⬇ Download solution (.xlsx)");bt.onclick=()=>dl(XIO.writeXlsx([Object.assign({},shs,{vals:v}),howSheet(t)]),fname(t,"solution"));r.appendChild(bt);b.appendChild(r)});return d}
 show(tasks[0]);
 
@@ -2255,6 +2293,11 @@ function demo(t){const sh=TK.buildSheet(t,"sol"),vals=XC.evalSheet(sh),R=t.R;con
   st.push({cap:"Read the <b>Between Groups</b> row: <b>F</b> = "+t.A.F.toFixed(3)+" · <b>P-value</b> = "+XC.show(t.A.p)+" · <b>F crit</b> = "+t.A.fc.toFixed(3),draw:s=>{frame(s,"Data");sheet(s,{sh,vals,cols:[0,1,2,3,"gap",10,11,12,13,14,15,16],rows,show:new Set(Object.keys(sh.cells)),W:WO});const i=rows.indexOf(rb);const y=84+19*(i+1);hot(s,34+46+62*3+18,y,200+84+70+70+84+96+90,19)}});
   [R.F,R.p,R.fc].forEach(r=>shown.add(r));step("Bring the results across: F <code>="+R.tpF+"</code> · p <code>"+sh.cells[R.p]+"</code> · F crit <code>"+sh.cells[R.fc]+"</code>",{sel:R.F+":"+R.fc,fx:sh.cells[R.p]});
   shown.add(R.dec);step("<b>Decision</b> · F "+t.A.F.toFixed(2)+" &gt; F crit "+t.A.fc.toFixed(2)+" and p = "+XC.show(t.A.p)+" &lt; 0.05 → <b class='hl'>Reject H0</b> – at least one therapy differs",{sel:R.dec,fx:"Reject H0"});
+  const rowsP=[0,1,3,5,7,14,16,17,18,19,20,21,22,23],colsP=[0,1,2,3,6,7,9],WP={0:46,1:70,2:70,3:70,6:300,7:96,9:130};
+  const pstep=(cap,o)=>{const snap=new Set(shown);st.push({cap,draw:s=>{frame(s,"Home");sheet(s,Object.assign({sh,vals,cols:colsP,rows:rowsP,show:snap,W:WP},o))}})};
+  shown.add(R.msw);shown.add(R.n);pstep("<b>POST-HOC · Tukey</b> (H0 was rejected). q = <b>3.67</b> is given in H18 · MS within <code>="+R.tpMSw+"</code> → "+val(R.msw)+" · n <code>=COUNT(B3:B8)</code> → 6",{sel:R.msw+":"+R.n,fx:sh.cells[R.msw]});
+  shown.add(R.hsd);pstep("<b>HSD</b> = q × √(MS within ÷ n) · <code>"+sh.cells[R.hsd]+"</code> → <b class='hb'>"+val(R.hsd)+"</b>",{sel:R.hsd,fx:sh.cells[R.hsd]});
+  t.pairs.forEach((q,n)=>{shown.add(R["gp"+n]);shown.add(R["sg"+n])});pstep("<b>Gap</b> for each pair <code>=ABS(H4-H6)</code> … then column J: gap &gt; HSD → <b class='hl'>Different</b>. Answer: PT vs Control and PT + support vs Control",{sel:R.gp0+":"+R["sg"+(t.pairs.length-1)],fx:sh.cells[R.gp1]});
   return st}
 function mount(host,t){const box=el("details","card xw");box.open=true;box.innerHTML="<summary><span class='xw-k'>EXCEL STEP-BY-STEP</span><b>Worked demo · "+t.title+" ("+t.src+")</b><span class='xw-t'>▾</span></summary>";host.appendChild(box);
   const s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 900 430");s.setAttribute("class","mock");box.appendChild(s);
@@ -2286,6 +2329,10 @@ const PQ=[
  {lv:1,tp:"p-value",sc:"A study uses a 5% significance level and finds <b>p = 0.004</b>, so H₀ is rejected.",ask:"What is the highest probability that this rejection is a Type I error? (decimal)",f:[{l:"Highest P(Type I)",a:.004,tol:.00005,u:"",p:1}],h:["5% is only the maximum limit you set.","The p-value is the ACTUAL highest chance of a Type I error for this data."],w:["Significance level 5% = the maximum limit","p = <span class='eq'>0.004</span> = the actual highest chance of a Type I error (0.4%)"]},
  {lv:1,tp:"All three df",sc:"<b>3 groups of 10</b> people.",ask:"Find df between, df within and df total.",f:[{l:"df between",a:2,tol:0,u:""},{l:"df within",a:27,tol:0,u:""},{l:"df total",a:29,tol:0,u:""}],
   h:["k = 3, N = 30.","Between = k − 1 · Within = N − k · Total = N − 1."],w:["df<sub>between</sub> = 3 − 1 = <span class='eq'>2</span>","df<sub>within</sub> = 30 − 3 = <span class='eq'>27</span>","df<sub>total</sub> = 30 − 1 = <span class='eq'>29</span> (= 2 + 27 ✔)"]},
+ {lv:1,tp:"Tukey · when?",sc:"An ANOVA on 3 exercise groups gives <b>p = 0.31</b> (α = 0.05).",ask:"Should you run a Tukey post-hoc test?",o:["No – accept H₀; there is no difference to look for","Yes – always run Tukey after ANOVA","Yes – to find the group with the highest mean","Only if the groups have equal sizes"],
+  h:["First decide: reject or accept H₀?","Tukey answers ‘WHICH groups differ?’ – does any group differ here?"],w:["p = 0.31 &gt; 0.05 → accept H₀","No significant difference → <span class='eq'>no Tukey needed</span>"]},
+ {lv:1,tp:"Tukey · HSD",sc:"ANOVA rejected H₀. Tukey table: <b>q = 3.67</b>. ToolPak: <b>MS within = 25.47</b>. Each group has <b>n = 6</b>.",ask:"HSD = ? (2 d.p.)",f:[{l:"HSD",a:7.56,tol:.02,u:""}],
+  h:["HSD = q × √(MS within ÷ n).","25.47 ÷ 6 = 4.245 → √4.245 = 2.06."],w:["MS within ÷ n = 25.47 ÷ 6 = 4.245","√4.245 = 2.060","HSD = 3.67 × 2.060 = <span class='eq'>7.56</span>","In Excel: <code>=H18*SQRT(H19/H20)</code>"]},
  {lv:2,tp:"Complete the table",sc:"3 groups, N = 30. SS between = <b>84</b>, SS within = <b>270</b>.",ask:"Find MS between, MS within and F.",f:[{l:"MS between",a:42,tol:.01,u:""},{l:"MS within",a:10,tol:.01,u:""},{l:"F",a:4.2,tol:.01,u:""}],
   h:["First the df: between = 2, within = 27.","MS = SS ÷ df, then F = MSb ÷ MSw."],w:["MS<sub>between</sub> = 84 ÷ 2 = <span class='eq'>42</span>","MS<sub>within</sub> = 270 ÷ 27 = <span class='eq'>10</span>","F = 42 ÷ 10 = <span class='eq'>4.2</span>"]},
  {lv:2,tp:"SS between by hand",sc:"Therapy study: group means <b>44, 45, 36</b>, each n = 6. Grand mean = <b>41.67</b>.",ask:"SS between = ?",f:[{l:"SS between",a:292,tol:.6,u:""}],
@@ -2295,7 +2342,9 @@ const PQ=[
  {lv:2,tp:"Which error is worse?",sc:"Airport scanner. H₀: the bag contains <b>no</b> weapon.",ask:"Which error would be WORSE here?",o:["Type II – a real weapon gets through undetected","Type I – a safe bag is searched again","Type I – statisticians always treat it as worse","Neither – they cost the same"],
   h:["Type I = false alarm (reject a true H₀). Type II = miss (accept a false H₀).","What does each mistake cost here?"],w:["Type I: a safe bag is flagged → an extra search","Type II: a real weapon is missed → lives at risk","Here <span class='eq'>Type II is worse</span> – either error can be worse depending on the context"]},
  {lv:2,tp:"Interpret carefully",sc:"Stress case study: F = 0.92, p = 0.40. A student writes: “Stress is exactly the same in all age groups.”",ask:"What is the best statement?",o:["No significant difference was found at the 5% level – but a Type II error is still possible","The student is right – p &gt; 0.05 proves the means are equal","Reject H₀ because F &lt; 1","A Type I error has been made"],
-  h:["Does accepting H₀ prove there is no difference at all?","Which error is possible when you ACCEPT H₀?"],w:["p = 0.40 &gt; 0.05 → accept H₀","That means ‘no significant difference found’ – not proof the means are identical","If a real difference exists, we've made a <span class='eq'>Type II error</span>"]}];
+  h:["Does accepting H₀ prove there is no difference at all?","Which error is possible when you ACCEPT H₀?"],w:["p = 0.40 &gt; 0.05 → accept H₀","That means ‘no significant difference found’ – not proof the means are identical","If a real difference exists, we've made a <span class='eq'>Type II error</span>"]},
+ {lv:2,tp:"Tukey · which pairs?",sc:"Therapy study, HSD = <b>7.56</b>. Means: PT <b>44</b> · PT + support <b>45</b> · Control <b>36</b>.",ask:"Which pairs are significantly different?",o:["PT vs Control and PT + support vs Control","Only PT + support vs Control","All three pairs","Only PT vs PT + support"],
+  h:["Work out the gap |mean − mean| for every pair.","Gap bigger than 7.56 → different."],w:["PT vs PT + support: |44 − 45| = 1 &lt; 7.56 → not different","PT vs Control: |44 − 36| = 8 &gt; 7.56 → <span class='eq'>different</span>","PT + support vs Control: |45 − 36| = 9 &gt; 7.56 → <span class='eq'>different</span>"]}];
 const Q=[
  {lv:0,q:"What is a Type I error?",o:["Rejecting H₀ when it is actually true","Accepting H₀ when it is actually false","Using the wrong t-test","Calculating the mean incorrectly"],g:"Type I = a false alarm.",w:"Type I = <b>rejecting a true H₀</b> – observing a difference when in truth there is none."},
  {lv:0,q:"What is a Type II error?",o:["Accepting H₀ when the alternative hypothesis is actually true","Rejecting a true H₀","Setting the significance level too high","Having unequal group sizes"],g:"Type II = a missed effect.",w:"Type II = <b>accepting a false H₀</b> – failing to observe a difference when there is one."},
