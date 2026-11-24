@@ -908,6 +908,13 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
 .qtab td,.qtab th{text-align:center}.qtab td.qh{color:var(--o);font-weight:800;box-shadow:inset 0 0 0 1px var(--o)}
 .wst span b.hl,.wsteps span b.hl{color:var(--o)}.wst span b.hb,.wsteps span b.hb{color:var(--b)}
 .card>.kick{font-family:Orbitron,sans-serif;color:var(--o);font-size:.62rem;letter-spacing:3px;font-weight:700}
+
+.qt{border-collapse:collapse;margin-top:8px;font-family:system-ui;font-size:.8rem;width:auto}.qt th,.qt td{border:1px solid rgba(0,229,255,.18);padding:4px 8px;text-align:center;color:#cfe3ec}
+.qt th{background:#0b1a2b;font-family:Orbitron,sans-serif;font-size:.58rem;letter-spacing:1.5px;color:var(--b)}.qt td:first-child{background:#0b1a2b;color:var(--b);font-weight:700}
+.qt .qcross,.qt tr.qrow td{background:rgba(0,229,255,.08)}.qt th.qc{background:rgba(0,229,255,.25);color:#fff}.qt td.qhit{background:var(--o)!important;color:#000;font-weight:900;box-shadow:0 0 14px rgba(255,106,0,.8)}
+.qt.pick td:not(:first-child){cursor:pointer}.qt.pick td:not(:first-child):hover{background:rgba(255,106,0,.25)}.qt td.qbad{background:rgba(255,61,90,.4)!important}
+.qcap{font-family:system-ui;letter-spacing:0;font-size:.82rem;margin-top:6px;color:#d8e6ee}
+.wsteps span .qt,.wst span .qt{margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -1052,8 +1059,8 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--o2);backgroun
   <div class="card o"><div class="kick" style="margin-bottom:6px">WORKED EXAMPLE 1 · THERAPY &amp; MOBILITY (LESSON PRACTICE)</div><div class="wx" id="wx1"></div></div>
   <div class="card"><div class="kick" style="margin-bottom:6px">WORKED EXAMPLE 2 · PAIN SCORE AFTER 3 PHYSIO PROGRAMMES</div><div class="wx" id="wx2"></div></div>
   <div class="card"><div class="kick" style="margin-bottom:6px">WHERE DOES q COME FROM?</div><p class="mute" style="font-family:system-ui;letter-spacing:0">Excel has no function for q, so it is <b>always given</b> in our sheets. It comes from a printed Tukey table (α = 0.05): pick the column for <b>k groups</b> and the row for <b>df within</b>.</p>
-    <table class="cmp qtab"><thead><tr><th>df within ↓ · k →</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td>10</td><td>3.88</td><td>4.33</td><td>4.65</td></tr><tr><td>12</td><td class="qh">3.77</td><td>4.20</td><td>4.51</td></tr><tr><td>15</td><td class="qh">3.67</td><td>4.08</td><td>4.37</td></tr><tr><td>20</td><td>3.58</td><td>3.96</td><td>4.23</td></tr><tr><td>30</td><td>3.49</td><td>3.85</td><td>4.10</td></tr></tbody></table>
-    <p class="mute" style="margin-top:8px;font-family:system-ui;letter-spacing:0;font-size:.78rem">Highlighted: Example 1 (k = 3, df = 15 → 3.67) and Example 2 (k = 3, df = 12 → 3.77). Bigger k → bigger q → a longer HSD stick.</p></div>
+<div id="qFull"></div>
+    <p class="mute" style="margin-top:8px;font-family:system-ui;letter-spacing:0;font-size:.78rem">Try it: tap a value of k and of df to find q. Bigger k → bigger q → a longer HSD stick.</p></div>
   <div class="pager"><button class="btn ghost" data-go="5">◂ ANOVA Steps</button><button class="btn" data-go="7">ANOVA Practice ▸</button></div>
 </section>
 
@@ -1765,7 +1772,7 @@ window.XG={create};
 (function(){
 "use strict";
 const XC=window.XC,TS=window.TS,D=window.DATA;
-const DEC=["Reject H0","Accept H0"],SIG=["Different","Not different"],QT={A1:3.67,A3:3.86,A5:3.56};
+const DEC=["Reject H0","Accept H0"],SIG=["Different","Not different"],QT={A1:3.67,A3:3.86,A5:3.56},QTAB={ks:[2,3,4,5,6],rows:[[10,[3.15,3.88,4.33,4.65,4.91]],[12,[3.08,3.77,4.20,4.51,4.75]],[15,[3.01,3.67,4.08,4.37,4.59]],[18,[2.97,3.61,4.00,4.28,4.49]],[20,[2.95,3.58,3.96,4.23,4.45]],[21,[2.94,3.56,3.94,4.21,4.42]],[24,[2.92,3.53,3.90,4.17,4.37]],[28,[2.90,3.50,3.86,4.12,4.32]],[30,[2.89,3.49,3.85,4.10,4.30]]]};window.QTAB=QTAB;
 const T=[
  {id:"A1",guided:1,src:"Lesson Practice",icon:"walk",title:"Therapy & Mobility",unit:"score",idl:"Subject",
   story:"18 elderly patients were randomly put into <b>3 therapy groups</b>. Mobility score after 8 weeks (higher = better). Does mobility <b>differ</b> between the groups?",
@@ -1773,13 +1780,13 @@ const T=[
  {id:"A2",guided:1,src:"Lesson Case Study",icon:"brain",title:"Stress & Age",unit:"0–10",idl:"Staff",
   story:"Polytechnic R staff rated their <b>stress</b> (0–10). Scores are grouped by age: <b>30–39, 40–49, 50–59</b>. Is stress level <b>different</b> between the age groups?",
   lab:["Age 30-39","Age 40-49","Age 50-59"],h1:"At least one age group's mean stress level is different"},
- {id:"A3",src:"Own practice",icon:"moon",title:"Shift Work & Sleep",unit:"hours",idl:"Nurse",
+ {id:"A3",guided:1,src:"Own practice",icon:"moon",title:"Shift Work & Sleep",unit:"hours",idl:"Nurse",
   story:"Hospital nurses on <b>4 shift patterns</b> logged their sleep (hours/night). Does mean sleep <b>differ</b> between shift types?",
   lab:["Day shift","Evening shift","Night shift","Rotating shift"],h1:"At least one shift type's mean sleep is different"},
- {id:"A4",src:"Own practice",icon:"steps",title:"Steps by Age",unit:"'000 steps",idl:"Adult",
+ {id:"A4",guided:1,src:"Own practice",icon:"steps",title:"Steps by Age",unit:"'000 steps",idl:"Adult",
   story:"Daily steps (thousands) of adults in <b>3 age bands</b>. Is there a <b>difference</b> in mean daily steps?",
   lab:["Age 20-34","Age 35-49","Age 50-64"],h1:"At least one age band's mean daily steps is different"},
- {id:"A5",src:"Own practice",icon:"apple",title:"Diet Plans",unit:"kg lost",idl:"Client",
+ {id:"A5",guided:1,src:"Own practice",icon:"apple",title:"Diet Plans",unit:"kg lost",idl:"Client",
   story:"Weight loss (kg) after 12 weeks on <b>3 diet plans</b>. Group sizes are <b>unequal</b> (7, 9 and 8). Does mean weight loss <b>differ</b>?",
   lab:["Low-carb","Mediterranean","Low-fat"],h1:"At least one diet's mean weight loss is different"}];
 T.forEach(t=>{t.g=D[t.id].g;t.k=t.g.length;t.ns=t.g.map(a=>a.length);t.N=t.ns.reduce((a,b)=>a+b,0);t.maxN=Math.max(...t.ns);t.A=TS.anova(t.g);t.alpha=.05;t.rej=t.A.p<.05;t.dec=t.rej?DEC[0]:DEC[1];
@@ -1805,7 +1812,7 @@ function layout(t){const L=[];const it=(k,label,f,kind,hint,extra)=>L.push(Objec
     if(t.eqn){P("n","n = number of values in EACH group","=COUNT("+t.rng[0]+")","=COUNT("+t.rng[0]+")",{exp:t.ns[0]});
       P("hsd","HSD = q × √(MS within ÷ n)","="+t.qRef+"*SQRT("+m.msw+"/"+m.n+")","="+t.qRef+"*SQRT("+m.msw+"/"+m.n+")",{exp:t.hsd})}
     t.pairs.forEach((q,n)=>{const A=t.lab[q.i],B=t.lab[q.j];let hr=m.hsd;
-      if(!t.eqn){const hx=P("h"+n,"HSD · "+A+" vs "+B,"="+t.qRef+"*SQRT("+m.msw+"/2*(1/COUNT("+t.rng[q.i]+")+1/COUNT("+t.rng[q.j]+")))","=q*SQRT(MSw/2*(1/nA+1/nB))",{exp:q.hsd});hr=hx.ref}
+      if(!t.eqn){const hx=P("h"+n,"HSD · "+A+" vs "+B,"="+t.qRef+"*SQRT("+m.msw+"/2*(1/COUNT("+t.rng[q.i]+")+1/COUNT("+t.rng[q.j]+")))","="+t.qRef+"*SQRT("+m.msw+"/2*(1/COUNT("+t.rng[q.i]+")+1/COUNT("+t.rng[q.j]+")))",{exp:q.hsd});hr=hx.ref}
       const x=P("gp"+n,"Gap · "+A+" vs "+B,"=ABS("+m["m"+q.i]+"-"+m["m"+q.j]+")","=ABS("+m["m"+q.i]+"-"+m["m"+q.j]+")",{exp:q.d,pair:n});
       L.push({k:"sg"+n,label:"Different? · "+A+" vs "+B,kind:"sig",ref:"J"+x.ref.slice(1),f:'=IF('+x.ref+'>'+hr+',"Different","Not different")',ph:1,pair:n,pref:x.ref,href:hr});m["sg"+n]=L[L.length-1].ref});
     t.phEnd=r-1}else t.phEnd=t.phHead;
@@ -1822,7 +1829,7 @@ function buildSheet(t,mode){const cells={},style={},val={};
   cells.G1="YOUR ANSWERS ▸ fill the orange cells";style.G1="sub";cells.G2="α (significance level)";style.G2="lab";cells.H2="0.05";style.H2="giv";
   t.L.forEach(x=>{if(x.kind==="sig"){style[x.ref]="ans";val[x.ref]=SIG;return}const r=x.ref.slice(1);cells["G"+r]=x.label;style["G"+r]="lab";style[x.ref]="ans";if(x.kind==="dec")val[x.ref]=DEC;if((t.guided||x.ph)&&x.hint){cells["I"+r]="'"+x.hint;style["I"+r]="hint"}});
   if(t.rej){cells["G"+t.phHead]="POST-HOC ▸ TUKEY HSD · which groups differ?";style["G"+t.phHead]="sub";cells["J"+t.phHead]="Different? ▾";style["J"+t.phHead]="lab";
-    const qr=t.qRef.slice(1);cells["G"+qr]="q from the Tukey table (k = "+t.k+", df within = "+t.A.dfw+")";style["G"+qr]="lab";cells[t.qRef]=String(t.q);style[t.qRef]="giv";cells["I"+qr]="given ✔";style["I"+qr]="hint";}
+    const qr=t.qRef.slice(1);cells["G"+qr]="q from the Tukey table (k = "+t.k+", df within = "+t.A.dfw+")";style["G"+qr]="lab";cells[t.qRef]=String(t.q);style[t.qRef]="giv";cells["I"+qr]="'see sheet ‘Tukey q table’ → column k = "+t.k+", row df = "+t.A.dfw;style["I"+qr]="hint";}
   else{cells["G"+t.phHead]="POST-HOC ▸ not needed – H0 accepted, there is no difference to locate";style["G"+t.phHead]="sub"}
   cells.K1="ToolPak ▸ Data Analysis → Anova: Single Factor → Output Range K2";style.K1="sub";
   if(mode==="sol"){t.L.forEach(x=>cells[x.ref]=x.f);toolpak(t).forEach((row,i)=>row.forEach((v,j)=>{if(v!==""&&v!=null)cells[XC.colL(TPC+j)+(TPR+1+i)]=typeof v==="number"?String(v):v}))}
@@ -1878,7 +1885,28 @@ function check(t,getC,tp){const A=t.A,out=[];const add=(it,st,msg,v,f)=>out.push
 function scanTP(sheets){const found=[];sheets.forEach(s=>{for(let r=0;r<s.rows;r++)for(let c=0;c<s.cols;c++){const v=s.get(r,c);if(typeof v==="string"&&/^Anova: Single Factor/i.test(v.trim())){const o={sheet:s.name,r,c,groups:0};
       for(let k=r+1;k<Math.min(s.rows,r+40);k++){const L=s.get(k,c);if(typeof L!=="string")continue;if(/^Between Groups/i.test(L.trim())){o.F=s.get(k,c+4);o.p=s.get(k,c+5);o.fc=s.get(k,c+6);break}}
       for(let k=r+4;k<Math.min(s.rows,r+20);k++){const L=s.get(k,c);if(L==null||L==="")break;o.groups++}found.push(o)}}});return found}
-window.TK={TASKS:T,DEC,SIG,buildSheet,toolpak,check,scanTP,near,TPC,TPR};
+function qSheet(t){const cells={},style={};cells.A1="TUKEY q TABLE · α = 0.05";style.A1="ttl";cells.A2="Find the column for k (number of groups) and the row for df within. Where they meet = q.";style.A2="sub";
+  cells.A4="df within ↓  ·  k →";style.A4="hdr";QTAB.ks.forEach((k,j)=>{const c=XC.colL(1+j);cells[c+"4"]=String(k);style[c+"4"]="hdr"});
+  QTAB.rows.forEach(([df,qs],i)=>{const r=5+i;cells["A"+r]=String(df);style["A"+r]="lab";qs.forEach((q,j)=>{const c=XC.colL(1+j);cells[c+r]=q.toFixed(2);if(t&&t.q&&df===t.A.dfw&&QTAB.ks[j]===t.k)style[c+r]="ans"})});
+  const n=5+QTAB.rows.length+1;if(t&&t.q){cells["A"+n]="This task: k = "+t.k+" groups, df within = "+t.A.dfw+"  →  q = "+t.q.toFixed(2)+" (orange cell)";style["A"+n]="sub"}
+  return{name:"Tukey q table",rows:n+2,cols:7,cells,style,widths:[170,80,80,80,80,80,60]}}
+const r3=v=>+(+v).toFixed(3),r4=v=>+(+v).toPrecision(4);
+function workSheet(t){const A=t.A,L=[],lab=t.lab;const P=(x,st)=>L.push([x,st||""]);
+  P("WORKED ANSWERS · ["+t.id+"] "+t.title,"ttl");P(t.story.replace(/<[^>]+>/g,""),"sub");P("");
+  P("STEP 1 · HYPOTHESES","hdrl");P("H0: There is no significant difference among the "+t.k+" group means.");P("H1: "+t.h1+".");P("");
+  P("STEP 2 · DESCRIPTIVE STATISTICS","hdrl");lab.forEach((l,i)=>P(l+": mean = "+r4(A.sum[i].m)+" · SD = "+r4(Math.sqrt(A.sum[i].v))+" · n = "+t.ns[i]+"   (=AVERAGE / =STDEV of "+t.rng[i]+")"));P("");
+  P("STEP 3 · DEGREES OF FREEDOM","hdrl");P("df between = k − 1 = "+t.k+" − 1 = "+A.dfb);P("df within = N − k = "+t.N+" − "+t.k+" = "+A.dfw);P("");
+  P("STEP 4 · ANOVA (Data Analysis → Anova: Single Factor)","hdrl");P("MS between = SS between ÷ df between = "+r4(A.ssb)+" ÷ "+A.dfb+" = "+r4(A.msb));P("MS within = SS within ÷ df within = "+r4(A.ssw)+" ÷ "+A.dfw+" = "+r4(A.msw));
+  P("F = MS between ÷ MS within = "+r4(A.msb)+" ÷ "+r4(A.msw)+" = "+r4(A.F));P("p-value = F.DIST.RT(F, "+A.dfb+", "+A.dfw+") = "+r4(A.p)+"   ·   F crit = F.INV.RT(0.05, "+A.dfb+", "+A.dfw+") = "+r4(A.fc));P("");
+  P("STEP 5 · DECISION","hdrl");P(t.rej?"F ("+r3(A.F)+") > F crit ("+r3(A.fc)+") and p ("+r4(A.p)+") < 0.05  →  REJECT H0.":"F ("+r3(A.F)+") < F crit ("+r3(A.fc)+") and p ("+r4(A.p)+") > 0.05  →  ACCEPT H0.");
+  P(t.rej?"Conclusion: at least one group mean is significantly different → do the Tukey post-hoc test.":"Conclusion: no significant difference among the groups → NO post-hoc test needed.");P("");
+  if(t.rej){P("STEP 6 · POST-HOC · TUKEY HSD","hdrl");P("6a. q from the Tukey table (sheet ‘Tukey q table’): k = "+t.k+", df within = "+A.dfw+"  →  q = "+t.q.toFixed(2));P("6b. MS within (ToolPak, Within Groups row) = "+r4(A.msw));
+    if(t.eqn){P("6c. n = "+t.ns[0]+" per group");P("6d. HSD = q × √(MS within ÷ n) = "+t.q.toFixed(2)+" × √("+r4(A.msw)+" ÷ "+t.ns[0]+") = "+t.q.toFixed(2)+" × "+r4(Math.sqrt(A.msw/t.ns[0]))+" = "+r4(t.hsd))}
+    else{P("6c. Group sizes differ → each pair gets its own HSD = q × √(MS within ÷ 2 × (1/nA + 1/nB))");t.pairs.forEach(q=>P("     "+lab[q.i]+" vs "+lab[q.j]+": "+t.q.toFixed(2)+" × √("+r4(A.msw)+" ÷ 2 × (1/"+t.ns[q.i]+" + 1/"+t.ns[q.j]+")) = "+r4(q.hsd)))}
+    P((t.eqn?"6e":"6d")+". Gap = |mean A − mean B|, then compare with HSD:");t.pairs.forEach(q=>P("     "+lab[q.i]+" vs "+lab[q.j]+": |"+r4(A.sum[q.i].m)+" − "+r4(A.sum[q.j].m)+"| = "+r4(q.d)+(q.sig?"  >  ":"  <  ")+"HSD "+r4(q.hsd)+"  →  "+(q.sig?"DIFFERENT":"not different")));
+    const sg=t.pairs.filter(q=>q.sig);P("Answer: "+(sg.length?sg.map(q=>lab[q.i]+" vs "+lab[q.j]).join(" · "):"no pair")+" "+(sg.length===1?"is":"are")+" significantly different.","sub")}
+  const cells={},style={};L.forEach(([x,st],i)=>{if(x)cells["A"+(i+1)]=x;if(st)style["A"+(i+1)]=st==="hdrl"?"lab":st});return{name:"Worked answers",rows:L.length+1,cols:1,cells,style,widths:[900]}}
+window.TK={TASKS:T,DEC,SIG,qSheet,workSheet,buildSheet,toolpak,check,scanTP,near,TPC,TPR};
 })();
 
 
@@ -2095,10 +2123,16 @@ $("#assm").innerHTML=[["INDEPENDENCE","The samples are independent random sample
       let key=td.dataset.x;if(!X[key]){if(ri>3&&ri<4+t.k)key=hdr[ci];else if(ri>t.k+7)key=hdr2[ci]||td.parentNode.children[0].textContent}if(ci===0&&ri>t.k+7)key=td.textContent;
       $("#anatx").innerHTML=X[key]?"<b class='hl'>"+key+"</b> · "+X[key]:"Tap a labelled row or a value."});$("#anatx").innerHTML="Read <b class='hl'>F</b>, <b class='hl'>P-value</b> and <b class='hl'>F crit</b> on the <b>Between Groups</b> row.";addComps(0)})();
 
+/* ---------- TUKEY q TABLE ---------- */
+function qTab(k,df,opt){opt=opt||{};const Q=window.QTAB,ci=Q.ks.indexOf(k);let h="<table class='qt"+(opt.pick?" pick":"")+"'><thead><tr><th>df within ↓ · k →</th>"+Q.ks.map((x,j)=>"<th class='"+(!opt.pick&&j===ci?"qc":"")+"'>"+x+"</th>").join("")+"</tr></thead><tbody>";
+  Q.rows.forEach(([d,qs])=>{const hit=!opt.pick&&d===df;h+="<tr class='"+(hit?"qrow":"")+"'><td>"+d+"</td>"+qs.map((q,j)=>"<td data-q='"+d+"_"+Q.ks[j]+"' class='"+(hit&&j===ci?"qhit":hit||(!opt.pick&&j===ci)?"qcross":"")+"'>"+q.toFixed(2)+"</td>").join("")+"</tr>"});
+  return h+"</tbody></table><div class='qcap'>"+(opt.pick?"Tap the q for <b>k = "+k+"</b> groups and <b>df within = "+df+"</b>.":"Column <b>k = "+k+"</b> · row <b>df within = "+df+"</b> → <b class='hl'>q = "+Q.rows.find(r=>r[0]===df)[1][ci].toFixed(2)+"</b>")+"</div>"}
+function qPick(box,k,df,onOk){box.innerHTML=qTab(k,df,{pick:1});const cap=$(".qcap",box);let done=false;box.addEventListener("click",e=>{const c=e.target.closest("td[data-q]");if(!c||done)return;const [d,kk]=c.dataset.q.split("_").map(Number);$$("td.qbad",box).forEach(x=>x.classList.remove("qbad"));
+  if(d===df&&kk===k){done=true;box.innerHTML=qTab(k,df);if(onOk)onOk()}else{c.classList.add("qbad");cap.innerHTML=(kk!==k?"Wrong column – use k = <b>"+k+"</b> (number of groups). ":"")+(d!==df?"Wrong row – use df within = <b>"+df+"</b> (N − k).":"")}})}
 /* ---------- TUKEY WORKED EXAMPLES ---------- */
 function tukeyWX(box,ex){const k=ex.g.length,A=TS.anova(ex.g),n=ex.g[0].length,hsd=ex.q*Math.sqrt(A.msw/n),r3=v=>+v.toFixed(3),P=[];for(let i=0;i<k;i++)for(let j=i+1;j<k;j++){const d=Math.abs(A.sum[i].m-A.sum[j].m);P.push({i,j,d,sig:d>hsd})}
   const S=[["ANOVA first","F = "+A.F.toFixed(2)+", p = "+fp(A.p)+" &lt; 0.05 → <b class='hl'>reject H₀</b>. At least one group differs → run Tukey."],
-    ["Get q","k = "+k+" groups, df within = "+A.dfw+" → Tukey table → <b class='hl'>q = "+ex.q+"</b>"],
+    ["Get q from the Tukey table","k = "+k+" groups, df within = N − k = "+A.dfw+" → <b class='hl'>q = "+ex.q+"</b>"+qTab(k,A.dfw)],
     ["MS within &amp; n","MS within = <b>"+r3(A.msw)+"</b> (ToolPak, Within Groups row) · n = <b>"+n+"</b> per group"],
     ["HSD","HSD = q × √(MS within ÷ n) = "+ex.q+" × √("+r3(A.msw)+" ÷ "+n+") = "+ex.q+" × "+r3(Math.sqrt(A.msw/n))+" = <b class='hl'>"+r3(hsd)+"</b>"],
     ["Gaps","Means: "+ex.lab.map((l,i)=>l+" "+r3(A.sum[i].m)).join(" · ")+"<br>"+P.map(q=>ex.lab[q.i]+" vs "+ex.lab[q.j]+": |"+r3(A.sum[q.i].m)+" − "+r3(A.sum[q.j].m)+"| = <b>"+r3(q.d)+"</b>").join("<br>")],
@@ -2113,12 +2147,14 @@ function tukeyWX(box,ex){const k=ex.g.length,A=TS.anova(ex.g),n=ex.g[0].length,h
   box.addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(!b)return;const a=b.dataset.w;st=a==="n"?Math.min(6,st+1):a==="all"?6:0;draw();if(st===6)markDone(null,ex.id)});addComps(1);draw()}
 tukeyWX($("#wx1"),{id:"wx1",g:window.TK.TASKS[0].g,lab:["PT","PT + support","Control"],q:3.67,story:"18 patients, 3 therapy groups (n = 6 each). Mobility score after 8 weeks."});
 tukeyWX($("#wx2"),{id:"wx2",g:[[6,5,7,6,6],[4,3,4,5,4],[5,6,5,4,5]],lab:["Prog A","Prog B","Prog C"],q:3.77,story:"15 patients, 3 physio programmes (n = 5 each). Pain-relief score (higher = better). A: 6, 5, 7, 6, 6 · B: 4, 3, 4, 5, 4 · C: 5, 6, 5, 4, 5."});
-window.__core={$,$$,el,sv,shuffle,markDone,addComps,updateXP,go,segs,fp,RM,PK,O,B};
+(function(){const box=$("#qFull");let k=3,df=15;const d=()=>{box.innerHTML="<div class='row' style='gap:10px;margin:8px 0'><div class='seg' data-s='k'>"+window.QTAB.ks.map(x=>"<button data-v='"+x+"' class='"+(x===k?"on":"")+"'>k = "+x+"</button>").join("")+"</div><div class='seg' data-s='df'>"+window.QTAB.rows.map(r=>"<button data-v='"+r[0]+"' class='"+(r[0]===df?"on":"")+"'>"+r[0]+"</button>").join("")+"</div></div>"+qTab(k,df)};
+  box.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b)return;if(b.parentNode.dataset.s==="k")k=+b.dataset.v;else df=+b.dataset.v;d()});d()})();
+window.__core={qTab,qPick,$,$$,el,sv,shuffle,markDone,addComps,updateXP,go,segs,fp,RM,PK,O,B};
 })();
 /* ================= ANOVA PRACTICE TAB ================= */
 (function(){
 "use strict";
-const {$,$$,el,sv,shuffle,markDone,addComps,fp,O,B,PK}=window.__core;const TK=window.TK,XC=window.XC,XIO=window.XIO,XG=window.XG,TS=window.TS;
+const {$,$$,el,sv,shuffle,markDone,addComps,fp,O,B,PK,qTab,qPick}=window.__core;const TK=window.TK,XC=window.XC,XIO=window.XIO,XG=window.XG,TS=window.TS;
 const CONC={A1:["At least one therapy group's mean mobility differs – therapy method affects mobility.","No significant difference in mobility between the therapy groups."],
  A2:["Stress level differs between at least two age groups.","No significant difference in stress levels among the three age groups."],
  A3:["Mean sleep differs for at least one shift type.","No significant difference in sleep between shift types."],
@@ -2131,7 +2167,7 @@ const fileSvg=up=>"<svg viewBox='0 0 48 48'><g fill='none' stroke-width='2.5'><p
 function dl(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
 const fname=(t,s)=>"S249_L11-12_"+t.id+"_"+t.title.replace(/[^A-Za-z0-9]+/g,"_").replace(/_$/,"")+(s?"_"+s:"")+".xlsx";
 function howSheet(t){const L=["HOW TO DO THIS PRACTICE","1. Fill every ORANGE cell on the 'ANOVA' sheet. Means and SDs need FORMULAS (e.g. =AVERAGE("+t.rng[0]+")).","2. Data → Data Analysis → Anova: Single Factor.","   Input Range: "+"$B$2:$"+XC.colL(t.k)+"$"+(t.maxN+2)+" · Grouped By: Columns · tick Labels in first row · Alpha 0.05 · Output Range: $K$2",
-  "3. Read F, P-value and F crit from the Between Groups row (or use =F.DIST.RT and =F.INV.RT).","4. Pick the Decision from the drop-down list.","5. POST-HOC – TUKEY HSD (only if you rejected H0): q is given · MS within from the ToolPak · HSD = q × √(MS within ÷ n) · Gap = ABS(mean A − mean B) · column J: Different if Gap > HSD.","6. Save as .xlsx and upload it back to the learning package to check your answers.","","Analysis ToolPak missing? File → Options → Add-ins → Manage: Excel Add-ins → Go → tick Analysis ToolPak."];
+  "3. Read F, P-value and F crit from the Between Groups row (or use =F.DIST.RT and =F.INV.RT).","4. Pick the Decision from the drop-down list.","5. POST-HOC – TUKEY HSD (only if you rejected H0): q is given (see the ‘Tukey q table’ sheet) · MS within from the ToolPak · HSD = q × √(MS within ÷ n) · Gap = ABS(mean A − mean B) · column J: Different if Gap > HSD.","6. Save as .xlsx and upload it back to the learning package to check your answers.","","Analysis ToolPak missing? File → Options → Add-ins → Manage: Excel Add-ins → Go → tick Analysis ToolPak."];
   const cells={},style={};L.forEach((x,i)=>cells["A"+(i+1)]=x);style.A1="ttl";return{name:"How to",cells,style,widths:[820],rows:L.length}}
 
 /* ---------- check panel ---------- */
@@ -2160,10 +2196,10 @@ function show(t){$$(".tk",bar).forEach(b=>b.classList.toggle("on",b.dataset.id==
   const gm=el("div");web.appendChild(gm);web.appendChild(el("div","row","<button class='btn ghost sm' data-x='mine'>⬇ Download my sheet (.xlsx)</button><span class='mute' style='font-size:.62rem'>Orange cells = your answers · ▤ DATA ANALYSIS = Analysis ToolPak · results check live below</span>"));web.appendChild(ckW.el);
   if(!S.sheet)S.sheet=TK.buildSheet(t,"tpl");grid=XG.create(gm,{daTool:0});grid.load(S.book||S.sheet);S.book=grid.book;
   const run=()=>{const bk=grid.book,V=bk.map((x,i)=>grid.valsOf(i)),v=V[0],sh=bk[0];const res=TK.check(t,ref=>({v:v[ref],f:XC.isF(sh.cells[ref])?sh.cells[ref]:null}),TK.scanTP(bk.map((x,i)=>({name:i?x.name:"",rows:x.rows,cols:x.cols,get:(r,c)=>V[i][XC.A1(r,c)]}))));ckW.show(t,res,"LIVE CHECK · IN-BROWSER SHEET");if(ckW.won)done(t,"excel")};grid.on(run);run();
-  $("[data-x=mine]",web).onclick=()=>{const bk=grid.book;dl(XIO.writeXlsx(bk.map((x,i)=>Object.assign({},x,{vals:grid.valsOf(i)})).concat([howSheet(t)])),fname(t,"my_work"))};
+  $("[data-x=mine]",web).onclick=()=>{const bk=grid.book;dl(XIO.writeXlsx(bk.map((x,i)=>Object.assign({},x,{vals:grid.valsOf(i)})).concat([howSheet(t)]).concat(t.q?[TK.qSheet(t)]:[])),fname(t,"my_work"))};
   file.innerHTML="<div class='filebox'><button class='fbig' data-x='tpl'>"+fileSvg(0)+"<div><b>DOWNLOAD TEMPLATE</b><small>"+fname(t)+"</small></div></button><label class='fbig up'>"+fileSvg(1)+"<div><b>UPLOAD TO CHECK</b><small>Drop your saved .xlsx here or tap to choose</small></div><input type='file' accept='.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' hidden></label></div>"+
     "<div class='howto'><span>Download</span><span>Means &amp; SDs with formulas</span><span>Data Analysis → Anova: Single Factor (K2 or New Worksheet Ply)</span><span>Fill F, p, F crit, decision</span><span>Save as .xlsx → upload</span></div><div class='upst'></div>";file.appendChild(ckF.el);
-  $("[data-x=tpl]",file).onclick=()=>dl(XIO.writeXlsx([TK.buildSheet(t,"tpl"),howSheet(t)]),fname(t));
+  $("[data-x=tpl]",file).onclick=()=>dl(XIO.writeXlsx([TK.buildSheet(t,"tpl"),howSheet(t)].concat(t.q?[TK.qSheet(t)]:[])),fname(t));
   const up=$("label.up",file),fi=$("input",up),st=$(".upst",file);fi.onchange=()=>{if(fi.files[0])upload(fi.files[0]);fi.value=""};
   ["dragenter","dragover"].forEach(e=>up.addEventListener(e,ev=>{ev.preventDefault();up.classList.add("over")}));["dragleave","drop"].forEach(e=>up.addEventListener(e,ev=>{ev.preventDefault();up.classList.remove("over")}));up.addEventListener("drop",ev=>{const f=ev.dataTransfer.files[0];if(f)upload(f)});
   async function upload(f){st.className="upst";st.textContent="Reading "+f.name+" …";if(!/\.xlsx$/i.test(f.name)){st.className="upst bad";st.innerHTML="Please upload an <b>.xlsx</b> file (Excel Workbook). In Excel: File → Save As → Excel Workbook (.xlsx).";return}
@@ -2198,7 +2234,7 @@ function posthoc(t,S){const w=el("div");w.appendChild(el("div","stepn","<em><spa
     if(dif.length>1){opts.push(pairTxt(t,dif[0])+" only");why.push("Check the other pairs too – more than one gap is bigger than HSD.")}}
   cc.append(ob,fb);const ord=S.pord||(S.pord=shuffle(opts.map((_,i)=>i)));const okMsg=t.rej?"✔ Gap bigger than HSD → those two groups are really different.":"✔ Accept H₀ → stop. Tukey is only for a significant ANOVA.";
   ord.forEach(i=>{const b=el("button","",opts[i]);if(S.post){b.disabled=true;if(i===0)b.classList.add("ok")}b.onclick=()=>{if(S.post)return;if(i===0){S.post=1;b.classList.add("ok");$$("button",ob).forEach(x=>x.disabled=true);fb.innerHTML=okMsg;done(t,"post")}else{b.classList.add("bad");b.disabled=true;fb.innerHTML="<span style='color:#ffb3c0'>"+why[i]+"</span>"}};ob.appendChild(b)});if(S.post)fb.innerHTML=okMsg;
-  if(t.rej){const tb=el("div","card ph-t");tb.innerHTML="<div class='phx'><b class='hl'>HSD</b> = the smallest gap between two group means that counts as a <b>real</b> difference.<br>Fill the <b class='hl'>POST-HOC</b> block (rows "+t.qRef.slice(1)+"–"+t.L[t.L.length-1].ref.slice(1)+"): "+(t.eqn?"MS within → n → HSD → the gap for each pair":"MS within → HSD and gap for each pair (group sizes differ, so each pair gets its own HSD)")+" → pick <b>Different</b> / <b>Not different</b> in column J.</div>";w.appendChild(tb)}
+  if(t.rej){const tb=el("div","card ph-t");tb.innerHTML="<div class='phx'><b class='hl'>HSD</b> = the smallest gap between two group means that counts as a <b>real</b> difference.<br>Fill the <b class='hl'>POST-HOC</b> block (rows "+t.qRef.slice(1)+"–"+t.L[t.L.length-1].ref.slice(1)+"): "+(t.eqn?"MS within → n → HSD → the gap for each pair":"MS within → HSD and gap for each pair (group sizes differ, so each pair gets its own HSD)")+" → pick <b>Different</b> / <b>Not different</b> in column J.</div>";w.appendChild(tb);const qb=el("div","card qfind");qb.innerHTML="<div class='kick' style='margin-bottom:6px'>FIND q · k = "+t.k+" GROUPS · df within = "+t.A.dfw+"</div><div class='qbox'></div>";w.appendChild(qb);qPick($(".qbox",qb),t.k,t.A.dfw,()=>{const c=$(".qcap",qb);c.innerHTML+=" ✔ – this is the blue cell <b>"+t.qRef+"</b> in your sheet."})}
   return w}
 function plot(s,t){s.innerHTML="";const all=[].concat(...t.g),lo=Math.min(...all),hi=Math.max(...all),pad=(hi-lo)*.1||1,Y=v=>180-150*(v-lo+pad)/(hi-lo+2*pad),cols=[O,B,PK,"#7dff6a"],gx=i=>60+i*(330/(t.k-1||1));
   const gm=t.A.gm;s.innerHTML="";sv("line",{x1:20,y1:Y(gm),x2:410,y2:Y(gm),stroke:"#fff","stroke-dasharray":"5 4",opacity:.6},s);
@@ -2222,14 +2258,14 @@ function solution(t){const A=t.A,d=el("details","sol");d.innerHTML="<summary>◆
     const fx=Math.min(A.F,fmax*.99);sv("line",{x1:X(fx),y1:16,x2:X(fx),y2:170,stroke:"#fff","stroke-width":3},s);sv("text",{x:X(fx),y:12,"text-anchor":"middle",fill:"#fff","font-size":12,"font-weight":800},s).textContent="F = "+A.F.toFixed(3);
     const v2=el("div","verdict2"+(t.rej?"":" ns"));v2.innerHTML="df ("+A.dfb+", "+A.dfw+") · F = "+A.F.toFixed(3)+(t.rej?" &gt; ":" &lt; ")+"F crit "+A.fc.toFixed(3)+" · p = "+fp(A.p)+(t.rej?" &lt; ":" &gt; ")+"0.05 → <b>"+(t.rej?"REJECT H₀":"ACCEPT H₀")+"</b>. "+CONC[t.id][t.rej?0:1];b.appendChild(v2);
     if(t.rej){const ph=el("div");const A2=t.A;let h2="<div class='sec' style='margin:14px 0 6px'><em>PH</em> POST-HOC · TUKEY HSD</div><div class='wsteps'>";
-      h2+="<div><em>1</em><b>q from the Tukey table</b><span>k = "+t.k+" groups · df within = "+A2.dfw+" → <b class='hl'>q = "+t.q+"</b> (given)</span></div>";
+      h2+="<div><em>1</em><b>q from the Tukey table</b><span>k = "+t.k+" groups · df within = "+A2.dfw+" → <b class='hl'>q = "+t.q.toFixed(2)+"</b>"+qTab(t.k,A2.dfw)+"</span></div>";
       h2+="<div><em>2</em><b>MS within</b><span>ToolPak, Within Groups row → <b class='hl'>"+r3(A2.msw)+"</b></span></div>";
       if(t.eqn){h2+="<div><em>3</em><b>HSD = q × √(MS within ÷ n)</b><span>"+t.q+" × √("+r3(A2.msw)+" ÷ "+t.ns[0]+") = "+t.q+" × "+r3(Math.sqrt(A2.msw/t.ns[0]))+" = <b class='hl'>"+r3(t.hsd)+"</b></span></div>"}
       else{h2+="<div><em>3</em><b>HSD for each pair (unequal n)</b><span>q × √(MS within ÷ 2 × (1/n<sub>A</sub> + 1/n<sub>B</sub>))<br>"+t.pairs.map(q=>pairTxt(t,q)+": "+t.q+" × √("+r3(A2.msw)+" ÷ 2 × (1/"+t.ns[q.i]+" + 1/"+t.ns[q.j]+")) = <b class='hl'>"+r3(q.hsd)+"</b>").join("<br>")+"</span></div>"}
       h2+="<div><em>4</em><b>Gap = |mean − mean| → compare with HSD</b><span>"+t.pairs.map(q=>pairTxt(t,q)+": |"+r3(A2.sum[q.i].m)+" − "+r3(A2.sum[q.j].m)+"| = <b>"+r3(q.d)+"</b> "+(q.sig?"&gt;":"&lt;")+" "+r3(q.hsd)+" → <b class='"+(q.sig?"hl":"hb")+"'>"+(q.sig?"DIFFERENT":"not different")+"</b>").join("<br>")+"</span></div></div>";
       ph.innerHTML=h2;const ps=document.createElementNS("http://www.w3.org/2000/svg","svg");ph.appendChild(ps);b.appendChild(ph);gapChart(ps,t);
       const sg=t.pairs.filter(q=>q.sig);const v3=el("div","verdict2");v3.innerHTML="Tukey: <b>"+(sg.length?sg.map(q=>pairTxt(t,q)).join(" · "):"no pair")+"</b> "+(sg.length===1?"is":"are")+" significantly different. Every other pair is not.";b.appendChild(v3)}
-    const r=el("div","row");r.style.marginTop="10px";const bt=el("button","btn ghost sm","⬇ Download solution (.xlsx)");bt.onclick=()=>dl(XIO.writeXlsx([Object.assign({},shs,{vals:v}),howSheet(t)]),fname(t,"solution"));r.appendChild(bt);b.appendChild(r)});return d}
+    const r=el("div","row");r.style.marginTop="10px";const bt=el("button","btn ghost sm","⬇ Download solution (.xlsx)");bt.onclick=()=>dl(XIO.writeXlsx([Object.assign({},shs,{vals:v}),TK.workSheet(t),howSheet(t)].concat(t.q?[TK.qSheet(t)]:[])),fname(t,"solution"));r.appendChild(bt);b.appendChild(r)});return d}
 show(tasks[0]);
 
 
